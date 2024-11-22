@@ -61,22 +61,31 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
 
   return (
     <div className="bg-white p-12 rounded-xl shadow-lg border-2 border-swedish-blue/10 relative min-h-[80vh] mt-8">
+      {items.length > 0 && (
+        <div className="mb-6 text-sm text-muted-foreground">
+          Total steps: {items.length}
+        </div>
+      )}
       <ScrollArea 
         ref={scrollAreaRef}
         className="h-[calc(100vh-20rem)] px-4 relative"
       >
         <div className="space-y-8 pb-4">
-          {items.map((item) => (
-            <ChecklistItem
-              key={item.id}
-              step={item.step}
-              completed={item.completed}
-              resourceLink={item.resource_link}
-              estimatedTime={item.estimated_time}
-              details={item.details}
-              documentTemplateUrl={item.document_template_url}
-              onToggle={(completed) => onToggleItem(item.step, completed)}
-            />
+          {items.map((item, index) => (
+            <div key={item.id} className="relative">
+              <div className="absolute -left-8 top-6 text-sm font-medium text-muted-foreground">
+                {index + 1}.
+              </div>
+              <ChecklistItem
+                step={item.step}
+                completed={item.completed}
+                resourceLink={item.resource_link}
+                estimatedTime={item.estimated_time}
+                details={item.details}
+                documentTemplateUrl={item.document_template_url}
+                onToggle={(completed) => onToggleItem(item.step, completed)}
+              />
+            </div>
           ))}
           {items.length === 0 && (
             <div className="text-center py-16 text-muted-foreground bg-accent/50 rounded-lg">
