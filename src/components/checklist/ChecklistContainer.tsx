@@ -29,8 +29,11 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
         const isAtBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
         const isAtTop = scrollTop === 0;
 
+        // Show scroll down button if not at bottom and content is scrollable
         setShowScrollDown(isScrollable && !isAtBottom);
-        setShowScrollUp(isScrollable && !isAtTop);
+        
+        // Show scroll up button if not at top (regardless of bottom position)
+        setShowScrollUp(scrollTop > 0);
       }
     };
 
