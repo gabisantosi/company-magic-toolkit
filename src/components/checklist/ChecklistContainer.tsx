@@ -60,13 +60,13 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
   };
 
   return (
-    <div className="bg-gradient-to-b from-white to-accent/20 p-8 md:p-12 rounded-2xl shadow-xl border border-swedish-blue/10 relative min-h-[80vh] mt-8 animate-fade-in">
+    <div className="bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-lg border border-swedish-blue/10 relative min-h-[80vh] animate-fade-in hover:shadow-xl transition-shadow duration-300">
       {items.length > 0 && (
         <div className="mb-8 flex items-center justify-between">
-          <div className="text-sm font-medium text-muted-foreground">
+          <div className="text-sm font-medium text-gray-600">
             Total steps: {items.length}
           </div>
-          <div className="text-sm font-medium text-muted-foreground">
+          <div className="text-sm font-medium text-gray-600">
             Completed: {items.filter(item => item.completed).length} / {items.length}
           </div>
         </div>

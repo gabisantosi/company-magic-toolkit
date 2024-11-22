@@ -149,42 +149,41 @@ const Checklist = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-accent/50 to-background">
       <Navbar />
       <main className="flex-grow">
-        <div className="bg-gradient-to-b from-accent to-white py-12">
-          <div className="container mx-auto px-4">
-            <ChecklistHeader />
-            
-            {!session && (
-              <div className="p-4 bg-accent border border-swedish-blue/20 rounded-lg mb-8 shadow-sm">
-                <p className="text-swedish-blue text-sm md:text-base">
-                  You are not logged in. Your progress won't be saved.{' '}
-                  <button
-                    className="text-swedish-blue underline font-semibold hover:text-swedish-blue/80"
-                    onClick={() => navigate('/login')}
-                  >
-                    Login to save your progress
-                  </button>
-                </p>
-              </div>
-            )}
+        <div className="container mx-auto px-4 py-12 space-y-8">
+          <ChecklistHeader />
+          
+          {!session && (
+            <div className="max-w-4xl mx-auto p-4 bg-accent border border-swedish-blue/20 rounded-lg mb-8 shadow-sm animate-fade-in">
+              <p className="text-swedish-blue text-sm md:text-base">
+                You are not logged in. Your progress won't be saved.{' '}
+                <button
+                  className="text-swedish-blue underline font-semibold hover:text-swedish-blue/80"
+                  onClick={() => navigate('/login')}
+                >
+                  Login to save your progress
+                </button>
+              </p>
+            </div>
+          )}
 
-            <div className="max-w-4xl mx-auto space-y-8">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="grid gap-8 md:grid-cols-2">
               <BusinessTypeSelector
                 businessType={businessType}
                 industry={industry}
                 onBusinessTypeChange={setBusinessType}
                 onIndustryChange={setIndustry}
               />
-
               <ChecklistProgress progress={progress} />
-
-              <ChecklistContainer 
-                items={items}
-                onToggleItem={toggleItem}
-              />
             </div>
+
+            <ChecklistContainer 
+              items={items}
+              onToggleItem={toggleItem}
+            />
           </div>
         </div>
       </main>

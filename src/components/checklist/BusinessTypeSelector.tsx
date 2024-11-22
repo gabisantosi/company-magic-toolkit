@@ -20,15 +20,17 @@ const BusinessTypeSelector = ({
   onIndustryChange,
 }: BusinessTypeSelectorProps) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 space-y-4 animate-fade-in">
-      <h2 className="text-xl font-semibold text-swedish-blue mb-4">Business Details</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-swedish-blue/10 space-y-4 animate-fade-in hover:shadow-xl transition-shadow duration-300">
+      <h2 className="text-xl font-semibold bg-gradient-to-r from-swedish-blue to-swedish-blue/80 bg-clip-text text-transparent">
+        Business Details
+      </h2>
+      <div className="grid gap-6">
         <div className="space-y-2">
           <label htmlFor="business-type" className="text-sm font-medium text-gray-700">
             Business Type
           </label>
           <Select value={businessType} onValueChange={onBusinessTypeChange}>
-            <SelectTrigger id="business-type" className="w-full">
+            <SelectTrigger id="business-type" className="w-full bg-white">
               <SelectValue placeholder="Select business type" />
             </SelectTrigger>
             <SelectContent>
@@ -45,7 +47,7 @@ const BusinessTypeSelector = ({
             Industry
           </label>
           <Select value={industry} onValueChange={onIndustryChange}>
-            <SelectTrigger id="industry" className="w-full">
+            <SelectTrigger id="industry" className="w-full bg-white">
               <SelectValue placeholder="Select industry" />
             </SelectTrigger>
             <SelectContent>
