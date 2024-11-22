@@ -163,11 +163,11 @@ const Checklist = () => {
             <ChecklistHeader />
             
             {!session && (
-              <div className="p-4 bg-white border border-gray-200 rounded-lg mb-8 shadow-sm">
-                <p className="text-gray-800 text-sm md:text-base">
+              <div className="p-4 bg-accent border border-swedish-blue/20 rounded-lg mb-8 shadow-sm">
+                <p className="text-swedish-blue text-sm md:text-base">
                   You are not logged in. Your progress won't be saved.{' '}
                   <button
-                    className="text-primary underline font-semibold"
+                    className="text-swedish-blue underline font-semibold hover:text-swedish-blue/80"
                     onClick={() => navigate('/login')}
                   >
                     Login to save your progress
