@@ -72,19 +72,23 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
       >
         <div className="space-y-8 pb-4">
           {items.map((item, index) => (
-            <div key={item.id} className="relative">
-              <div className="absolute -left-8 top-6 text-sm font-medium text-muted-foreground">
-                {index + 1}.
+            <div key={item.id} className="relative flex items-start gap-4">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent flex items-center justify-center">
+                <span className="text-sm font-semibold text-swedish-blue">
+                  {index + 1}
+                </span>
               </div>
-              <ChecklistItem
-                step={item.step}
-                completed={item.completed}
-                resourceLink={item.resource_link}
-                estimatedTime={item.estimated_time}
-                details={item.details}
-                documentTemplateUrl={item.document_template_url}
-                onToggle={(completed) => onToggleItem(item.step, completed)}
-              />
+              <div className="flex-grow">
+                <ChecklistItem
+                  step={item.step}
+                  completed={item.completed}
+                  resourceLink={item.resource_link}
+                  estimatedTime={item.estimated_time}
+                  details={item.details}
+                  documentTemplateUrl={item.document_template_url}
+                  onToggle={(completed) => onToggleItem(item.step, completed)}
+                />
+              </div>
             </div>
           ))}
           {items.length === 0 && (
