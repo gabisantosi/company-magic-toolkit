@@ -28,35 +28,39 @@ const ChecklistItem = ({
   onToggle 
 }: ChecklistItemProps) => {
   return (
-    <div className={`flex items-start gap-3 p-4 rounded-lg border transition-colors ${
-      completed ? 'bg-accent/50 border-accent' : 'bg-white border-gray-100 hover:border-swedish-blue'
-    }`}>
+    <div 
+      className={`flex items-start gap-4 p-6 rounded-xl border-2 transition-all duration-200 hover:shadow-md ${
+        completed 
+          ? 'bg-accent border-accent/50' 
+          : 'bg-white border-swedish-blue/10 hover:border-swedish-blue/30'
+      }`}
+    >
       <Checkbox
         checked={completed}
         onCheckedChange={(checked) => onToggle(checked as boolean)}
         className="mt-1"
       />
       <div className="flex-1 min-w-0">
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 md:gap-4">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4">
           <div className="flex-1 min-w-0">
-            <p className={`text-sm md:text-base break-words ${
+            <p className={`text-base md:text-lg font-medium break-words ${
               completed ? "text-muted-foreground" : "text-gray-900"
             }`}>
               {step}
             </p>
             {details && (
-              <p className="text-xs md:text-sm text-muted-foreground mt-1 break-words">
+              <p className="text-sm md:text-base text-muted-foreground mt-2 break-words">
                 {details}
               </p>
             )}
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
             {estimatedTime && (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-1 text-xs md:text-sm text-muted-foreground whitespace-nowrap">
-                      <Clock className="h-3 w-3 md:h-4 md:w-4" />
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground whitespace-nowrap bg-accent/50 px-3 py-1 rounded-full">
+                      <Clock className="h-4 w-4" />
                       <span>{estimatedTime}</span>
                     </div>
                   </TooltipTrigger>
@@ -73,10 +77,10 @@ const ChecklistItem = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 md:h-8 md:w-8 text-swedish-blue hover:text-swedish-blue/90"
+                      className="h-8 w-8 text-swedish-blue hover:text-swedish-blue/90 hover:bg-accent"
                       onClick={() => window.open(documentTemplateUrl, '_blank')}
                     >
-                      <FileDown className="h-3 w-3 md:h-4 md:w-4" />
+                      <FileDown className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -92,10 +96,10 @@ const ChecklistItem = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 md:h-8 md:w-8 text-swedish-blue hover:text-swedish-blue/90"
+                      className="h-8 w-8 text-swedish-blue hover:text-swedish-blue/90 hover:bg-accent"
                       onClick={() => window.open(resourceLink, '_blank')}
                     >
-                      <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
+                      <ExternalLink className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>

@@ -64,12 +64,12 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 relative">
+    <div className="bg-white p-8 rounded-xl shadow-lg border-2 border-swedish-blue/10 relative">
       <ScrollArea 
         ref={scrollAreaRef}
-        className="h-[calc(100vh-32rem)] px-1 relative"
+        className="h-[calc(100vh-32rem)] px-2 relative"
       >
-        <div className="space-y-4 pb-8">
+        <div className="space-y-6">
           {items.map((item) => (
             <ChecklistItem
               key={item.id}
@@ -83,7 +83,7 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
             />
           ))}
           {items.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-12 text-muted-foreground bg-accent/50 rounded-lg">
               No checklist items found for this business type and industry.
             </div>
           )}
@@ -93,7 +93,7 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
       {showScrollUp && (
         <button
           onClick={() => scrollToPosition('up')}
-          className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-4 py-2 rounded-b-lg shadow-md border border-t-0 hover:bg-accent transition-colors"
+          className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-4 py-2 rounded-full shadow-lg border-2 border-swedish-blue/10 hover:bg-accent transition-colors"
         >
           <ChevronUp className="h-4 w-4" />
           <span>Scroll up</span>
@@ -103,7 +103,7 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
       {showScrollDown && (
         <button
           onClick={() => scrollToPosition('down')}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-4 py-2 rounded-t-lg shadow-md border border-b-0 hover:bg-accent transition-colors"
+          className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-4 py-2 rounded-full shadow-lg border-2 border-swedish-blue/10 hover:bg-accent transition-colors"
         >
           <span>Scroll down</span>
           <ChevronDown className="h-4 w-4" />
