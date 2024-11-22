@@ -3,7 +3,7 @@ import Footer from "@/components/layout/Footer";
 import Hero from "@/components/home/Hero";
 import Features from "@/components/home/Features";
 import QuestionnaireButton from "@/components/questionnaire/QuestionnaireButton";
-import { Flag } from "lucide-react";
+import { Flag, Sparkles } from "lucide-react";
 
 const Index = () => {
   return (
@@ -15,11 +15,6 @@ const Index = () => {
           <div className="py-16 bg-gradient-to-br from-accent via-white to-accent/30 rounded-3xl my-12 relative overflow-hidden backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-500">
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,106,167,0.05)_1px,transparent_1px),linear-gradient(rgba(0,106,167,0.05)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]"></div>
             <div className="relative text-center space-y-8">
-              <img
-                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
-                alt="Person working on laptop"
-                className="w-full max-w-2xl mx-auto rounded-lg shadow-xl mb-8 hover:scale-105 transition-transform duration-300"
-              />
               <div className="relative inline-block">
                 <div className="absolute inset-0 bg-swedish-blue/5 blur-2xl rounded-full animate-pulse"></div>
                 <Flag className="w-16 h-16 text-swedish-blue mx-auto animate-wave relative" />
