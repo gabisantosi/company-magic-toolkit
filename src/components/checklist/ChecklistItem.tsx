@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { ExternalLink, Clock, Info } from "lucide-react";
+import { ExternalLink, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   Tooltip, 
@@ -26,7 +26,9 @@ const ChecklistItem = ({
   onToggle 
 }: ChecklistItemProps) => {
   return (
-    <div className="flex items-start gap-3 p-3 md:p-4 bg-card rounded-lg border hover:border-primary transition-colors">
+    <div className={`flex items-start gap-3 p-4 rounded-lg border transition-colors ${
+      completed ? 'bg-accent/50 border-accent' : 'bg-white border-gray-100 hover:border-swedish-blue'
+    }`}>
       <Checkbox
         checked={completed}
         onCheckedChange={(checked) => onToggle(checked as boolean)}
@@ -35,7 +37,9 @@ const ChecklistItem = ({
       <div className="flex-1 min-w-0">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 md:gap-4">
           <div className="flex-1 min-w-0">
-            <p className={`text-sm md:text-base break-words ${completed ? "line-through text-muted-foreground" : ""}`}>
+            <p className={`text-sm md:text-base break-words ${
+              completed ? "text-muted-foreground" : "text-gray-900"
+            }`}>
               {step}
             </p>
             {details && (
@@ -67,7 +71,7 @@ const ChecklistItem = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 md:h-8 md:w-8"
+                      className="h-6 w-6 md:h-8 md:w-8 text-swedish-blue hover:text-swedish-blue/90"
                       onClick={() => window.open(resourceLink, '_blank')}
                     >
                       <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />

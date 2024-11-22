@@ -4,26 +4,18 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import BusinessDetailsForm from "@/components/business/BusinessDetailsForm";
 import ChecklistProgress from "@/components/checklist/ChecklistProgress";
 import BusinessTypeSelector from "@/components/checklist/BusinessTypeSelector";
 import ChecklistContainer from "@/components/checklist/ChecklistContainer";
-
-interface ChecklistItem {
-  id: number;
-  step: string;
-  completed: boolean;
-  business_type: string;
-  resource_link?: string | null;
-  estimated_time?: string | null;
-  details?: string | null;
-}
+import ChecklistHeader from "@/components/checklist/ChecklistHeader";
 
 const Checklist = () => {
   const session = useSession();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [items, setItems] = useState<ChecklistItem[]>([]);
+  const [items, setItems] = useState([]);
   const [businessType, setBusinessType] = useState("Aktiebolag");
   const [industry, setIndustry] = useState("Technology");
   const [progress, setProgress] = useState(0);
@@ -162,54 +154,52 @@ const Checklist = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <main className="container mx-auto px-4 py-6 md:py-8 max-w-4xl">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl md:text-3xl font-bold">
-              Start a Business in Sweden
-            </h1>
-            <p className="text-muted-foreground">
-              Follow this checklist to set up your business correctly.
-            </p>
-          </div>
+      <main className="flex-grow">
+        <div className="bg-gradient-to-b from-accent to-white py-12">
+          <div className="container mx-auto px-4">
+            <ChecklistHeader />
+            
+            {!session && (
+              <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+                <p className="text-yellow-800 text-sm md:text-base">
+                  You are not logged in. Your progress won't be saved.{' '}
+                  <button
+                    className="text-yellow-800 underline font-semibold"
+                    onClick={() => navigate('/login')}
+                  >
+                    Login to save your progress
+                  </button>
+                </p>
+              </div>
+            )}
 
-          {!session && (
-            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-yellow-800 text-sm md:text-base">
-                You are not logged in. Your progress won't be saved.{' '}
-                <button
-                  className="text-yellow-800 underline font-semibold"
-                  onClick={() => navigate('/login')}
-                >
-                  Login to save your progress
-                </button>
-              </p>
+            <div className="max-w-4xl mx-auto space-y-8">
+              <BusinessDetailsForm
+                onDetailsSubmitted={handleBusinessDetailsSubmitted}
+                currentBusinessType={businessType}
+                currentIndustry={industry}
+              />
+
+              <BusinessTypeSelector
+                businessType={businessType}
+                industry={industry}
+                onBusinessTypeChange={setBusinessType}
+                onIndustryChange={setIndustry}
+              />
+
+              <ChecklistProgress progress={progress} />
+
+              <ChecklistContainer 
+                items={items}
+                onToggleItem={toggleItem}
+              />
             </div>
-          )}
-
-          <BusinessDetailsForm
-            onDetailsSubmitted={handleBusinessDetailsSubmitted}
-            currentBusinessType={businessType}
-            currentIndustry={industry}
-          />
-
-          <BusinessTypeSelector
-            businessType={businessType}
-            industry={industry}
-            onBusinessTypeChange={setBusinessType}
-            onIndustryChange={setIndustry}
-          />
-
-          <ChecklistProgress progress={progress} />
-
-          <ChecklistContainer 
-            items={items}
-            onToggleItem={toggleItem}
-          />
+          </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

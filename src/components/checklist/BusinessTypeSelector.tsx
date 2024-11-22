@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -21,10 +20,11 @@ const BusinessTypeSelector = ({
   onIndustryChange,
 }: BusinessTypeSelectorProps) => {
   return (
-    <div className="space-y-4 mb-8 animate-fade-in">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 space-y-4 animate-fade-in">
+      <h2 className="text-xl font-semibold text-swedish-blue mb-4">Business Details</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label htmlFor="business-type" className="text-sm font-medium">
+          <label htmlFor="business-type" className="text-sm font-medium text-gray-700">
             Business Type
           </label>
           <Select value={businessType} onValueChange={onBusinessTypeChange}>
@@ -41,7 +41,7 @@ const BusinessTypeSelector = ({
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="industry" className="text-sm font-medium">
+          <label htmlFor="industry" className="text-sm font-medium text-gray-700">
             Industry
           </label>
           <Select value={industry} onValueChange={onIndustryChange}>
