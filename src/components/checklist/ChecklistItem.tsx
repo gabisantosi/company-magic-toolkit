@@ -1,7 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { ExternalLink, Clock, FileDown, BookOpen } from "lucide-react";
+import { ExternalLink, Clock, FileDown, BookOpen, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Tooltip, 
   TooltipContent, 
@@ -39,6 +40,23 @@ const ChecklistItem = ({
   nextStep 
 }: ChecklistItemProps) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleToggle = (checked: boolean) => {
+    onToggle(checked);
+    if (checked) {
+      toast({
+        title: (
+          <div className="flex items-center gap-2 text-swedish-blue">
+            <CheckCircle2 className="h-5 w-5" />
+            <span>Step Completed!</span>
+          </div>
+        ),
+        description: "Great progress! Keep going!",
+        className: "bg-accent border-swedish-blue/20",
+      });
+    }
+  };
 
   const handleViewGuide = () => {
     navigate(`/guide?step=${encodeURIComponent(step)}&businessType=${encodeURIComponent(businessType)}&industry=${encodeURIComponent(industry)}`);
@@ -49,15 +67,15 @@ const ChecklistItem = ({
       <div 
         className={`group flex items-start gap-4 p-6 rounded-xl border transition-all duration-500 hover:shadow-lg transform hover:-translate-y-1 ${
           completed 
-            ? 'bg-accent/50 border-accent shadow-accent/20' 
+            ? 'bg-accent/50 border-accent shadow-accent/20 animate-[scale-in_0.2s_ease-out]' 
             : 'bg-white border-swedish-blue/10 hover:border-swedish-blue/30 hover:bg-accent/5'
         }`}
       >
         <Checkbox
           checked={completed}
-          onCheckedChange={(checked) => onToggle(checked as boolean)}
-          className={`mt-1 transition-transform duration-300 group-hover:scale-110 ${
-            completed ? 'border-swedish-blue' : ''
+          onCheckedChange={handleToggle}
+          className={`mt-1 transition-all duration-300 group-hover:scale-110 ${
+            completed ? 'border-swedish-blue animate-[scale-in_0.2s_ease-out]' : ''
           }`}
         />
         <div className="flex-1 min-w-0">
