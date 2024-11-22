@@ -14,7 +14,7 @@ const ChecklistProgress = ({ progress }: ChecklistProgressProps) => {
         <div className="space-y-2 animate-fade-in delay-100">
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium text-gray-600">Completion</span>
-            <span className="text-sm font-medium text-swedish-yellow">{Math.round(progress)}%</span>
+            <span className="text-sm font-medium text-swedish-blue">{Math.round(progress)}%</span>
           </div>
           <Progress 
             value={progress} 
