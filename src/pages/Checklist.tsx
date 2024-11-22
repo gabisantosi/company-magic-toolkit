@@ -10,12 +10,13 @@ import ChecklistProgress from "@/components/checklist/ChecklistProgress";
 import BusinessTypeSelector from "@/components/checklist/BusinessTypeSelector";
 import ChecklistContainer from "@/components/checklist/ChecklistContainer";
 import ChecklistHeader from "@/components/checklist/ChecklistHeader";
+import { ChecklistItem } from "@/types/checklist";
 
 const Checklist = () => {
   const session = useSession();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<ChecklistItem[]>([]);
   const [businessType, setBusinessType] = useState("Aktiebolag");
   const [industry, setIndustry] = useState("Technology");
   const [progress, setProgress] = useState(0);
