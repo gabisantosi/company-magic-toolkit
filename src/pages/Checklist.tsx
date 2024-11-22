@@ -183,6 +183,8 @@ const Checklist = () => {
 
             <ChecklistContainer 
               items={items}
+              businessType={businessType}
+              industry={industry}
               onToggleItem={toggleItem}
             />
           </div>
