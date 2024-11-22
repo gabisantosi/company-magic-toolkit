@@ -20,10 +20,10 @@ const features = [
 
 const Features = () => {
   return (
-    <div className="py-20 bg-white">
+    <div className="py-20 bg-gradient-to-b from-white to-accent/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-swedish-blue mb-4">
+          <h2 className="text-3xl font-bold text-swedish-blue mb-4 [text-shadow:_0_1px_2px_rgb(0_0_0_/_10%)]">
             Everything You Need to Start Your Business
           </h2>
           <p className="text-xl text-gray-600">
@@ -34,14 +34,16 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group p-6 rounded-lg border border-gray-200 hover:border-swedish-blue transition-all duration-300"
+              className="group bg-white/50 backdrop-blur-sm p-8 rounded-xl border border-gray-200/50 hover:border-swedish-blue transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
             >
               <div className="mb-6 flex justify-center">
-                <div className="bg-white p-3 rounded-full shadow-lg">
+                <div className="bg-gradient-to-br from-white to-accent p-4 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
                   {feature.icon}
                 </div>
               </div>
-              <h3 className="text-xl font-semibold text-swedish-blue mb-2">{feature.title}</h3>
+              <h3 className="text-xl font-semibold text-swedish-blue mb-3 [text-shadow:_0_1px_2px_rgb(0_0_0_/_10%)]">
+                {feature.title}
+              </h3>
               <p className="text-gray-600">{feature.description}</p>
             </div>
           ))}
