@@ -15,7 +15,7 @@ const Index = () => {
           <div className="py-16 bg-gradient-to-r from-accent/30 via-white to-accent/30 rounded-3xl my-12 relative overflow-hidden">
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,106,167,0.05)_1px,transparent_1px),linear-gradient(rgba(0,106,167,0.05)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
             <div className="relative text-center space-y-6">
-              <Flag className="w-16 h-16 text-swedish-blue mx-auto animate-wave drop-shadow-[0_0_8px_rgba(254,204,2,0.6)] filter hover:drop-shadow-[0_0_12px_rgba(254,204,2,0.8)] transition-all duration-300" />
+              <Flag className="w-16 h-16 text-swedish-blue mx-auto animate-wave" />
               <h2 className="text-3xl font-bold text-swedish-blue">Not Sure Where to Begin?</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
                 Take our quick quiz to get personalized guidance on starting your business in Sweden.
