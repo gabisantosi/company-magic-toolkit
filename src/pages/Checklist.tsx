@@ -2,34 +2,41 @@ import { useEffect, useState } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Trash2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Navbar from "@/components/layout/Navbar";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 interface ChecklistItem {
   id: number;
   step: string;
   completed: boolean;
+  business_type: string;
 }
 
 const Checklist = () => {
   const session = useSession();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [items, setItems] = useState<ChecklistItem[]>([]);
-  const [newStep, setNewStep] = useState("");
+  const [businessType, setBusinessType] = useState("Aktiebolag");
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (session) {
-      fetchChecklist();
+    if (!session) {
+      navigate("/login");
+      return;
     }
-  }, [session]);
+    fetchChecklist();
+  }, [session, businessType]);
 
   const fetchChecklist = async () => {
     const { data, error } = await supabase
       .from('checklist')
       .select('*')
+      .eq('business_type', businessType)
       .order('id', { ascending: true });
 
     if (error) {
@@ -41,49 +48,32 @@ const Checklist = () => {
       return;
     }
 
-    setItems(data || []);
-  };
-
-  const addItem = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!session) {
-      toast({
-        title: "Login Required",
-        description: "Please login to save checklist items",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (!newStep.trim()) return;
-
-    const { error } = await supabase
+    const userProgress = await supabase
       .from('checklist')
-      .insert([
-        {
-          step: newStep,
-          user_id: session?.user.id,
-          completed: false,
-        },
-      ]);
+      .select('*')
+      .eq('user_id', session?.user.id)
+      .eq('business_type', businessType);
 
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to add checklist item",
-        variant: "destructive",
-      });
-      return;
-    }
+    const completedItems = new Set(
+      userProgress.data?.map(item => item.step)
+    );
 
-    setNewStep("");
-    fetchChecklist();
-    toast({
-      title: "Success",
-      description: "Checklist item added",
-    });
+    const itemsWithProgress = data?.map(item => ({
+      ...item,
+      completed: completedItems.has(item.step)
+    })) || [];
+
+    setItems(itemsWithProgress);
+    updateProgress(itemsWithProgress);
   };
 
-  const toggleItem = async (id: number, completed: boolean) => {
+  const updateProgress = (currentItems: ChecklistItem[]) => {
+    const completed = currentItems.filter(item => item.completed).length;
+    const total = currentItems.length;
+    setProgress(total > 0 ? (completed / total) * 100 : 0);
+  };
+
+  const toggleItem = async (step: string, completed: boolean) => {
     if (!session) {
       toast({
         title: "Login Required",
@@ -93,51 +83,53 @@ const Checklist = () => {
       return;
     }
 
-    const { error } = await supabase
-      .from('checklist')
-      .update({ completed })
-      .eq('id', id);
+    if (completed) {
+      // Add completed item
+      const { error } = await supabase
+        .from('checklist')
+        .insert({
+          step,
+          completed: true,
+          user_id: session.user.id,
+          business_type: businessType
+        });
 
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update checklist item",
-        variant: "destructive",
-      });
-      return;
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to update checklist item",
+          variant: "destructive",
+        });
+        return;
+      }
+    } else {
+      // Remove completed item
+      const { error } = await supabase
+        .from('checklist')
+        .delete()
+        .eq('user_id', session.user.id)
+        .eq('step', step)
+        .eq('business_type', businessType);
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to update checklist item",
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
-    fetchChecklist();
-  };
+    const updatedItems = items.map(item =>
+      item.step === step ? { ...item, completed } : item
+    );
+    setItems(updatedItems);
+    updateProgress(updatedItems);
 
-  const deleteItem = async (id: number) => {
-    if (!session) {
-      toast({
-        title: "Login Required",
-        description: "Please login to delete checklist items",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const { error } = await supabase
-      .from('checklist')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete checklist item",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    fetchChecklist();
     toast({
-      title: "Success",
-      description: "Checklist item deleted",
+      title: completed ? "Step completed!" : "Step unchecked",
+      description: completed ? "Keep up the good work!" : "You can always complete this step later",
     });
   };
 
@@ -145,52 +137,60 @@ const Checklist = () => {
     <div>
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">My Checklist</h1>
-        
-        {!session && (
-          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <p className="text-yellow-800">
-              Login to save and sync your checklist across devices.
-            </p>
-          </div>
-        )}
-
-        <form onSubmit={addItem} className="flex gap-4 mb-8">
-          <Input
-            type="text"
-            value={newStep}
-            onChange={(e) => setNewStep(e.target.value)}
-            placeholder="Add a new item..."
-            className="flex-1"
-          />
-          <Button type="submit">Add Item</Button>
-        </form>
-
-        <div className="space-y-4">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between p-4 bg-card rounded-lg border"
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Start a Business in Sweden</h1>
+          
+          <div className="mb-8">
+            <label className="block text-sm font-medium mb-2">
+              Business Type
+            </label>
+            <Select
+              value={businessType}
+              onValueChange={setBusinessType}
             >
-              <div className="flex items-center gap-3">
+              <SelectTrigger className="w-full md:w-[280px]">
+                <SelectValue placeholder="Select business type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Aktiebolag">Aktiebolag (AB)</SelectItem>
+                <SelectItem value="Enskild Firma">Enskild Firma</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">Overall Progress</span>
+              <span className="text-sm font-medium">{Math.round(progress)}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+
+          <div className="space-y-4">
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-start gap-3 p-4 bg-card rounded-lg border hover:border-primary transition-colors"
+              >
                 <Checkbox
                   checked={item.completed}
-                  onCheckedChange={(checked) => toggleItem(item.id, checked as boolean)}
+                  onCheckedChange={(checked) => toggleItem(item.step, checked as boolean)}
+                  className="mt-1"
                 />
-                <span className={item.completed ? "line-through text-muted-foreground" : ""}>
-                  {item.step}
-                </span>
+                <div className="flex-1">
+                  <p className={`text-base ${item.completed ? "line-through text-muted-foreground" : ""}`}>
+                    {item.step}
+                  </p>
+                </div>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => deleteItem(item.id)}
-                className="text-destructive hover:text-destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+            ))}
+          </div>
+
+          {items.length === 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+              No checklist items found for this business type.
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
