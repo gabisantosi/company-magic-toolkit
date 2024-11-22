@@ -46,14 +46,14 @@ const ChecklistItem = ({
     onToggle(checked);
     if (checked) {
       toast({
-        title: (
+        description: "Great progress! Keep going!",
+        className: "bg-accent border-swedish-blue/20",
+        action: (
           <div className="flex items-center gap-2 text-swedish-blue">
             <CheckCircle2 className="h-5 w-5" />
             <span>Step Completed!</span>
           </div>
-        ),
-        description: "Great progress! Keep going!",
-        className: "bg-accent border-swedish-blue/20",
+        )
       });
     }
   };
