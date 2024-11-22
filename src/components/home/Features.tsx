@@ -34,15 +34,15 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group p-8 rounded-xl border-2 border-gray-100 hover:border-swedish-blue transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
+              className="group p-6 rounded-lg border border-gray-200 hover:border-swedish-blue transition-all duration-300"
             >
               <div className="mb-6 flex justify-center">
-                <div className="bg-accent p-4 rounded-full shadow-md group-hover:shadow-lg transition-all duration-300">
+                <div className="bg-white p-3 rounded-full shadow-lg">
                   {feature.icon}
                 </div>
               </div>
-              <h3 className="text-xl font-semibold text-swedish-blue mb-3">{feature.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+              <h3 className="text-xl font-semibold text-swedish-blue mb-2">{feature.title}</h3>
+              <p className="text-gray-600">{feature.description}</p>
             </div>
           ))}
         </div>
