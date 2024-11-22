@@ -13,6 +13,7 @@ interface ChecklistItem {
   step: string;
   completed: boolean;
   business_type: string;
+  resource_link?: string | null;
 }
 
 const Checklist = () => {
@@ -29,7 +30,6 @@ const Checklist = () => {
   }, [session, businessType, industry]);
 
   const fetchChecklist = async () => {
-    // First, fetch the template items for the selected business type and industry
     const { data: templateData, error: templateError } = await supabase
       .from('checklist_templates')
       .select('*')
@@ -47,7 +47,6 @@ const Checklist = () => {
     }
 
     if (session) {
-      // If user is logged in, fetch their progress
       const { data: progressData, error: progressError } = await supabase
         .from('checklist')
         .select('*')
@@ -75,7 +74,6 @@ const Checklist = () => {
       setItems(itemsWithProgress);
       updateProgress(itemsWithProgress);
     } else {
-      // If user is not logged in, show uncompleted checklist
       const baseItems = templateData?.map(item => ({
         ...item,
         completed: false
@@ -195,6 +193,7 @@ const Checklist = () => {
                 key={item.id}
                 step={item.step}
                 completed={item.completed}
+                resourceLink={item.resource_link}
                 onToggle={(completed) => toggleItem(item.step, completed)}
               />
             ))}

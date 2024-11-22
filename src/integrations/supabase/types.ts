@@ -68,6 +68,7 @@ export type Database = {
           id: number
           industry: string
           order_number: number
+          resource_link: string | null
           step: string
         }
         Insert: {
@@ -75,6 +76,7 @@ export type Database = {
           id?: number
           industry: string
           order_number: number
+          resource_link?: string | null
           step: string
         }
         Update: {
@@ -82,6 +84,7 @@ export type Database = {
           id?: number
           industry?: string
           order_number?: number
+          resource_link?: string | null
           step?: string
         }
         Relationships: []
