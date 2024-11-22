@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -24,10 +25,6 @@ const Checklist = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (!session) {
-      navigate("/login");
-      return;
-    }
     fetchChecklist();
   }, [session, businessType]);
 
@@ -47,23 +44,35 @@ const Checklist = () => {
       return;
     }
 
-    const userProgress = await supabase
-      .from('checklist')
-      .select('*')
-      .eq('user_id', session?.user.id)
-      .eq('business_type', businessType);
+    if (session) {
+      // If user is logged in, fetch their progress
+      const userProgress = await supabase
+        .from('checklist')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .eq('business_type', businessType);
 
-    const completedItems = new Set(
-      userProgress.data?.map(item => item.step)
-    );
+      const completedItems = new Set(
+        userProgress.data?.map(item => item.step)
+      );
 
-    const itemsWithProgress = data?.map(item => ({
-      ...item,
-      completed: completedItems.has(item.step)
-    })) || [];
+      const itemsWithProgress = data?.map(item => ({
+        ...item,
+        completed: completedItems.has(item.step)
+      })) || [];
 
-    setItems(itemsWithProgress);
-    updateProgress(itemsWithProgress);
+      setItems(itemsWithProgress);
+      updateProgress(itemsWithProgress);
+    } else {
+      // If user is not logged in, show uncompleted checklist
+      const baseItems = data?.map(item => ({
+        ...item,
+        completed: false
+      })) || [];
+      
+      setItems(baseItems);
+      setProgress(0);
+    }
   };
 
   const updateProgress = (currentItems: ChecklistItem[]) => {
@@ -74,16 +83,22 @@ const Checklist = () => {
 
   const toggleItem = async (step: string, completed: boolean) => {
     if (!session) {
+      // For non-logged in users, only update the UI state
+      const updatedItems = items.map(item =>
+        item.step === step ? { ...item, completed } : item
+      );
+      setItems(updatedItems);
+      updateProgress(updatedItems);
+      
       toast({
-        title: "Login Required",
-        description: "Please login to update checklist items",
-        variant: "destructive",
+        title: "Not Logged In",
+        description: "Your progress won't be saved. Login to save your progress.",
       });
       return;
     }
 
+    // For logged-in users, update the database
     if (completed) {
-      // Add completed item
       const { error } = await supabase
         .from('checklist')
         .insert({
@@ -102,7 +117,6 @@ const Checklist = () => {
         return;
       }
     } else {
-      // Remove completed item
       const { error } = await supabase
         .from('checklist')
         .delete()
@@ -139,6 +153,21 @@ const Checklist = () => {
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Start a Business in Sweden</h1>
           
+          {!session && (
+            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-yellow-800">
+                You are not logged in. Your progress won't be saved.{' '}
+                <Button
+                  variant="link"
+                  className="text-yellow-800 underline p-0 h-auto font-semibold"
+                  onClick={() => navigate('/login')}
+                >
+                  Login to save your progress
+                </Button>
+              </p>
+            </div>
+          )}
+
           <div className="mb-8">
             <label className="block text-sm font-medium mb-2">
               Business Type
