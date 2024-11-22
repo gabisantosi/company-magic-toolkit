@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { Progress } from "@/components/ui/progress";
 import { QuestionnaireForm } from "@/components/questionnaire/QuestionnaireForm";
 
 const Questionnaire = () => {
