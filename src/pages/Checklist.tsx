@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -15,14 +15,25 @@ const Checklist = () => {
   const session = useSession();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   const [items, setItems] = useState<ChecklistItem[]>([]);
-  const [businessType, setBusinessType] = useState("Aktiebolag");
-  const [industry, setIndustry] = useState("Technology");
+  const [businessType, setBusinessType] = useState(searchParams.get("businessType") || "Aktiebolag");
+  const [industry, setIndustry] = useState(searchParams.get("industry") || "Technology");
   const [progress, setProgress] = useState(0);
+  const activeStep = searchParams.get("step");
 
   useEffect(() => {
     fetchChecklist();
   }, [session, businessType, industry]);
+
+  useEffect(() => {
+    if (activeStep) {
+      const element = document.getElementById(`step-${activeStep}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [activeStep, items]);
 
   const fetchChecklist = async () => {
     const { data: templateData, error: templateError } = await supabase

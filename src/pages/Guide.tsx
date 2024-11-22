@@ -61,38 +61,11 @@ const Guide = () => {
     }
   };
 
-  const markAsComplete = async (step: string) => {
-    if (!session) {
-      toast({
-        title: "Not logged in",
-        description: "Please log in to save your progress",
-      });
-      return;
-    }
-
-    try {
-      const { error } = await supabase
-        .from("checklist")
-        .upsert({
-          user_id: session.user.id,
-          step: step,
-          completed: true,
-          business_type: businessType,
-        });
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Step marked as complete",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update progress",
-        variant: "destructive",
-      });
-    }
+  const handleBack = () => {
+    const stepParam = encodeURIComponent(step || "");
+    const businessTypeParam = encodeURIComponent(businessType);
+    const industryParam = encodeURIComponent(industry);
+    navigate(`/checklist?step=${stepParam}&businessType=${businessTypeParam}&industry=${industryParam}`);
   };
 
   return (
@@ -103,7 +76,7 @@ const Guide = () => {
           <Button
             variant="ghost"
             className="mb-8 flex items-center gap-2 hover:bg-accent"
-            onClick={() => navigate("/checklist")}
+            onClick={handleBack}
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Checklist

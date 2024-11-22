@@ -85,7 +85,8 @@ const ChecklistContainer = ({
         <div className="space-y-6">
           {items.map((item, index) => (
             <div 
-              key={item.id} 
+              key={item.id}
+              id={`step-${item.step}`}
               className="relative flex items-start gap-4 transition-all duration-500 hover:translate-x-1"
               style={{
                 animationDelay: `${index * 0.1}s`,
