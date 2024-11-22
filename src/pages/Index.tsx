@@ -18,10 +18,10 @@ const Index = () => {
               <HelpCircle className="w-16 h-16 text-swedish-blue mx-auto animate-bounce" />
               <h2 className="text-3xl font-bold text-swedish-blue">Not Sure Where to Begin?</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                Take our quick questionnaire to get personalized guidance on starting your business in Sweden.
+                Take our quick quiz to get personalized guidance on starting your business in Sweden.
                 We'll help you navigate through the process step by step.
               </p>
-              <div className="mt-8">
+              <div className="mt-8 flex justify-center">
                 <QuestionnaireButton />
               </div>
             </div>

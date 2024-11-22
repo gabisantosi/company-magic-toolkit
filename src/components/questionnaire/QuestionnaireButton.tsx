@@ -8,10 +8,10 @@ const QuestionnaireButton = () => {
   return (
     <Button
       onClick={() => navigate("/questionnaire")}
-      className="bg-swedish-blue hover:bg-swedish-blue/90 text-white flex items-center gap-2"
+      className="bg-swedish-blue hover:bg-swedish-blue/90 text-white flex items-center gap-2 mx-auto"
     >
       <Flag className="h-4 w-4" />
-      Where Do I Start?
+      Take the Quiz
     </Button>
   );
 };
