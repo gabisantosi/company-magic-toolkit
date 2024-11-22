@@ -29,7 +29,7 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
         const isAtBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
 
         setShowScrollDown(isScrollable && !isAtBottom);
-        setShowScrollUp(scrollTop > 0 || isAtBottom);
+        setShowScrollUp(scrollTop > 0);
       }
     };
 
@@ -65,7 +65,7 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
         ref={scrollAreaRef}
         className="h-[calc(100vh-20rem)] px-4 relative"
       >
-        <div className="space-y-8 pb-8">
+        <div className="space-y-8 pb-4">
           {items.map((item) => (
             <ChecklistItem
               key={item.id}
