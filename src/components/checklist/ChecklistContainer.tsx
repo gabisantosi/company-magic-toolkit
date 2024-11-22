@@ -67,10 +67,17 @@ const ChecklistContainer = ({
   };
 
   const getNextStep = (currentIndex: number) => {
-    const nextItem = items[currentIndex + 1];
-    return nextItem ? {
-      step: nextItem.step,
-      details: nextItem.details
+    // Find the next uncompleted step after the current index
+    const nextUncompleted = items.slice(currentIndex + 1).find(item => !item.completed);
+    
+    // If there's no uncompleted step after current index, look from the beginning
+    const firstUncompleted = items.slice(0, currentIndex).find(item => !item.completed);
+    
+    const nextStep = nextUncompleted || firstUncompleted;
+    
+    return nextStep ? {
+      step: nextStep.step,
+      details: nextStep.details
     } : null;
   };
 
