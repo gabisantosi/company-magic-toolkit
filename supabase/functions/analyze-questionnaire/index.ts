@@ -1,15 +1,12 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+
+const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-const supabaseUrl = Deno.env.get('SUPABASE_URL');
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -20,22 +17,22 @@ serve(async (req) => {
     const { responses, userId } = await req.json();
     
     // Create the prompt for OpenAI
-    const prompt = `As a business advisor in Sweden, analyze this questionnaire response and provide specific recommendations:
+    const prompt = `Como um consultor de negócios na Suécia, analise esta resposta do questionário e forneça recomendações específicas:
     
-    Business Idea: ${responses.business_idea}
-    Target Market: ${responses.target_market}
-    Initial Investment: ${responses.initial_investment}
-    Experience Level: ${responses.experience_level}
-    Preferred Structure: ${responses.preferred_structure}
+    Ideia de Negócio: ${responses.business_idea}
+    Mercado-Alvo: ${responses.target_market}
+    Investimento Inicial: ${responses.initial_investment}
+    Nível de Experiência: ${responses.experience_level}
+    Estrutura Preferida: ${responses.preferred_structure}
     
-    Please provide detailed recommendations about:
-    1. Business structure suggestions
-    2. Key steps to take
-    3. Potential challenges to prepare for
-    4. Resources they should look into
-    5. Timeline expectations
+    Por favor, forneça recomendações detalhadas sobre:
+    1. Sugestões de estrutura de negócio
+    2. Principais passos a serem tomados
+    3. Potenciais desafios a se preparar
+    4. Recursos que devem ser consultados
+    5. Expectativas de cronograma
     
-    Format the response in clear sections.`;
+    Formate a resposta em seções claras.`;
 
     // Get AI recommendations
     const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -47,17 +44,20 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         messages: [
-          { role: 'system', content: 'You are a knowledgeable business advisor in Sweden, experienced in helping entrepreneurs start their businesses.' },
+          { role: 'system', content: 'Você é um consultor de negócios experiente na Suécia, especializado em ajudar empreendedores a iniciar seus negócios.' },
           { role: 'user', content: prompt }
         ],
       }),
     });
 
-    const aiData = await openAIResponse.json();
-    const recommendations = aiData.choices[0].message.content;
+    const data = await openAIResponse.json();
+    const recommendations = data.choices[0].message.content;
 
-    // Update the questionnaire response with AI recommendations
-    const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
+    // Save recommendations to Supabase
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
     
     const { error: updateError } = await supabase
       .from('questionnaire_responses')
@@ -66,9 +66,7 @@ serve(async (req) => {
       .order('created_at', { ascending: false })
       .limit(1);
 
-    if (updateError) {
-      throw updateError;
-    }
+    if (updateError) throw updateError;
 
     return new Response(
       JSON.stringify({ recommendations }),
