@@ -20,8 +20,7 @@ const BusinessTypeSelector = ({
   onIndustryChange,
 }: BusinessTypeSelectorProps) => {
   return (
-    <div className="relative group backdrop-blur-sm bg-white/80 p-6 rounded-2xl shadow-lg border border-swedish-blue/10 space-y-4 animate-fade-in hover:shadow-[0_20px_40px_rgb(0,106,167,0.2)] transition-all duration-500">
-      <div className="absolute inset-[-2px] bg-gradient-to-r from-swedish-blue/10 via-accent/5 to-swedish-yellow/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-70 transition-all duration-500"></div>
+    <div className="relative backdrop-blur-sm bg-white/80 p-6 rounded-2xl shadow-lg border border-swedish-blue/10 space-y-4 animate-fade-in">
       <div className="relative">
         <h2 className="text-xl font-semibold bg-gradient-to-r from-swedish-blue to-swedish-blue/80 bg-clip-text text-transparent">
           Business Details
