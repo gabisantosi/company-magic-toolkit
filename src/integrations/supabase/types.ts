@@ -132,6 +132,8 @@ export type Database = {
       }
       guide_content: {
         Row: {
+          action_label: string | null
+          action_url: string | null
           business_type: string
           content: string
           id: number
@@ -141,6 +143,8 @@ export type Database = {
           title: string
         }
         Insert: {
+          action_label?: string | null
+          action_url?: string | null
           business_type: string
           content: string
           id?: number
@@ -150,6 +154,8 @@ export type Database = {
           title: string
         }
         Update: {
+          action_label?: string | null
+          action_url?: string | null
           business_type?: string
           content?: string
           id?: number

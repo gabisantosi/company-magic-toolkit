@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, ExternalLink } from "lucide-react";
 
 interface GuideContent {
   id: number;
@@ -21,6 +21,8 @@ interface GuideContent {
   step: string;
   business_type: string;
   industry: string;
+  action_url?: string | null;
+  action_label?: string | null;
 }
 
 const Guide = () => {
@@ -142,10 +144,20 @@ const Guide = () => {
                           dangerouslySetInnerHTML={{ __html: content.content }}
                         />
                       </div>
-                      <div className="mt-6 flex justify-end">
+                      <div className="mt-6 flex flex-wrap items-center gap-4">
+                        {content.action_url && content.action_label && (
+                          <Button
+                            onClick={() => window.open(content.action_url!, '_blank')}
+                            className="flex items-center gap-2 bg-swedish-blue hover:bg-swedish-blue/90"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            {content.action_label}
+                          </Button>
+                        )}
                         <Button
                           onClick={() => markAsComplete(content.step)}
-                          className="flex items-center gap-2"
+                          variant="outline"
+                          className="flex items-center gap-2 border-swedish-blue/20 hover:bg-accent"
                         >
                           <CheckCircle className="h-4 w-4" />
                           Mark as Complete
