@@ -9,6 +9,7 @@ interface ChecklistContainerProps {
     resource_link?: string | null;
     estimated_time?: string | null;
     details?: string | null;
+    document_template_url?: string | null;
   }>;
   onToggleItem: (step: string, completed: boolean) => void;
 }
@@ -26,6 +27,7 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
               resourceLink={item.resource_link}
               estimatedTime={item.estimated_time}
               details={item.details}
+              documentTemplateUrl={item.document_template_url}
               onToggle={(completed) => onToggleItem(item.step, completed)}
             />
           ))}

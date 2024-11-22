@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { ExternalLink, Clock } from "lucide-react";
+import { ExternalLink, Clock, FileDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   Tooltip, 
@@ -14,6 +14,7 @@ interface ChecklistItemProps {
   resourceLink?: string | null;
   estimatedTime?: string | null;
   details?: string | null;
+  documentTemplateUrl?: string | null;
   onToggle: (completed: boolean) => void;
 }
 
@@ -23,6 +24,7 @@ const ChecklistItem = ({
   resourceLink, 
   estimatedTime, 
   details,
+  documentTemplateUrl,
   onToggle 
 }: ChecklistItemProps) => {
   return (
@@ -60,6 +62,25 @@ const ChecklistItem = ({
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Estimated time to complete</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+            {documentTemplateUrl && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 md:h-8 md:w-8 text-swedish-blue hover:text-swedish-blue/90"
+                      onClick={() => window.open(documentTemplateUrl, '_blank')}
+                    >
+                      <FileDown className="h-3 w-3 md:h-4 md:w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Download template</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
