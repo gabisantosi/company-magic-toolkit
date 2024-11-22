@@ -68,6 +68,40 @@ const Guide = () => {
     navigate(`/checklist?step=${stepParam}&businessType=${businessTypeParam}&industry=${industryParam}`);
   };
 
+  const markAsComplete = async (step: string) => {
+    if (!session) {
+      toast({
+        title: "Not logged in",
+        description: "Please log in to save your progress",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("checklist")
+        .upsert({
+          user_id: session.user.id,
+          step: step,
+          completed: true,
+          business_type: businessType,
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Step marked as complete",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update progress",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
