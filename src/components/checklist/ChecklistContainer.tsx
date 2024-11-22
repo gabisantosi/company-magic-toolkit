@@ -66,6 +66,14 @@ const ChecklistContainer = ({
     }
   };
 
+  const getNextStep = (currentIndex: number) => {
+    const nextItem = items[currentIndex + 1];
+    return nextItem ? {
+      step: nextItem.step,
+      details: nextItem.details
+    } : null;
+  };
+
   return (
     <div className="bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-lg border border-swedish-blue/10 relative min-h-[80vh] animate-fade-in hover:shadow-xl transition-all duration-500">
       {items.length > 0 && (
@@ -110,6 +118,7 @@ const ChecklistContainer = ({
                   businessType={businessType}
                   industry={industry}
                   onToggle={(completed) => onToggleItem(item.step, completed)}
+                  nextStep={item.completed ? getNextStep(index) : null}
                 />
               </div>
             </div>
