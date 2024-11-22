@@ -9,6 +9,7 @@ import ChecklistProgress from "@/components/checklist/ChecklistProgress";
 import BusinessTypeSelector from "@/components/checklist/BusinessTypeSelector";
 import ChecklistContainer from "@/components/checklist/ChecklistContainer";
 import ChecklistHeader from "@/components/checklist/ChecklistHeader";
+import ChecklistAnalytics from "@/components/checklist/ChecklistAnalytics";
 import { ChecklistItem } from "@/types/checklist";
 
 const Checklist = () => {
@@ -159,6 +160,8 @@ const Checklist = () => {
     });
   };
 
+  const completedCount = items.filter(item => item.completed).length;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -182,7 +185,7 @@ const Checklist = () => {
           )}
 
           <div className="max-w-4xl mx-auto space-y-8">
-            <div className="grid gap-8 md:grid-cols-2">
+            <div className="grid gap-8 md:grid-cols-3">
               <BusinessTypeSelector
                 businessType={businessType}
                 industry={industry}
@@ -190,6 +193,11 @@ const Checklist = () => {
                 onIndustryChange={setIndustry}
               />
               <ChecklistProgress progress={progress} />
+              <ChecklistAnalytics
+                completedCount={completedCount}
+                totalCount={items.length}
+                items={items}
+              />
             </div>
 
             <ChecklistContainer 
