@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSession } from "@supabase/auth-helpers-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -17,18 +16,15 @@ interface ChecklistItem {
 
 const Checklist = () => {
   const session = useSession();
-  const navigate = useNavigate();
   const { toast } = useToast();
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [newStep, setNewStep] = useState("");
 
   useEffect(() => {
-    if (!session) {
-      navigate('/login');
-      return;
+    if (session) {
+      fetchChecklist();
     }
-    fetchChecklist();
-  }, [session, navigate]);
+  }, [session]);
 
   const fetchChecklist = async () => {
     const { data, error } = await supabase
@@ -50,6 +46,14 @@ const Checklist = () => {
 
   const addItem = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!session) {
+      toast({
+        title: "Login Required",
+        description: "Please login to save checklist items",
+        variant: "destructive",
+      });
+      return;
+    }
     if (!newStep.trim()) return;
 
     const { error } = await supabase
@@ -80,6 +84,15 @@ const Checklist = () => {
   };
 
   const toggleItem = async (id: number, completed: boolean) => {
+    if (!session) {
+      toast({
+        title: "Login Required",
+        description: "Please login to update checklist items",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const { error } = await supabase
       .from('checklist')
       .update({ completed })
@@ -98,6 +111,15 @@ const Checklist = () => {
   };
 
   const deleteItem = async (id: number) => {
+    if (!session) {
+      toast({
+        title: "Login Required",
+        description: "Please login to delete checklist items",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const { error } = await supabase
       .from('checklist')
       .delete()
@@ -119,16 +141,20 @@ const Checklist = () => {
     });
   };
 
-  if (!session) {
-    return null;
-  }
-
   return (
     <div>
       <Navbar />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-6">My Checklist</h1>
         
+        {!session && (
+          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-yellow-800">
+              Login to save and sync your checklist across devices.
+            </p>
+          </div>
+        )}
+
         <form onSubmit={addItem} className="flex gap-4 mb-8">
           <Input
             type="text"

@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useSession } from "@supabase/auth-helpers-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const session = useSession();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -14,7 +16,7 @@ const Navbar = () => {
       title: "Logged out",
       description: "You have been successfully logged out.",
     });
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -47,13 +49,23 @@ const Navbar = () => {
             </div>
           </div>
           <div className="flex items-center">
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              className="ml-4"
-            >
-              Logout
-            </Button>
+            {session ? (
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                className="ml-4"
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                onClick={() => navigate('/login')}
+                variant="outline"
+                className="ml-4"
+              >
+                Login
+              </Button>
+            )}
           </div>
         </div>
       </div>

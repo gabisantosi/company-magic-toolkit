@@ -1,22 +1,6 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSession } from "@supabase/auth-helpers-react";
 import Navbar from "@/components/layout/Navbar";
 
 const Simulator = () => {
-  const session = useSession();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!session) {
-      navigate('/login');
-    }
-  }, [session, navigate]);
-
-  if (!session) {
-    return null;
-  }
-
   return (
     <div>
       <Navbar />
