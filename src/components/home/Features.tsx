@@ -21,7 +21,7 @@ const features = [
 const Features = () => {
   return (
     <div className="py-20 bg-gradient-to-b from-white to-accent/30 relative">
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,106,167,0.05)_1px,transparent_1px),linear-gradient(rgba(0,106,167,0.05)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_100%,#000,transparent)]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(254,204,2,0.03)_1px,transparent_1px),linear-gradient(rgba(254,204,2,0.03)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_100%,#000,transparent)]"></div>
       <div className="container mx-auto px-4 relative">
         <div className="text-center mb-16">
           <div className="inline-block">
@@ -39,7 +39,7 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group bg-white/50 backdrop-blur-sm p-8 rounded-xl border border-gray-200/50 hover:border-swedish-blue/50 transition-all duration-500 transform hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,106,167,0.12)] relative overflow-hidden"
+              className="group bg-white/50 backdrop-blur-sm p-8 rounded-xl border border-gray-200/50 hover:border-swedish-yellow/50 transition-all duration-500 transform hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(254,204,2,0.12)] relative overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-swedish-blue/5 to-swedish-yellow/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="mb-6 flex justify-center relative">
@@ -49,12 +49,12 @@ const Features = () => {
               </div>
               <h3 className="text-xl font-semibold text-swedish-blue mb-3 relative z-10 group-hover:translate-y-[-2px] transition-transform duration-300 flex items-center justify-center">
                 {feature.title}
-                <ChevronRight className="w-5 h-5 ml-1 opacity-0 group-hover:opacity-100 transform transition-all duration-300 group-hover:translate-x-1" />
+                <ChevronRight className="w-5 h-5 ml-1 opacity-0 group-hover:opacity-100 transform transition-all duration-300 group-hover:translate-x-1 text-swedish-yellow" />
               </h3>
               <p className="text-gray-600 relative z-10 transform transition-all duration-300 group-hover:translate-y-[-1px]">
                 {feature.description}
               </p>
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-swedish-blue/0 via-swedish-blue/30 to-swedish-blue/0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-swedish-yellow/0 via-swedish-yellow/30 to-swedish-yellow/0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
             </div>
           ))}
         </div>
