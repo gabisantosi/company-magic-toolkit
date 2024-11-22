@@ -22,7 +22,6 @@ const Index = () => {
               <div className="space-y-4">
                 <h2 className="text-4xl font-bold bg-gradient-to-r from-swedish-blue to-swedish-blue/80 bg-clip-text text-transparent [text-shadow:_0_2px_4px_rgb(0_0_0_/_5%)]">
                   Not Sure Where to Begin?
-                  <Sparkles className="inline-block w-6 h-6 ml-2 text-swedish-yellow animate-pulse" />
                 </h2>
                 <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
                   Take our quick quiz to get personalized guidance on starting your business in Sweden.
