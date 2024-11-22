@@ -198,6 +198,7 @@ export type Database = {
       }
       questionnaire_responses: {
         Row: {
+          ai_recommendations: string | null
           business_idea: string | null
           created_at: string
           experience_level: string | null
@@ -208,6 +209,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          ai_recommendations?: string | null
           business_idea?: string | null
           created_at?: string
           experience_level?: string | null
@@ -218,6 +220,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          ai_recommendations?: string | null
           business_idea?: string | null
           created_at?: string
           experience_level?: string | null

@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Loader2 } from "lucide-react";
 
 const questions = [
   {
@@ -78,6 +79,7 @@ const Questionnaire = () => {
   const { toast } = useToast();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
@@ -91,6 +93,8 @@ const Questionnaire = () => {
   const handleNext = async () => {
     if (currentQuestion === questions.length - 1) {
       try {
+        setIsSubmitting(true);
+
         if (!session) {
           toast({
             title: "Not logged in",
@@ -100,14 +104,31 @@ const Questionnaire = () => {
           return;
         }
 
-        await supabase.from("questionnaire_responses").upsert({
-          user_id: session.user.id,
-          ...answers,
+        // Save responses to Supabase
+        const { data: responseData, error: responseError } = await supabase
+          .from("questionnaire_responses")
+          .insert({
+            user_id: session.user.id,
+            ...answers,
+          })
+          .select()
+          .single();
+
+        if (responseError) throw responseError;
+
+        // Get AI analysis
+        const aiResponse = await supabase.functions.invoke('analyze-questionnaire', {
+          body: { 
+            responses: answers,
+            userId: session.user.id
+          }
         });
 
+        if (aiResponse.error) throw aiResponse.error;
+
         toast({
-          title: "Responses saved!",
-          description: "Redirecting to your personalized recommendations...",
+          title: "Analysis Complete!",
+          description: "Your responses have been analyzed. Redirecting to recommendations...",
         });
 
         navigate("/checklist", {
@@ -119,6 +140,9 @@ const Questionnaire = () => {
           description: "Failed to save your responses. Please try again.",
           variant: "destructive",
         });
+        console.error('Questionnaire submission error:', error);
+      } finally {
+        setIsSubmitting(false);
       }
     } else {
       setCurrentQuestion((prev) => prev + 1);
@@ -185,9 +209,16 @@ const Questionnaire = () => {
                   </Button>
                   <Button
                     onClick={handleNext}
-                    disabled={!answers[currentQ.id]}
+                    disabled={!answers[currentQ.id] || isSubmitting}
                   >
-                    {currentQuestion === questions.length - 1 ? "Finish" : "Next"}
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Analyzing...
+                      </>
+                    ) : (
+                      currentQuestion === questions.length - 1 ? "Finish" : "Next"
+                    )}
                   </Button>
                 </div>
               </CardContent>
