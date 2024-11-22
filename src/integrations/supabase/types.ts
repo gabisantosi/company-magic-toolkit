@@ -30,6 +30,36 @@ export type Database = {
         }
         Relationships: []
       }
+      business_recommendations: {
+        Row: {
+          business_type: string
+          complexity_level: string | null
+          id: number
+          key_benefits: string[] | null
+          key_challenges: string[] | null
+          min_investment: string | null
+          suitable_for: string[] | null
+        }
+        Insert: {
+          business_type: string
+          complexity_level?: string | null
+          id?: number
+          key_benefits?: string[] | null
+          key_challenges?: string[] | null
+          min_investment?: string | null
+          suitable_for?: string[] | null
+        }
+        Update: {
+          business_type?: string
+          complexity_level?: string | null
+          id?: number
+          key_benefits?: string[] | null
+          key_challenges?: string[] | null
+          min_investment?: string | null
+          suitable_for?: string[] | null
+        }
+        Relationships: []
+      }
       checklist: {
         Row: {
           business_type: string
@@ -163,6 +193,72 @@ export type Database = {
           order_number?: number
           step?: string
           title?: string
+        }
+        Relationships: []
+      }
+      questionnaire_responses: {
+        Row: {
+          business_idea: string | null
+          created_at: string
+          experience_level: string | null
+          id: number
+          initial_investment: string | null
+          preferred_structure: string | null
+          target_market: string | null
+          user_id: string | null
+        }
+        Insert: {
+          business_idea?: string | null
+          created_at?: string
+          experience_level?: string | null
+          id?: number
+          initial_investment?: string | null
+          preferred_structure?: string | null
+          target_market?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          business_idea?: string | null
+          created_at?: string
+          experience_level?: string | null
+          id?: number
+          initial_investment?: string | null
+          preferred_structure?: string | null
+          target_market?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      success_stories: {
+        Row: {
+          business_type: string
+          content: string
+          founder_name: string | null
+          id: number
+          industry: string
+          key_learnings: string[] | null
+          title: string
+          year_founded: number | null
+        }
+        Insert: {
+          business_type: string
+          content: string
+          founder_name?: string | null
+          id?: number
+          industry: string
+          key_learnings?: string[] | null
+          title: string
+          year_founded?: number | null
+        }
+        Update: {
+          business_type?: string
+          content?: string
+          founder_name?: string | null
+          id?: number
+          industry?: string
+          key_learnings?: string[] | null
+          title?: string
+          year_founded?: number | null
         }
         Relationships: []
       }
