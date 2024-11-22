@@ -23,14 +23,27 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
   useEffect(() => {
     const checkScroll = () => {
       if (scrollAreaRef.current) {
-        const { scrollHeight, clientHeight } = scrollAreaRef.current;
-        setShowScrollIndicator(scrollHeight > clientHeight);
+        const { scrollHeight, clientHeight, scrollTop } = scrollAreaRef.current;
+        const isScrollable = scrollHeight > clientHeight;
+        const isAtBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+        setShowScrollIndicator(isScrollable && !isAtBottom);
       }
     };
 
-    checkScroll();
+    const scrollElement = scrollAreaRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', checkScroll);
+      checkScroll(); // Initial check
+    }
+
     window.addEventListener('resize', checkScroll);
-    return () => window.removeEventListener('resize', checkScroll);
+    
+    return () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener('scroll', checkScroll);
+      }
+      window.removeEventListener('resize', checkScroll);
+    };
   }, [items]);
 
   return (
