@@ -130,6 +130,36 @@ export type Database = {
           },
         ]
       }
+      guide_content: {
+        Row: {
+          business_type: string
+          content: string
+          id: number
+          industry: string
+          order_number: number
+          step: string
+          title: string
+        }
+        Insert: {
+          business_type: string
+          content: string
+          id?: number
+          industry: string
+          order_number: number
+          step: string
+          title: string
+        }
+        Update: {
+          business_type?: string
+          content?: string
+          id?: number
+          industry?: string
+          order_number?: number
+          step?: string
+          title?: string
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           created_at: string | null

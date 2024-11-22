@@ -1,6 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { ExternalLink, Clock, FileDown } from "lucide-react";
+import { ExternalLink, Clock, FileDown, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import { 
   Tooltip, 
   TooltipContent, 
@@ -15,6 +16,8 @@ interface ChecklistItemProps {
   estimatedTime?: string | null;
   details?: string | null;
   documentTemplateUrl?: string | null;
+  businessType: string;
+  industry: string;
   onToggle: (completed: boolean) => void;
 }
 
@@ -25,8 +28,16 @@ const ChecklistItem = ({
   estimatedTime, 
   details,
   documentTemplateUrl,
+  businessType,
+  industry,
   onToggle 
 }: ChecklistItemProps) => {
+  const navigate = useNavigate();
+
+  const handleViewGuide = () => {
+    navigate(`/guide?step=${encodeURIComponent(step)}&businessType=${encodeURIComponent(businessType)}&industry=${encodeURIComponent(industry)}`);
+  };
+
   return (
     <div 
       className={`group flex items-start gap-4 p-6 rounded-xl border transition-all duration-500 hover:shadow-lg transform hover:-translate-y-1 ${
@@ -74,6 +85,23 @@ const ChecklistItem = ({
                 </Tooltip>
               </TooltipProvider>
             )}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-swedish-blue hover:text-swedish-blue/90 hover:bg-accent transition-all duration-300 hover:scale-110"
+                    onClick={handleViewGuide}
+                  >
+                    <BookOpen className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>View guide</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             {documentTemplateUrl && (
               <TooltipProvider>
                 <Tooltip>

@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Checklist from "./pages/Checklist";
 import Simulator from "./pages/Simulator";
 import Login from "./pages/Login";
+import Guide from "./pages/Guide";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/checklist" element={<Checklist />} />
             <Route path="/simulator" element={<Simulator />} />
+            <Route path="/guide" element={<Guide />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
