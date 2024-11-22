@@ -77,6 +77,7 @@ export default {
       animation: {
         "fade-in": "fade-in 0.5s ease-out",
         "spin-slow": "spin-slow 20s linear infinite",
+        "wave": "wave 2s ease-in-out infinite",
       },
     },
   },
