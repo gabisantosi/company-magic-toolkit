@@ -58,6 +58,12 @@ const Navbar = () => {
               >
                 Simulator
               </Link>
+              <Link
+                to="/guide"
+                className="border-transparent text-gray-500 hover:text-swedish-blue inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:border-swedish-blue/50"
+              >
+                Guide
+              </Link>
             </div>
           </div>
           <div className="flex items-center">
