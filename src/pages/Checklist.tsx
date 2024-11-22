@@ -9,7 +9,6 @@ import ChecklistProgress from "@/components/checklist/ChecklistProgress";
 import BusinessTypeSelector from "@/components/checklist/BusinessTypeSelector";
 import ChecklistContainer from "@/components/checklist/ChecklistContainer";
 import ChecklistHeader from "@/components/checklist/ChecklistHeader";
-import ChecklistAnalytics from "@/components/checklist/ChecklistAnalytics";
 import { ChecklistItem } from "@/types/checklist";
 
 const Checklist = () => {
@@ -185,15 +184,15 @@ const Checklist = () => {
           )}
 
           <div className="max-w-4xl mx-auto space-y-8">
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2">
               <BusinessTypeSelector
                 businessType={businessType}
                 industry={industry}
                 onBusinessTypeChange={setBusinessType}
                 onIndustryChange={setIndustry}
               />
-              <ChecklistProgress progress={progress} />
-              <ChecklistAnalytics
+              <ChecklistProgress 
+                progress={progress}
                 completedCount={completedCount}
                 totalCount={items.length}
                 items={items}
