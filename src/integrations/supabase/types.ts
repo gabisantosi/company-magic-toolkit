@@ -9,6 +9,27 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      business_details: {
+        Row: {
+          business_type: string
+          description: string | null
+          id: number
+          industry: string
+        }
+        Insert: {
+          business_type: string
+          description?: string | null
+          id?: number
+          industry: string
+        }
+        Update: {
+          business_type?: string
+          description?: string | null
+          id?: number
+          industry?: string
+        }
+        Relationships: []
+      }
       checklist: {
         Row: {
           business_type: string
@@ -40,6 +61,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      checklist_templates: {
+        Row: {
+          business_type: string
+          id: number
+          industry: string
+          order_number: number
+          step: string
+        }
+        Insert: {
+          business_type: string
+          id?: number
+          industry: string
+          order_number: number
+          step: string
+        }
+        Update: {
+          business_type?: string
+          id?: number
+          industry?: string
+          order_number?: number
+          step?: string
+        }
+        Relationships: []
       }
       forms: {
         Row: {

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/components/ui/use-toast";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import Navbar from "@/components/layout/Navbar";
-import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import Navbar from "@/components/layout/Navbar";
+import BusinessDetailsForm from "@/components/business/BusinessDetailsForm";
+import ChecklistItem from "@/components/checklist/ChecklistItem";
+import ChecklistProgress from "@/components/checklist/ChecklistProgress";
 
 interface ChecklistItem {
   id: number;
@@ -22,23 +21,26 @@ const Checklist = () => {
   const { toast } = useToast();
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [businessType, setBusinessType] = useState("Aktiebolag");
+  const [industry, setIndustry] = useState("Technology");
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     fetchChecklist();
-  }, [session, businessType]);
+  }, [session, businessType, industry]);
 
   const fetchChecklist = async () => {
-    const { data, error } = await supabase
-      .from('checklist')
+    // First, fetch the template items for the selected business type and industry
+    const { data: templateData, error: templateError } = await supabase
+      .from('checklist_templates')
       .select('*')
       .eq('business_type', businessType)
-      .order('id', { ascending: true });
+      .eq('industry', industry)
+      .order('order_number', { ascending: true });
 
-    if (error) {
+    if (templateError) {
       toast({
         title: "Error",
-        description: "Failed to fetch checklist items",
+        description: "Failed to fetch checklist templates",
         variant: "destructive",
       });
       return;
@@ -46,17 +48,26 @@ const Checklist = () => {
 
     if (session) {
       // If user is logged in, fetch their progress
-      const userProgress = await supabase
+      const { data: progressData, error: progressError } = await supabase
         .from('checklist')
         .select('*')
         .eq('user_id', session.user.id)
         .eq('business_type', businessType);
 
+      if (progressError) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch user progress",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const completedItems = new Set(
-        userProgress.data?.map(item => item.step)
+        progressData?.map(item => item.step)
       );
 
-      const itemsWithProgress = data?.map(item => ({
+      const itemsWithProgress = templateData?.map(item => ({
         ...item,
         completed: completedItems.has(item.step)
       })) || [];
@@ -65,7 +76,7 @@ const Checklist = () => {
       updateProgress(itemsWithProgress);
     } else {
       // If user is not logged in, show uncompleted checklist
-      const baseItems = data?.map(item => ({
+      const baseItems = templateData?.map(item => ({
         ...item,
         completed: false
       })) || [];
@@ -83,7 +94,6 @@ const Checklist = () => {
 
   const toggleItem = async (step: string, completed: boolean) => {
     if (!session) {
-      // For non-logged in users, only update the UI state
       const updatedItems = items.map(item =>
         item.step === step ? { ...item, completed } : item
       );
@@ -97,7 +107,6 @@ const Checklist = () => {
       return;
     }
 
-    // For logged-in users, update the database
     if (completed) {
       const { error } = await supabase
         .from('checklist')
@@ -146,6 +155,11 @@ const Checklist = () => {
     });
   };
 
+  const handleBusinessDetailsSubmitted = (newBusinessType: string, newIndustry: string) => {
+    setBusinessType(newBusinessType);
+    setIndustry(newIndustry);
+  };
+
   return (
     <div>
       <Navbar />
@@ -157,66 +171,38 @@ const Checklist = () => {
             <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-yellow-800">
                 You are not logged in. Your progress won't be saved.{' '}
-                <Button
-                  variant="link"
-                  className="text-yellow-800 underline p-0 h-auto font-semibold"
+                <button
+                  className="text-yellow-800 underline font-semibold"
                   onClick={() => navigate('/login')}
                 >
                   Login to save your progress
-                </Button>
+                </button>
               </p>
             </div>
           )}
 
-          <div className="mb-8">
-            <label className="block text-sm font-medium mb-2">
-              Business Type
-            </label>
-            <Select
-              value={businessType}
-              onValueChange={setBusinessType}
-            >
-              <SelectTrigger className="w-full md:w-[280px]">
-                <SelectValue placeholder="Select business type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Aktiebolag">Aktiebolag (AB)</SelectItem>
-                <SelectItem value="Enskild Firma">Enskild Firma</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <BusinessDetailsForm
+            onDetailsSubmitted={handleBusinessDetailsSubmitted}
+            currentBusinessType={businessType}
+            currentIndustry={industry}
+          />
 
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium">Overall Progress</span>
-              <span className="text-sm font-medium">{Math.round(progress)}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
+          <ChecklistProgress progress={progress} />
 
           <div className="space-y-4">
             {items.map((item) => (
-              <div
+              <ChecklistItem
                 key={item.id}
-                className="flex items-start gap-3 p-4 bg-card rounded-lg border hover:border-primary transition-colors"
-              >
-                <Checkbox
-                  checked={item.completed}
-                  onCheckedChange={(checked) => toggleItem(item.step, checked as boolean)}
-                  className="mt-1"
-                />
-                <div className="flex-1">
-                  <p className={`text-base ${item.completed ? "line-through text-muted-foreground" : ""}`}>
-                    {item.step}
-                  </p>
-                </div>
-              </div>
+                step={item.step}
+                completed={item.completed}
+                onToggle={(completed) => toggleItem(item.step, completed)}
+              />
             ))}
           </div>
 
           {items.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
-              No checklist items found for this business type.
+              No checklist items found for this business type and industry.
             </div>
           )}
         </div>
