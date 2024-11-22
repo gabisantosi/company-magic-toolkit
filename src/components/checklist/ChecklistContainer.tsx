@@ -60,9 +60,9 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-lg border border-swedish-blue/10 relative min-h-[80vh] animate-fade-in hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-lg border border-swedish-blue/10 relative min-h-[80vh] animate-fade-in hover:shadow-xl transition-all duration-500">
       {items.length > 0 && (
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex items-center justify-between animate-[fade-in_0.5s_ease-out_0.3s]">
           <div className="text-sm font-medium text-gray-600">
             Total steps: {items.length}
           </div>
@@ -79,9 +79,14 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
           {items.map((item, index) => (
             <div 
               key={item.id} 
-              className="relative flex items-start gap-4 transition-all duration-300 hover:translate-x-1"
+              className="relative flex items-start gap-4 transition-all duration-500 hover:translate-x-1"
+              style={{
+                animationDelay: `${index * 0.1}s`,
+                animation: 'fade-in 0.5s ease-out forwards',
+                opacity: 0
+              }}
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-swedish-blue to-swedish-blue/80 flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-110">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-swedish-blue to-swedish-blue/80 flex items-center justify-center shadow-lg transform transition-all duration-300 hover:scale-110 hover:rotate-[360deg]">
                 <span className="text-sm font-bold text-white">
                   {index + 1}
                 </span>
@@ -110,7 +115,7 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
       {showScrollUp && (
         <button
           onClick={() => scrollToPosition('up')}
-          className="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-6 py-2.5 rounded-full shadow-lg border border-swedish-blue/10 hover:bg-accent transition-all duration-300 hover:-translate-y-1"
+          className="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-6 py-2.5 rounded-full shadow-lg border border-swedish-blue/10 hover:bg-accent transition-all duration-300 hover:-translate-y-1 animate-fade-in"
         >
           <ChevronUp className="h-4 w-4" />
           <span>Scroll up</span>
@@ -120,7 +125,7 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
       {showScrollDown && (
         <button
           onClick={() => scrollToPosition('down')}
-          className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-6 py-2.5 rounded-full shadow-lg border border-swedish-blue/10 hover:bg-accent transition-all duration-300 hover:translate-y-1"
+          className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-6 py-2.5 rounded-full shadow-lg border border-swedish-blue/10 hover:bg-accent transition-all duration-300 hover:translate-y-1 animate-fade-in"
         >
           <span>Scroll down</span>
           <ChevronDown className="h-4 w-4" />
