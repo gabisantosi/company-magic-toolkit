@@ -11,18 +11,21 @@ export type Database = {
     Tables: {
       checklist: {
         Row: {
+          business_type: string
           completed: boolean | null
           id: number
           step: string
           user_id: string | null
         }
         Insert: {
+          business_type?: string
           completed?: boolean | null
           id?: never
           step: string
           user_id?: string | null
         }
         Update: {
+          business_type?: string
           completed?: boolean | null
           id?: never
           step?: string
