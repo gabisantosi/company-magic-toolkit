@@ -11,7 +11,16 @@ const Navbar = () => {
   const session = useSession();
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     toast({
       title: "Logged out",
       description: "You have been successfully logged out.",
