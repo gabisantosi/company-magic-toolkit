@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import ChecklistItem from "./ChecklistItem";
 
@@ -17,7 +17,8 @@ interface ChecklistContainerProps {
 }
 
 const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) => {
-  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+  const [showScrollDown, setShowScrollDown] = useState(false);
+  const [showScrollUp, setShowScrollUp] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,7 +27,10 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
         const { scrollHeight, clientHeight, scrollTop } = scrollAreaRef.current;
         const isScrollable = scrollHeight > clientHeight;
         const isAtBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
-        setShowScrollIndicator(isScrollable && !isAtBottom);
+        const isAtTop = scrollTop === 0;
+
+        setShowScrollDown(isScrollable && !isAtBottom);
+        setShowScrollUp(isScrollable && !isAtTop);
       }
     };
 
@@ -45,6 +49,16 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
       window.removeEventListener('resize', checkScroll);
     };
   }, [items]);
+
+  const scrollToPosition = (direction: 'up' | 'down') => {
+    if (scrollAreaRef.current) {
+      const scrollAmount = direction === 'down' ? 300 : -300;
+      scrollAreaRef.current.scrollBy({
+        top: scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 relative">
@@ -73,14 +87,24 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
         </div>
       </ScrollArea>
       
-      {showScrollIndicator && (
-        <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center pointer-events-none">
-          <div className="w-full h-12 bg-gradient-to-t from-white to-transparent" />
-          <div className="flex items-center gap-2 text-sm text-swedish-blue animate-bounce">
-            <span>Scroll for more</span>
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </div>
+      {showScrollUp && (
+        <button
+          onClick={() => scrollToPosition('up')}
+          className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-4 py-2 rounded-b-lg shadow-md border border-t-0 hover:bg-accent transition-colors"
+        >
+          <ChevronUp className="h-4 w-4" />
+          <span>Scroll up</span>
+        </button>
+      )}
+
+      {showScrollDown && (
+        <button
+          onClick={() => scrollToPosition('down')}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-swedish-blue bg-white px-4 py-2 rounded-t-lg shadow-md border border-b-0 hover:bg-accent transition-colors"
+        >
+          <span>Scroll down</span>
+          <ChevronDown className="h-4 w-4" />
+        </button>
       )}
     </div>
   );
