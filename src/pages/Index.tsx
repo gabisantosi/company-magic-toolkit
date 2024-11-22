@@ -1,9 +1,7 @@
-import { useEffect } from "react";
-import { useSession } from "@supabase/auth-helpers-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import Hero from "@/components/Hero";
-import Features from "@/components/Features";
+import Hero from "@/components/home/Hero";
+import Features from "@/components/home/Features";
 import QuestionnaireButton from "@/components/questionnaire/QuestionnaireButton";
 
 const Index = () => {
