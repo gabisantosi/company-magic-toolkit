@@ -1,4 +1,4 @@
-import { CheckCircle, Calculator, FileText } from "lucide-react";
+import { CheckCircle, Calculator, FileText, ArrowRight, Sparkles, ChevronRight } from "lucide-react";
 
 const features = [
   {
@@ -27,6 +27,7 @@ const Features = () => {
           <div className="inline-block">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-swedish-blue to-swedish-blue/80 bg-clip-text text-transparent mb-4 [text-shadow:_0_2px_4px_rgb(0_0_0_/_5%)]">
               Everything You Need to Start Your Business
+              <Sparkles className="inline-block w-6 h-6 ml-2 text-swedish-yellow animate-pulse" />
             </h2>
             <div className="h-1 w-1/3 mx-auto bg-gradient-to-r from-swedish-blue/50 to-swedish-yellow/50 rounded-full transform transition-all duration-300 hover:scale-x-110"></div>
           </div>
@@ -46,8 +47,9 @@ const Features = () => {
                   {feature.icon}
                 </div>
               </div>
-              <h3 className="text-xl font-semibold text-swedish-blue mb-3 relative z-10 group-hover:translate-y-[-2px] transition-transform duration-300">
+              <h3 className="text-xl font-semibold text-swedish-blue mb-3 relative z-10 group-hover:translate-y-[-2px] transition-transform duration-300 flex items-center justify-center">
                 {feature.title}
+                <ChevronRight className="w-5 h-5 ml-1 opacity-0 group-hover:opacity-100 transform transition-all duration-300 group-hover:translate-x-1" />
               </h3>
               <p className="text-gray-600 relative z-10 transform transition-all duration-300 group-hover:translate-y-[-1px]">
                 {feature.description}
