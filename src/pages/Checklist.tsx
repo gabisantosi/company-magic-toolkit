@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import BusinessDetailsForm from "@/components/business/BusinessDetailsForm";
 import ChecklistProgress from "@/components/checklist/ChecklistProgress";
 import BusinessTypeSelector from "@/components/checklist/BusinessTypeSelector";
 import ChecklistContainer from "@/components/checklist/ChecklistContainer";
@@ -149,11 +148,6 @@ const Checklist = () => {
     });
   };
 
-  const handleBusinessDetailsSubmitted = (newBusinessType: string, newIndustry: string) => {
-    setBusinessType(newBusinessType);
-    setIndustry(newIndustry);
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -177,12 +171,6 @@ const Checklist = () => {
             )}
 
             <div className="max-w-4xl mx-auto space-y-8">
-              <BusinessDetailsForm
-                onDetailsSubmitted={handleBusinessDetailsSubmitted}
-                currentBusinessType={businessType}
-                currentIndustry={industry}
-              />
-
               <BusinessTypeSelector
                 businessType={businessType}
                 industry={industry}
