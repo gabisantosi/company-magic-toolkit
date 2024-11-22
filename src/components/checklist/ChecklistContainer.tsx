@@ -13,10 +13,17 @@ interface ChecklistContainerProps {
     details?: string | null;
     document_template_url?: string | null;
   }>;
+  businessType: string;
+  industry: string;
   onToggleItem: (step: string, completed: boolean) => void;
 }
 
-const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) => {
+const ChecklistContainer = ({ 
+  items, 
+  businessType,
+  industry,
+  onToggleItem 
+}: ChecklistContainerProps) => {
   const [showScrollDown, setShowScrollDown] = useState(false);
   const [showScrollUp, setShowScrollUp] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -99,6 +106,8 @@ const ChecklistContainer = ({ items, onToggleItem }: ChecklistContainerProps) =>
                   estimatedTime={item.estimated_time}
                   details={item.details}
                   documentTemplateUrl={item.document_template_url}
+                  businessType={businessType}
+                  industry={industry}
                   onToggle={(completed) => onToggleItem(item.step, completed)}
                 />
               </div>
