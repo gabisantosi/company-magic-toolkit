@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/layout/Navbar";
 import BusinessDetailsForm from "@/components/business/BusinessDetailsForm";
-import ChecklistItem from "@/components/checklist/ChecklistItem";
 import ChecklistProgress from "@/components/checklist/ChecklistProgress";
+import BusinessTypeSelector from "@/components/checklist/BusinessTypeSelector";
+import ChecklistContainer from "@/components/checklist/ChecklistContainer";
 
 interface ChecklistItem {
   id: number;
@@ -161,15 +162,22 @@ const Checklist = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Start a Business in Sweden</h1>
-          
+      <main className="container mx-auto px-4 py-6 md:py-8 max-w-4xl">
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h1 className="text-2xl md:text-3xl font-bold">
+              Start a Business in Sweden
+            </h1>
+            <p className="text-muted-foreground">
+              Follow this checklist to set up your business correctly.
+            </p>
+          </div>
+
           {!session && (
-            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-yellow-800">
+            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-yellow-800 text-sm md:text-base">
                 You are not logged in. Your progress won't be saved.{' '}
                 <button
                   className="text-yellow-800 underline font-semibold"
@@ -187,29 +195,21 @@ const Checklist = () => {
             currentIndustry={industry}
           />
 
+          <BusinessTypeSelector
+            businessType={businessType}
+            industry={industry}
+            onBusinessTypeChange={setBusinessType}
+            onIndustryChange={setIndustry}
+          />
+
           <ChecklistProgress progress={progress} />
 
-          <div className="space-y-4">
-            {items.map((item) => (
-              <ChecklistItem
-                key={item.id}
-                step={item.step}
-                completed={item.completed}
-                resourceLink={item.resource_link}
-                estimatedTime={item.estimated_time}
-                details={item.details}
-                onToggle={(completed) => toggleItem(item.step, completed)}
-              />
-            ))}
-          </div>
-
-          {items.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              No checklist items found for this business type and industry.
-            </div>
-          )}
+          <ChecklistContainer 
+            items={items}
+            onToggleItem={toggleItem}
+          />
         </div>
-      </div>
+      </main>
     </div>
   );
 };

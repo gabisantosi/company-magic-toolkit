@@ -1,7 +1,12 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ExternalLink, Clock, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { 
+  Tooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
 
 interface ChecklistItemProps {
   step: string;
@@ -21,20 +26,20 @@ const ChecklistItem = ({
   onToggle 
 }: ChecklistItemProps) => {
   return (
-    <div className="flex items-start gap-3 p-4 bg-card rounded-lg border hover:border-primary transition-colors">
+    <div className="flex items-start gap-3 p-3 md:p-4 bg-card rounded-lg border hover:border-primary transition-colors">
       <Checkbox
         checked={completed}
         onCheckedChange={(checked) => onToggle(checked as boolean)}
         className="mt-1"
       />
-      <div className="flex-1">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <p className={`text-base ${completed ? "line-through text-muted-foreground" : ""}`}>
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 md:gap-4">
+          <div className="flex-1 min-w-0">
+            <p className={`text-sm md:text-base break-words ${completed ? "line-through text-muted-foreground" : ""}`}>
               {step}
             </p>
             {details && (
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-xs md:text-sm text-muted-foreground mt-1 break-words">
                 {details}
               </p>
             )}
@@ -44,8 +49,8 @@ const ChecklistItem = ({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                      <Clock className="h-4 w-4" />
+                    <div className="flex items-center gap-1 text-xs md:text-sm text-muted-foreground whitespace-nowrap">
+                      <Clock className="h-3 w-3 md:h-4 md:w-4" />
                       <span>{estimatedTime}</span>
                     </div>
                   </TooltipTrigger>
@@ -62,10 +67,10 @@ const ChecklistItem = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6"
+                      className="h-6 w-6 md:h-8 md:w-8"
                       onClick={() => window.open(resourceLink, '_blank')}
                     >
-                      <ExternalLink className="h-4 w-4" />
+                      <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
