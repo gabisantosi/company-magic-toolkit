@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -26,7 +26,7 @@ const Hero = () => {
                 >
                   <Link to="/checklist">
                     Get Started
-                    <ArrowRight className="w-4 h-4 ml-2 transform transition-transform group-hover:translate-x-1" />
+                    <ArrowLeft className="w-4 h-4 ml-2 transform transition-transform group-hover:-translate-x-1" />
                   </Link>
                 </Button>
                 <Button
