@@ -149,18 +149,19 @@ const Checklist = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-accent/50 to-background">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow">
-        <div className="container mx-auto px-4 py-12 space-y-8">
+      <main className="flex-grow bg-gradient-to-br from-accent via-white to-transparent relative overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]"></div>
+        <div className="container mx-auto px-4 py-12 space-y-8 relative">
           <ChecklistHeader />
           
           {!session && (
-            <div className="max-w-4xl mx-auto p-4 bg-accent border border-swedish-blue/20 rounded-lg mb-8 shadow-sm animate-fade-in">
-              <p className="text-swedish-blue text-sm md:text-base">
+            <div className="max-w-4xl mx-auto p-6 bg-white/80 backdrop-blur-sm border border-swedish-blue/20 rounded-xl shadow-lg mb-8 animate-fade-in">
+              <p className="text-swedish-blue text-center">
                 You are not logged in. Your progress won't be saved.{' '}
                 <button
-                  className="text-swedish-blue underline font-semibold hover:text-swedish-blue/80"
+                  className="text-swedish-blue underline font-semibold hover:text-swedish-blue/80 transition-colors"
                   onClick={() => navigate('/login')}
                 >
                   Login to save your progress
