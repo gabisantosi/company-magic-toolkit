@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { ExternalLink, Clock } from "lucide-react";
+import { ExternalLink, Clock, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -8,10 +8,18 @@ interface ChecklistItemProps {
   completed: boolean;
   resourceLink?: string | null;
   estimatedTime?: string | null;
+  details?: string | null;
   onToggle: (completed: boolean) => void;
 }
 
-const ChecklistItem = ({ step, completed, resourceLink, estimatedTime, onToggle }: ChecklistItemProps) => {
+const ChecklistItem = ({ 
+  step, 
+  completed, 
+  resourceLink, 
+  estimatedTime, 
+  details,
+  onToggle 
+}: ChecklistItemProps) => {
   return (
     <div className="flex items-start gap-3 p-4 bg-card rounded-lg border hover:border-primary transition-colors">
       <Checkbox
@@ -21,10 +29,17 @@ const ChecklistItem = ({ step, completed, resourceLink, estimatedTime, onToggle 
       />
       <div className="flex-1">
         <div className="flex items-start justify-between gap-4">
-          <p className={`text-base ${completed ? "line-through text-muted-foreground" : ""}`}>
-            {step}
-          </p>
-          <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <p className={`text-base ${completed ? "line-through text-muted-foreground" : ""}`}>
+              {step}
+            </p>
+            {details && (
+              <p className="text-sm text-muted-foreground mt-1">
+                {details}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
             {estimatedTime && (
               <TooltipProvider>
                 <Tooltip>

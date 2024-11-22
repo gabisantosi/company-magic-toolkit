@@ -65,6 +65,7 @@ export type Database = {
       checklist_templates: {
         Row: {
           business_type: string
+          details: string | null
           estimated_time: string | null
           id: number
           industry: string
@@ -74,6 +75,7 @@ export type Database = {
         }
         Insert: {
           business_type: string
+          details?: string | null
           estimated_time?: string | null
           id?: number
           industry: string
@@ -83,6 +85,7 @@ export type Database = {
         }
         Update: {
           business_type?: string
+          details?: string | null
           estimated_time?: string | null
           id?: number
           industry?: string

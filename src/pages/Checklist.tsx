@@ -15,6 +15,7 @@ interface ChecklistItem {
   business_type: string;
   resource_link?: string | null;
   estimated_time?: string | null;
+  details?: string | null;
 }
 
 const Checklist = () => {
@@ -196,6 +197,7 @@ const Checklist = () => {
                 completed={item.completed}
                 resourceLink={item.resource_link}
                 estimatedTime={item.estimated_time}
+                details={item.details}
                 onToggle={(completed) => toggleItem(item.step, completed)}
               />
             ))}
