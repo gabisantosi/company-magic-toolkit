@@ -8,8 +8,14 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { 
+      headers: {
+        ...corsHeaders,
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      }
+    });
   }
 
   try {
@@ -51,7 +57,13 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Eden AI API error response:', errorText);
-      throw new Error(`Eden AI API failed with status ${response.status}: ${errorText}`);
+      return new Response(
+        JSON.stringify({ error: 'Eden AI API request failed', details: errorText }),
+        { 
+          status: response.status,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     const result = await response.json();
@@ -60,12 +72,24 @@ serve(async (req) => {
     // Validate the response structure
     if (!result?.anthropic?.generated_text) {
       console.error('Invalid or missing response from Eden AI:', result);
-      throw new Error('Invalid or missing response from Eden AI');
+      return new Response(
+        JSON.stringify({ error: 'Invalid or missing response from Eden AI' }),
+        { 
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     const generatedText = result.anthropic.generated_text.trim();
     if (!generatedText) {
-      throw new Error('Empty response from Eden AI');
+      return new Response(
+        JSON.stringify({ error: 'Empty response from Eden AI' }),
+        { 
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     console.log('Generated recommendations:', generatedText);
@@ -84,16 +108,19 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('Supabase update error:', updateError);
-      throw updateError;
+      return new Response(
+        JSON.stringify({ error: 'Failed to save recommendations', details: updateError }),
+        { 
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     return new Response(
       JSON.stringify({ recommendations: generatedText }),
       { 
-        headers: { 
-          ...corsHeaders,
-          'Content-Type': 'application/json'
-        }
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
 
@@ -106,10 +133,7 @@ serve(async (req) => {
       }),
       { 
         status: 500,
-        headers: { 
-          ...corsHeaders,
-          'Content-Type': 'application/json'
-        }
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
   }
