@@ -33,7 +33,12 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold text-swedish-blue mb-4">Contact</h4>
             <p className="text-gray-600">
-              Email: contact@startsweden.com
+              <a 
+                href="mailto:gabisantos.enf@gmail.com" 
+                className="text-gray-600 hover:text-swedish-blue transition-colors duration-300 inline-flex items-center gap-1"
+              >
+                Mail Us
+              </a>
             </p>
           </div>
         </div>
