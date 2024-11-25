@@ -5,7 +5,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-8 relative">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold text-swedish-blue mb-4">SwedishStartup</h3>
+            <h3 className="text-lg font-semibold text-swedish-blue mb-4">Start Sweden</h3>
             <p className="text-gray-600">
               Making company registration in Sweden simple and accessible.
             </p>
@@ -33,14 +33,14 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold text-swedish-blue mb-4">Contact</h4>
             <p className="text-gray-600">
-              Email: contact@swedishstartup.com
+              Email: contact@startsweden.com
               <br />
               Phone: +46 XX XXX XX XX
             </p>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-200/50 text-center text-gray-600">
-          <p>&copy; {new Date().getFullYear()} SwedishStartup. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Start Sweden. All rights reserved.</p>
         </div>
       </div>
     </footer>
