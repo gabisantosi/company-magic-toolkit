@@ -57,14 +57,13 @@ serve(async (req) => {
     const result = await response.json();
     console.log('Eden AI raw response:', JSON.stringify(result, null, 2));
 
-    // Extract the message from the chat response
-    const generatedText = result.anthropic?.generated_text;
-    
-    if (!generatedText || typeof generatedText !== 'string' || !generatedText.trim()) {
-      console.error('Invalid response structure:', result);
-      throw new Error('Unable to extract message from Eden AI chat response');
+    // Extract the generated text from the response
+    if (!result.anthropic || !result.anthropic.generated_text) {
+      console.error('Invalid response structure from Eden AI:', result);
+      throw new Error('Invalid response structure from Eden AI');
     }
 
+    const generatedText = result.anthropic.generated_text;
     console.log('Generated recommendations:', generatedText);
 
     // Save to Supabase
