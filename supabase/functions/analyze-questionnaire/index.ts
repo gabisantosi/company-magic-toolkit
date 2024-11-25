@@ -44,9 +44,7 @@ serve(async (req) => {
         temperature: 0.7,
         max_tokens: 500,
         settings: {
-          anthropic: {
-            model: "claude-2"
-          }
+          anthropic: "claude-2"
         }
       })
     });
