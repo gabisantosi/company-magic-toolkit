@@ -32,7 +32,8 @@ serve(async (req) => {
       throw new Error('Eden AI API key not found in environment variables');
     }
 
-    const response = await fetch('https://api.edenai.run/v2/text/generation', {
+    // Using Eden AI's chat API instead of text generation
+    const response = await fetch('https://api.edenai.run/v2/text/chat', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${edenAiApiKey}`,
@@ -42,7 +43,6 @@ serve(async (req) => {
         providers: "anthropic",
         text: prompt,
         temperature: 0.7,
-        max_tokens: 500,
         settings: {
           anthropic: "claude-2"
         }
@@ -58,41 +58,17 @@ serve(async (req) => {
     const result = await response.json();
     console.log('Eden AI raw response:', JSON.stringify(result, null, 2));
 
-    // Extract the generated text from the response with better error handling
-    let generatedText = '';
-    if (result.anthropic && result.anthropic.generated_text) {
-      generatedText = result.anthropic.generated_text;
-    } else if (result.generated_text) {
-      generatedText = result.generated_text;
-    } else {
-      console.error('Unexpected Eden AI response structure:', result);
-      // Try to find the text in a nested structure
-      const findGeneratedText = (obj: any): string | null => {
-        for (const key in obj) {
-          if (typeof obj[key] === 'object') {
-            const found = findGeneratedText(obj[key]);
-            if (found) return found;
-          } else if (key === 'generated_text' && typeof obj[key] === 'string') {
-            return obj[key];
-          }
-        }
-        return null;
-      };
-      
-      const foundText = findGeneratedText(result);
-      if (foundText) {
-        generatedText = foundText;
-      } else {
-        throw new Error('Unable to extract generated text from Eden AI response');
-      }
-    }
-
-    if (typeof generatedText !== 'string' || !generatedText.trim()) {
-      throw new Error('Generated text is empty or invalid');
+    // Extract the message from the chat response
+    const generatedText = result.anthropic?.message;
+    
+    if (!generatedText || typeof generatedText !== 'string' || !generatedText.trim()) {
+      console.error('Invalid response structure:', result);
+      throw new Error('Unable to extract message from Eden AI chat response');
     }
 
     console.log('Generated recommendations:', generatedText);
 
+    // Save to Supabase
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
