@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import GuideHeader from "@/components/guide/GuideHeader";
 import GuideContent from "@/components/guide/GuideContent";
+import { Button } from "@/components/ui/button";
 
 interface GuideContent {
   id: number;
@@ -28,11 +29,15 @@ const Guide = () => {
   const [loading, setLoading] = useState(true);
 
   const step = searchParams.get("step");
-  const businessType = searchParams.get("businessType") || "Aktiebolag";
+  const businessType = searchParams.get("businessType");
   const industry = searchParams.get("industry") || "General";
 
   useEffect(() => {
-    fetchGuideContent();
+    if (businessType) {
+      fetchGuideContent();
+    } else {
+      setLoading(false);
+    }
   }, [step, businessType, industry]);
 
   const fetchGuideContent = async () => {
@@ -58,6 +63,11 @@ const Guide = () => {
   };
 
   const handleBack = () => {
+    if (!businessType) {
+      navigate("/questionnaire");
+      return;
+    }
+    
     const stepParam = encodeURIComponent(step || "");
     const businessTypeParam = encodeURIComponent(businessType);
     const industryParam = encodeURIComponent(industry);
@@ -97,6 +107,47 @@ const Guide = () => {
       });
     }
   };
+
+  if (!businessType) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow bg-gradient-to-br from-accent via-white to-transparent">
+          <div className="container mx-auto px-4 py-12">
+            <div className="max-w-3xl mx-auto text-center space-y-8">
+              <h1 className="text-4xl font-bold text-swedish-blue">
+                Choose Your Business Type
+              </h1>
+              <p className="text-lg text-gray-600">
+                Select the type of business you want to start to access the relevant guide.
+              </p>
+              <div className="grid gap-4 md:grid-cols-3">
+                <Button 
+                  className="p-8 text-lg"
+                  onClick={() => navigate(`/guide?businessType=Aktiebolag&industry=${industry}`)}
+                >
+                  Aktiebolag (AB)
+                </Button>
+                <Button 
+                  className="p-8 text-lg"
+                  onClick={() => navigate(`/guide?businessType=Enskild Firma&industry=${industry}`)}
+                >
+                  Enskild Firma
+                </Button>
+                <Button 
+                  className="p-8 text-lg"
+                  onClick={() => navigate(`/guide?businessType=Handelsbolag&industry=${industry}`)}
+                >
+                  Handelsbolag
+                </Button>
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
