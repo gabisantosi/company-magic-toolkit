@@ -9,6 +9,14 @@ const Footer = () => {
             <p className="text-gray-600">
               Making company registration in Sweden simple and accessible.
             </p>
+            <div className="mt-4">
+              <a 
+                href="mailto:contact@startsweden.com" 
+                className="text-gray-600 hover:text-swedish-blue transition-colors duration-300"
+              >
+                Contact
+              </a>
+            </div>
           </div>
           <div>
             <h4 className="text-lg font-semibold text-swedish-blue mb-4">Quick Links</h4>
