@@ -13,6 +13,9 @@ const Navbar = () => {
           <Link to="/checklist">
             <Button variant="ghost">Checklist</Button>
           </Link>
+          <Link to="/simulator">
+            <Button variant="ghost">Cost Calculator</Button>
+          </Link>
           <Link to="/guide">
             <Button variant="ghost">Guide</Button>
           </Link>
