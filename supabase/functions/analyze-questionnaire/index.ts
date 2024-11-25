@@ -35,7 +35,13 @@ serve(async (req) => {
 
     const edenAiApiKey = Deno.env.get('EDEN_AI_API_KEY');
     if (!edenAiApiKey) {
-      throw new Error('Eden AI API key not found in environment variables');
+      return new Response(
+        JSON.stringify({ error: 'Eden AI API key not configured' }),
+        { 
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     const response = await fetch('https://api.edenai.run/v2/text/chat', {
@@ -58,7 +64,11 @@ serve(async (req) => {
       const errorText = await response.text();
       console.error('Eden AI API error response:', errorText);
       return new Response(
-        JSON.stringify({ error: 'Eden AI API request failed', details: errorText }),
+        JSON.stringify({ 
+          error: 'Eden AI API request failed', 
+          details: errorText,
+          status: response.status 
+        }),
         { 
           status: response.status,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -73,7 +83,10 @@ serve(async (req) => {
     if (!result?.anthropic?.generated_text) {
       console.error('Invalid or missing response from Eden AI:', result);
       return new Response(
-        JSON.stringify({ error: 'Invalid or missing response from Eden AI' }),
+        JSON.stringify({ 
+          error: 'Invalid or missing response from Eden AI',
+          details: JSON.stringify(result)
+        }),
         { 
           status: 500,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -109,7 +122,10 @@ serve(async (req) => {
     if (updateError) {
       console.error('Supabase update error:', updateError);
       return new Response(
-        JSON.stringify({ error: 'Failed to save recommendations', details: updateError }),
+        JSON.stringify({ 
+          error: 'Failed to save recommendations', 
+          details: updateError 
+        }),
         { 
           status: 500,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
