@@ -33,6 +33,8 @@ serve(async (req) => {
     
     Format the response in clear sections.`;
 
+    console.log('Making request to Eden AI with prompt:', prompt);
+
     // Make request to Eden AI
     const response = await fetch('https://api.edenai.run/v2/text/generation', {
       method: 'POST',
@@ -53,8 +55,19 @@ serve(async (req) => {
       })
     });
 
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Eden AI API error:', errorData);
+      throw new Error(`Eden AI API failed with status ${response.status}: ${errorData}`);
+    }
+
     const result = await response.json();
     console.log('Eden AI response:', result);
+
+    if (!result.anthropic || !result.anthropic.generated_text) {
+      console.error('Invalid Eden AI response format:', result);
+      throw new Error('Invalid response format from Eden AI');
+    }
 
     // Extract recommendations from Eden AI response
     const recommendations = result.anthropic.generated_text;
@@ -72,7 +85,10 @@ serve(async (req) => {
       .order('created_at', { ascending: false })
       .limit(1);
 
-    if (updateError) throw updateError;
+    if (updateError) {
+      console.error('Supabase update error:', updateError);
+      throw updateError;
+    }
 
     return new Response(
       JSON.stringify({ recommendations }),
