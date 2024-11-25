@@ -59,11 +59,7 @@ Please structure your response with clear sections for each aspect and provide a
         temperature: 0.7,
         max_tokens: 1000,
         settings: {
-          openai: {
-            model: "gpt-4",
-            temperature: 0.7,
-            max_tokens: 1000
-          }
+          openai: "gpt-4"  // Changed format: directly specify the model name as a string
         }
       })
     });
