@@ -29,7 +29,7 @@ const Guide = () => {
 
   const step = searchParams.get("step");
   const businessType = searchParams.get("businessType") || "Aktiebolag";
-  const industry = searchParams.get("industry") || "Technology";
+  const industry = searchParams.get("industry") || "General"; // Changed default to General
 
   useEffect(() => {
     fetchGuideContent();
@@ -37,16 +37,22 @@ const Guide = () => {
 
   const fetchGuideContent = async () => {
     try {
+      console.log('Fetching guide content for:', { businessType, industry }); // Debug log
       const { data, error } = await supabase
         .from("guide_content")
         .select("*")
         .eq("business_type", businessType)
-        .eq("industry", industry)
-        .order("order_number");
+        .eq("industry", industry);
 
-      if (error) throw error;
-      setGuideContent(data);
+      if (error) {
+        console.error('Supabase error:', error); // Debug log
+        throw error;
+      }
+
+      console.log('Fetched guide content:', data); // Debug log
+      setGuideContent(data || []);
     } catch (error) {
+      console.error('Error fetching guide content:', error); // Debug log
       toast({
         title: "Error",
         description: "Failed to load guide content",
@@ -122,7 +128,7 @@ const Guide = () => {
                 </h1>
                 <div className="space-y-4">
                   <p className="text-gray-600">
-                    This comprehensive guide will walk you through all the necessary steps to establish and run your {businessType} in Sweden's {industry} sector. Each step includes detailed instructions, official resources, and practical tips to ensure a smooth process.
+                    This comprehensive guide will walk you through all the necessary steps to establish and run your {businessType} in Sweden. Each step includes detailed instructions, official resources, and practical tips to ensure a smooth process.
                   </p>
                   <div className="bg-accent/30 p-4 rounded-lg">
                     <h2 className="font-semibold text-swedish-blue mb-2">Important Notes:</h2>
