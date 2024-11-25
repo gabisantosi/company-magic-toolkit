@@ -16,7 +16,7 @@ const Navbar = () => {
           <Link to="/simulator">
             <Button variant="ghost">Cost Calculator</Button>
           </Link>
-          <Link to="/questionnaire">
+          <Link to="/guide">
             <Button variant="ghost">Guide</Button>
           </Link>
           <Link to="/questionnaire">
