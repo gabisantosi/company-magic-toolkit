@@ -1,13 +1,28 @@
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import { SimulatorForm } from "@/components/simulator/SimulatorForm";
 
 const Simulator = () => {
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-4">Simulator</h1>
-        {/* Add your simulator content here */}
-      </div>
+      <main className="flex-grow bg-gradient-to-br from-accent via-white to-transparent">
+        <div className="container mx-auto px-4 py-12">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold text-swedish-blue">
+                Business Cost Simulator
+              </h1>
+              <p className="text-muted-foreground">
+                Compare costs and financial implications of different business types in Sweden
+              </p>
+            </div>
+
+            <SimulatorForm />
+          </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 };
