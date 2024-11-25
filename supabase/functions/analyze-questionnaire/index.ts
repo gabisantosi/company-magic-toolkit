@@ -15,25 +15,25 @@ serve(async (req) => {
   try {
     const { responses, userId } = await req.json();
     
-    // Criar o prompt para análise
-    const prompt = `Analise esta resposta de questionário e forneça recomendações específicas:
+    // Create prompt for analysis in English
+    const prompt = `Analyze this questionnaire response and provide specific recommendations:
     
-    Ideia de Negócio: ${responses.business_idea}
-    Mercado Alvo: ${responses.target_market}
-    Investimento Inicial: ${responses.initial_investment}
-    Nível de Experiência: ${responses.experience_level}
-    Estrutura Preferida: ${responses.preferred_structure}
+    Business Idea: ${responses.business_idea}
+    Target Market: ${responses.target_market}
+    Initial Investment: ${responses.initial_investment}
+    Experience Level: ${responses.experience_level}
+    Preferred Structure: ${responses.preferred_structure}
     
-    Por favor, forneça recomendações detalhadas sobre:
-    1. Sugestões de estrutura empresarial
-    2. Principais passos a serem tomados
-    3. Desafios potenciais para se preparar
-    4. Recursos que devem ser consultados
-    5. Expectativas de cronograma
+    Please provide detailed recommendations about:
+    1. Business structure suggestions
+    2. Key steps to take
+    3. Potential challenges to prepare for
+    4. Resources to consult
+    5. Timeline expectations
     
-    Formate a resposta em seções claras.`;
+    Format the response in clear sections.`;
 
-    // Fazer requisição para Eden AI
+    // Make request to Eden AI
     const response = await fetch('https://api.edenai.run/v2/text/generation', {
       method: 'POST',
       headers: {
@@ -56,11 +56,11 @@ serve(async (req) => {
     const result = await response.json();
     console.log('Eden AI response:', result);
 
-    // Extrair recomendações da resposta do Eden AI
+    // Extract recommendations from Eden AI response
     const recommendations = result.anthropic.generated_text;
     console.log('Recommendations generated:', recommendations);
 
-    // Atualizar a resposta do questionário com as recomendações
+    // Update questionnaire response with recommendations
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
