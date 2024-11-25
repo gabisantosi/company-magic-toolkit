@@ -15,7 +15,6 @@ serve(async (req) => {
   try {
     const { responses, userId } = await req.json();
     
-    // Format questionnaire responses into a comprehensive text
     const prompt = `Based on the following information, what is the best type of company to open in Sweden?
     
     Business Idea: ${responses.business_idea}
@@ -28,13 +27,11 @@ serve(async (req) => {
 
     console.log('Formatted prompt:', prompt);
 
-    // Get Eden AI API key from environment variables
     const edenAiApiKey = Deno.env.get('EDEN_AI_API_KEY');
     if (!edenAiApiKey) {
       throw new Error('Eden AI API key not found in environment variables');
     }
 
-    // Make request to Eden AI
     const response = await fetch('https://api.edenai.run/v2/text/generation', {
       method: 'POST',
       headers: {
@@ -53,24 +50,22 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Eden AI API error:', errorData);
-      throw new Error(`Eden AI API failed with status ${response.status}: ${errorData}`);
+      const errorText = await response.text();
+      console.error('Eden AI API error response:', errorText);
+      throw new Error(`Eden AI API failed with status ${response.status}: ${errorText}`);
     }
 
     const result = await response.json();
-    console.log('Eden AI response:', result);
+    console.log('Eden AI raw response:', JSON.stringify(result, null, 2));
 
-    if (!result.anthropic || !result.anthropic.generated_text) {
-      console.error('Invalid response format from Eden AI:', result);
-      throw new Error('Invalid response format from Eden AI');
+    if (!result.anthropic || typeof result.anthropic.generated_text !== 'string') {
+      console.error('Invalid response structure from Eden AI:', result);
+      throw new Error('Invalid response structure from Eden AI');
     }
 
-    // Extract recommendations from Eden AI response
     const recommendations = result.anthropic.generated_text;
     console.log('Generated recommendations:', recommendations);
 
-    // Update questionnaire response with AI recommendations
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -100,7 +95,10 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in analyze-questionnaire function:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.stack || 'No stack trace available'
+      }),
       { 
         status: 500,
         headers: { 
