@@ -35,7 +35,6 @@ export const QuestionnaireForm = () => {
   const [aiRecommendations, setAiRecommendations] = useState<string>("");
   const [showRecommendations, setShowRecommendations] = useState(false);
 
-  // Load saved answers from localStorage on component mount
   useEffect(() => {
     const savedAnswers = localStorage.getItem(STORAGE_KEY);
     if (savedAnswers) {
@@ -179,7 +178,7 @@ export const QuestionnaireForm = () => {
           <DialogHeader>
             <DialogTitle>Your Personalized Business Recommendations</DialogTitle>
             <DialogDescription>
-              Based on your responses, here are our AI-powered recommendations:
+              Based on your responses, here are our recommendations:
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4 space-y-4 whitespace-pre-wrap">
