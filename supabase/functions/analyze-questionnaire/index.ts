@@ -60,18 +60,19 @@ serve(async (req) => {
     const result = await response.json();
     console.log('Eden AI raw response:', JSON.stringify(result, null, 2));
 
-    // More detailed validation of the response structure
-    if (!result || typeof result !== 'object') {
-      throw new Error('Invalid response from Eden AI: Response is not an object');
+    // Extract the generated text from the response
+    let generatedText;
+    if (result?.anthropic?.generated_text) {
+      generatedText = result.anthropic.generated_text;
+    } else if (result?.generated_text) {
+      generatedText = result.generated_text;
+    } else {
+      console.error('Unexpected Eden AI response structure:', result);
+      throw new Error('Unable to extract generated text from Eden AI response');
     }
 
-    if (!result.anthropic) {
-      throw new Error('Invalid response from Eden AI: Missing anthropic field');
-    }
-
-    const generatedText = result.anthropic.generated_text;
     if (typeof generatedText !== 'string') {
-      throw new Error('Invalid response from Eden AI: generated_text is not a string');
+      throw new Error('Generated text is not a string');
     }
 
     console.log('Generated recommendations:', generatedText);
