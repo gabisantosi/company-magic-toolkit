@@ -10,8 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { ChartContainer } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Tooltip as UITooltip,
@@ -22,6 +20,8 @@ import {
 import { HelpCircle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { CostDistributionChart } from "./charts/CostDistributionChart";
+import { FinancialOverviewChart } from "./charts/FinancialOverviewChart";
 
 interface BusinessType {
   id: number;
@@ -50,8 +50,6 @@ interface PredefinedScenario {
   business_type_id: number;
   sector_id: number;
 }
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export const SimulatorForm = () => {
   const { toast } = useToast();
@@ -356,41 +354,13 @@ export const SimulatorForm = () => {
               </div>
 
               <div>
-                <h4 className="text-sm font-medium mb-4">Cost Distribution</h4>
-                <ChartContainer className="h-[300px]">
-                  <PieChart>
-                    <Pie
-                      data={pieChartData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      label
-                    >
-                      {pieChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ChartContainer>
+                <CostDistributionChart data={pieChartData} />
               </div>
             </div>
           </Card>
 
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Financial Overview</h3>
-            <ChartContainer className="h-[400px]">
-              <BarChart data={barChartData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="value" fill="#4F46E5" name="Amount (SEK)" />
-              </BarChart>
-            </ChartContainer>
+            <FinancialOverviewChart data={barChartData} />
           </Card>
         </>
       )}
