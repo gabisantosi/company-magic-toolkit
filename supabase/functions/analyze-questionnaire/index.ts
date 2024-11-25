@@ -60,7 +60,9 @@ serve(async (req) => {
         text: prompt,
         temperature: 0.7,
         settings: {
-          anthropic: "claude-2"
+          anthropic: {
+            model: "claude-3-haiku-20240307"
+          }
         }
       })
     });
@@ -91,9 +93,22 @@ serve(async (req) => {
     }
 
     const result = await response.json();
+    console.log('Eden AI response:', JSON.stringify(result));
     
     if (!result?.anthropic?.generated_text) {
       console.error('Invalid API response:', result);
+      if (result?.anthropic?.error) {
+        return new Response(
+          JSON.stringify({ 
+            error: 'AI service error',
+            details: result.anthropic.error.message
+          }),
+          { 
+            status: 500,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        );
+      }
       return new Response(
         JSON.stringify({ 
           error: 'Invalid response format',
