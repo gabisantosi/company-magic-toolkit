@@ -1,20 +1,24 @@
 import { ArrowRight, Calculator, CheckCircle, ChevronRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const features = [
   {
     icon: <ArrowRight className="w-12 h-12 text-swedish-blue" />,
     title: "Get Started",
     description: "Begin your journey to start your business in Sweden with our step-by-step guidance.",
+    link: "/questionnaire"
   },
   {
     icon: <CheckCircle className="w-12 h-12 text-swedish-blue" />,
     title: "Interactive Checklist",
     description: "Track your progress with our dynamic checklist tailored to your business type.",
+    link: "/checklist"
   },
   {
     icon: <Calculator className="w-12 h-12 text-swedish-blue" />,
     title: "Cost Calculator",
     description: "Calculate the costs of starting your business with our easy-to-use calculator.",
+    link: "/simulator"
   },
 ];
 
@@ -37,7 +41,8 @@ const Features = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div
+            <Link
+              to={feature.link}
               key={index}
               className="group bg-white/50 backdrop-blur-sm p-8 rounded-xl border border-gray-200/50 hover:border-swedish-blue/50 transition-all duration-500 transform hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,106,167,0.12)] relative overflow-hidden"
             >
@@ -55,7 +60,7 @@ const Features = () => {
                 {feature.description}
               </p>
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-swedish-blue/0 via-swedish-blue/30 to-swedish-blue/0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
