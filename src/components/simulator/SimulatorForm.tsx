@@ -12,7 +12,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  Tooltip as UITooltip,
+  Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { CostDistributionChart } from "./charts/CostDistributionChart";
 import { FinancialOverviewChart } from "./charts/FinancialOverviewChart";
+import { SalarySimulation } from "./SalarySimulation";
 
 interface BusinessType {
   id: number;
@@ -170,14 +171,14 @@ export const SimulatorForm = () => {
               <div className="flex items-center gap-2">
                 <Label htmlFor="business-type">Business Type</Label>
                 <TooltipProvider>
-                  <UITooltip>
+                  <Tooltip>
                     <TooltipTrigger>
                       <HelpCircle className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Choose your preferred business structure. Each type has different registration costs and tax implications.</p>
                     </TooltipContent>
-                  </UITooltip>
+                  </Tooltip>
                 </TooltipProvider>
               </div>
               <Select value={businessTypeId?.toString()} onValueChange={(value) => setBusinessTypeId(Number(value))}>
@@ -201,14 +202,14 @@ export const SimulatorForm = () => {
               <div className="flex items-center gap-2">
                 <Label htmlFor="sector">Business Sector</Label>
                 <TooltipProvider>
-                  <UITooltip>
+                  <Tooltip>
                     <TooltipTrigger>
                       <HelpCircle className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Your business sector helps us provide more accurate cost estimates.</p>
                     </TooltipContent>
-                  </UITooltip>
+                  </Tooltip>
                 </TooltipProvider>
               </div>
               <Select value={sectorId?.toString()} onValueChange={(value) => setSectorId(Number(value))}>
@@ -229,14 +230,14 @@ export const SimulatorForm = () => {
               <div className="flex items-center gap-2">
                 <Label htmlFor="revenue">Estimated Annual Revenue (SEK)</Label>
                 <TooltipProvider>
-                  <UITooltip>
+                  <Tooltip>
                     <TooltipTrigger>
                       <HelpCircle className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Your expected yearly income before taxes and expenses.</p>
                     </TooltipContent>
-                  </UITooltip>
+                  </Tooltip>
                 </TooltipProvider>
               </div>
               <Input
@@ -253,14 +254,14 @@ export const SimulatorForm = () => {
               <div className="flex items-center gap-2">
                 <Label htmlFor="employees">Number of Employees</Label>
                 <TooltipProvider>
-                  <UITooltip>
+                  <Tooltip>
                     <TooltipTrigger>
                       <HelpCircle className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Each employee adds approximately 400,000 SEK to your annual costs.</p>
                     </TooltipContent>
-                  </UITooltip>
+                  </Tooltip>
                 </TooltipProvider>
               </div>
               <Input
@@ -277,14 +278,14 @@ export const SimulatorForm = () => {
               <div className="flex items-center gap-2">
                 <Label htmlFor="fixed-costs">Additional Fixed Costs (SEK/year)</Label>
                 <TooltipProvider>
-                  <UITooltip>
+                  <Tooltip>
                     <TooltipTrigger>
                       <HelpCircle className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Include rent, utilities, insurance, and other regular expenses.</p>
                     </TooltipContent>
-                  </UITooltip>
+                  </Tooltip>
                 </TooltipProvider>
               </div>
               <Input
@@ -358,6 +359,13 @@ export const SimulatorForm = () => {
               </div>
             </div>
           </Card>
+
+          <SalarySimulation
+            businessTypeId={businessTypeId}
+            revenue={revenue}
+            fixedCosts={fixedCosts}
+            employees={employees}
+          />
 
           <Card className="p-6">
             <FinancialOverviewChart data={barChartData} />

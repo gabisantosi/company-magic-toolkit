@@ -158,6 +158,32 @@ export type Database = {
         }
         Relationships: []
       }
+      employer_contributions: {
+        Row: {
+          id: number
+          business_type_id: number | null
+          contribution_rate: number
+          min_employees: number | null
+          max_employees: number | null
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          business_type_id?: number | null
+          contribution_rate: number
+          min_employees?: number | null
+          max_employees?: number | null
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          business_type_id?: number | null
+          contribution_rate?: number
+          min_employees?: number | null
+          max_employees?: number | null
+          created_at?: string
+        }
+      }
       forms: {
         Row: {
           created_at: string | null
@@ -313,6 +339,29 @@ export type Database = {
         }
         Relationships: []
       }
+      salary_tax_brackets: {
+        Row: {
+          id: number
+          min_amount: number
+          max_amount: number | null
+          tax_rate: number
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          min_amount: number
+          max_amount?: number | null
+          tax_rate: number
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          min_amount?: number
+          max_amount?: number | null
+          tax_rate?: number
+          created_at?: string
+        }
+      }
       sectors: {
         Row: {
           average_fixed_cost: number
@@ -422,7 +471,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -434,10 +483,10 @@ export type Tables<
         PublicSchema["Views"])
     ? (PublicSchema["Tables"] &
         PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
+      Row: infer R
+    }
+    ? R
+    : never
     : never
 
 export type TablesInsert<
