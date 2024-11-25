@@ -41,7 +41,7 @@ serve(async (req) => {
       throw new Error('Eden AI API key not found in environment variables');
     }
 
-    // Make request to Eden AI
+    // Make request to Eden AI with correct settings format
     const response = await fetch('https://api.edenai.run/v2/text/generation', {
       method: 'POST',
       headers: {
@@ -54,9 +54,7 @@ serve(async (req) => {
         temperature: 0.7,
         max_tokens: 500,
         settings: {
-          anthropic: {
-            model: "claude-2"
-          }
+          anthropic: "claude-2"
         }
       })
     });
