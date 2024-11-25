@@ -12,10 +12,10 @@ const Footer = () => {
             <div className="mt-4">
               <h3 className="text-lg font-semibold text-swedish-blue mb-4">Contact</h3>
               <a 
-                href="mailto:contact@startsweden.com" 
+                href="mailto:gabisantos.enf@gmail.com" 
                 className="text-gray-600 hover:text-swedish-blue transition-colors duration-300"
               >
-                contact@startsweden.com
+                Mail us
               </a>
             </div>
           </div>
