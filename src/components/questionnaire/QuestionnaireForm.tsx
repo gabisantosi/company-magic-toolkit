@@ -4,7 +4,6 @@ import { useSession } from "@supabase/auth-helpers-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import {
   Card,
   CardContent,
@@ -14,15 +13,9 @@ import {
 } from "@/components/ui/card";
 import { QuestionInput } from "./QuestionInput";
 import { questions } from "./questions";
-import { Loader2, Download } from "lucide-react";
-import jsPDF from "jspdf";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Loader2 } from "lucide-react";
+import { QuestionnaireProgress } from "./QuestionnaireProgress";
+import { RecommendationsDialog } from "./RecommendationsDialog";
 
 const STORAGE_KEY = "questionnaire_answers";
 
@@ -56,27 +49,6 @@ export const QuestionnaireForm = () => {
     }));
   };
 
-  const handleSaveAsPDF = () => {
-    const doc = new jsPDF();
-    
-    // Add title
-    doc.setFontSize(16);
-    doc.text("Your Business Recommendations", 20, 20);
-    
-    // Add content
-    doc.setFontSize(12);
-    const splitText = doc.splitTextToSize(aiRecommendations, 170);
-    doc.text(splitText, 20, 40);
-    
-    // Save the PDF
-    doc.save("business-recommendations.pdf");
-    
-    toast({
-      title: "PDF Downloaded",
-      description: "Your recommendations have been saved as a PDF file.",
-    });
-  };
-
   const handleNext = async () => {
     if (currentQuestion === questions.length - 1) {
       if (!session) {
@@ -88,6 +60,11 @@ export const QuestionnaireForm = () => {
         navigate("/login");
         return;
       }
+
+      toast({
+        title: "Starting Analysis",
+        description: "Please wait a few seconds while we analyze your responses...",
+      });
 
       try {
         setIsSubmitting(true);
@@ -156,7 +133,7 @@ export const QuestionnaireForm = () => {
           <CardDescription>{currentQ.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Progress value={progress} className="mb-6" />
+          <QuestionnaireProgress progress={progress} />
           
           <QuestionInput
             question={currentQ}
@@ -189,32 +166,11 @@ export const QuestionnaireForm = () => {
         </CardContent>
       </Card>
 
-      <Dialog open={showRecommendations} onOpenChange={handleCloseRecommendations}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Your Personalized Business Recommendations</DialogTitle>
-            <DialogDescription>
-              Based on your responses, here are our recommendations:
-            </DialogDescription>
-          </DialogHeader>
-          <div className="mt-4 space-y-4 whitespace-pre-wrap">
-            {aiRecommendations}
-          </div>
-          <div className="mt-6 flex justify-between items-center">
-            <Button
-              variant="outline"
-              onClick={handleSaveAsPDF}
-              className="flex items-center gap-2"
-            >
-              <Download className="h-4 w-4" />
-              Save as PDF
-            </Button>
-            <Button onClick={handleCloseRecommendations}>
-              Continue to Checklist
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <RecommendationsDialog
+        open={showRecommendations}
+        onClose={handleCloseRecommendations}
+        recommendations={aiRecommendations}
+      />
     </>
   );
 };
