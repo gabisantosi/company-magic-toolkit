@@ -35,11 +35,17 @@ serve(async (req) => {
 
     console.log('Making request to Eden AI with prompt:', prompt);
 
+    // Get Eden AI API key from environment variables
+    const edenAiApiKey = Deno.env.get('EDEN_AI_API_KEY');
+    if (!edenAiApiKey) {
+      throw new Error('Eden AI API key not found in environment variables');
+    }
+
     // Make request to Eden AI
     const response = await fetch('https://api.edenai.run/v2/text/generation', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('EDEN_AI_API_KEY')}`,
+        'Authorization': `Bearer ${edenAiApiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
