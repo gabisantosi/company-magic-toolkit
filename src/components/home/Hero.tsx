@@ -16,16 +16,16 @@ const Hero = () => {
                 <Sparkles className="inline-block w-8 h-8 ml-2 text-swedish-yellow animate-pulse" />
               </h1>
               <p className="text-xl text-gray-600 mb-8 [text-shadow:_0_1px_2px_rgb(0_0_0_/_5%)] transform transition-all duration-300 group-hover:translate-y-[-2px] group-hover:text-gray-700">
-                We guide you through every step of setting up your company in Sweden,
-                from registration to launch.
+                Take our quick quiz to get personalized guidance on setting up your company in Sweden.
+                We'll help you choose the right business structure and guide you through every step.
               </p>
               <div className="space-x-4 relative z-10">
                 <Button 
                   asChild 
                   className="bg-swedish-blue hover:bg-swedish-blue/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent group"
                 >
-                  <Link to="/checklist">
-                    Get Started
+                  <Link to="/questionnaire">
+                    Take the Quiz
                     <ArrowLeft className="w-4 h-4 ml-2 transform transition-transform group-hover:-translate-x-1" />
                   </Link>
                 </Button>
@@ -34,7 +34,7 @@ const Hero = () => {
                   asChild
                   className="border-swedish-blue text-swedish-blue hover:bg-swedish-blue/10 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent backdrop-blur-sm"
                 >
-                  <Link to="/simulator">Calculate Costs</Link>
+                  <Link to="/guide">Learn More</Link>
                 </Button>
               </div>
             </div>

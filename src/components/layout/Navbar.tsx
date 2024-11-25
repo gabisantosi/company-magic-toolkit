@@ -10,13 +10,13 @@ const Navbar = () => {
           <Logo />
         </Link>
         <div className="flex items-center gap-4">
+          <Link to="/checklist">
+            <Button variant="ghost">Checklist</Button>
+          </Link>
           <Link to="/guide">
             <Button variant="ghost">Guide</Button>
           </Link>
-          <Link to="/simulator">
-            <Button variant="ghost">Simulator</Button>
-          </Link>
-          <Link to="/login">
+          <Link to="/questionnaire">
             <Button>Get Started</Button>
           </Link>
         </div>
