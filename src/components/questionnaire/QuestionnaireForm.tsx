@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/card";
 import { QuestionInput } from "./QuestionInput";
 import { questions } from "./questions";
-import { Loader2 } from "lucide-react";
+import { Loader2, Download } from "lucide-react";
+import jsPDF from "jspdf";
 import {
   Dialog,
   DialogContent,
@@ -42,7 +43,6 @@ export const QuestionnaireForm = () => {
     }
   }, []);
 
-  // Save answers to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
   }, [answers]);
@@ -56,10 +56,30 @@ export const QuestionnaireForm = () => {
     }));
   };
 
+  const handleSaveAsPDF = () => {
+    const doc = new jsPDF();
+    
+    // Add title
+    doc.setFontSize(16);
+    doc.text("Your Business Recommendations", 20, 20);
+    
+    // Add content
+    doc.setFontSize(12);
+    const splitText = doc.splitTextToSize(aiRecommendations, 170);
+    doc.text(splitText, 20, 40);
+    
+    // Save the PDF
+    doc.save("business-recommendations.pdf");
+    
+    toast({
+      title: "PDF Downloaded",
+      description: "Your recommendations have been saved as a PDF file.",
+    });
+  };
+
   const handleNext = async () => {
     if (currentQuestion === questions.length - 1) {
       if (!session) {
-        // Save current answers and redirect to login
         localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
         toast({
           title: "Please log in",
@@ -72,7 +92,6 @@ export const QuestionnaireForm = () => {
       try {
         setIsSubmitting(true);
 
-        // Save responses to Supabase
         const { error: responseError } = await supabase
           .from("questionnaire_responses")
           .insert({
@@ -86,7 +105,6 @@ export const QuestionnaireForm = () => {
 
         if (responseError) throw responseError;
 
-        // Get AI analysis
         const aiResponse = await supabase.functions.invoke('analyze-questionnaire', {
           body: { 
             responses: answers,
@@ -96,11 +114,9 @@ export const QuestionnaireForm = () => {
 
         if (aiResponse.error) throw aiResponse.error;
 
-        // Store AI recommendations and show dialog
         setAiRecommendations(aiResponse.data.recommendations);
         setShowRecommendations(true);
         
-        // Clear saved answers from localStorage after successful submission
         localStorage.removeItem(STORAGE_KEY);
         
         toast({
@@ -184,7 +200,15 @@ export const QuestionnaireForm = () => {
           <div className="mt-4 space-y-4 whitespace-pre-wrap">
             {aiRecommendations}
           </div>
-          <div className="mt-6 flex justify-end">
+          <div className="mt-6 flex justify-between items-center">
+            <Button
+              variant="outline"
+              onClick={handleSaveAsPDF}
+              className="flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Save as PDF
+            </Button>
             <Button onClick={handleCloseRecommendations}>
               Continue to Checklist
             </Button>
