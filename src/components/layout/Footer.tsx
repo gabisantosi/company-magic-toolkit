@@ -34,8 +34,6 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-swedish-blue mb-4">Contact</h4>
             <p className="text-gray-600">
               Email: contact@startsweden.com
-              <br />
-              Phone: +46 XX XXX XX XX
             </p>
           </div>
         </div>
