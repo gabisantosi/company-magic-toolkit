@@ -48,14 +48,16 @@ export const QuestionnaireForm = () => {
         }
 
         // Save responses to Supabase
-        const { data: responseData, error: responseError } = await supabase
+        const { error: responseError } = await supabase
           .from("questionnaire_responses")
           .insert({
             user_id: session.user.id,
-            ...answers,
-          })
-          .select()
-          .single();
+            business_idea: answers.business_idea,
+            target_market: answers.target_market,
+            initial_investment: answers.initial_investment,
+            experience_level: answers.experience_level,
+            preferred_structure: answers.preferred_structure,
+          });
 
         if (responseError) throw responseError;
 
@@ -77,10 +79,10 @@ export const QuestionnaireForm = () => {
         navigate("/checklist", {
           state: { businessType: answers.preferred_structure || "Aktiebolag" },
         });
-      } catch (error) {
+      } catch (error: any) {
         toast({
           title: "Error",
-          description: "Failed to save your responses. Please try again.",
+          description: error.message || "Failed to save your responses. Please try again.",
           variant: "destructive",
         });
         console.error('Questionnaire submission error:', error);
@@ -101,6 +103,8 @@ export const QuestionnaireForm = () => {
         <CardDescription>{currentQ.description}</CardDescription>
       </CardHeader>
       <CardContent>
+        <Progress value={progress} className="mb-6" />
+        
         <QuestionInput
           question={currentQ}
           value={answers[currentQ.id] || ""}
