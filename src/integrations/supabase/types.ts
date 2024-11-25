@@ -160,29 +160,38 @@ export type Database = {
       }
       employer_contributions: {
         Row: {
-          id: number
           business_type_id: number | null
           contribution_rate: number
-          min_employees: number | null
-          max_employees: number | null
           created_at: string
+          id: number
+          max_employees: number | null
+          min_employees: number | null
         }
         Insert: {
-          id?: number
           business_type_id?: number | null
           contribution_rate: number
-          min_employees?: number | null
-          max_employees?: number | null
           created_at?: string
+          id?: number
+          max_employees?: number | null
+          min_employees?: number | null
         }
         Update: {
-          id?: number
           business_type_id?: number | null
           contribution_rate?: number
-          min_employees?: number | null
-          max_employees?: number | null
           created_at?: string
+          id?: number
+          max_employees?: number | null
+          min_employees?: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "employer_contributions_business_type_id_fkey"
+            columns: ["business_type_id"]
+            isOneToOne: false
+            referencedRelation: "business_types"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       forms: {
         Row: {
@@ -341,26 +350,27 @@ export type Database = {
       }
       salary_tax_brackets: {
         Row: {
-          id: number
-          min_amount: number
-          max_amount: number | null
-          tax_rate: number
           created_at: string
+          id: number
+          max_amount: number | null
+          min_amount: number
+          tax_rate: number
         }
         Insert: {
-          id?: number
-          min_amount: number
-          max_amount?: number | null
-          tax_rate: number
           created_at?: string
+          id?: number
+          max_amount?: number | null
+          min_amount: number
+          tax_rate: number
         }
         Update: {
-          id?: number
-          min_amount?: number
-          max_amount?: number | null
-          tax_rate?: number
           created_at?: string
+          id?: number
+          max_amount?: number | null
+          min_amount?: number
+          tax_rate?: number
         }
+        Relationships: []
       }
       sectors: {
         Row: {
@@ -471,7 +481,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never,
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -483,10 +493,10 @@ export type Tables<
         PublicSchema["Views"])
     ? (PublicSchema["Tables"] &
         PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
-    : never
+        Row: infer R
+      }
+      ? R
+      : never
     : never
 
 export type TablesInsert<
