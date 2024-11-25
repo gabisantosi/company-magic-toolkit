@@ -25,7 +25,7 @@ const Hero = () => {
                   className="bg-swedish-blue hover:bg-swedish-blue/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent group"
                 >
                   <Link to="/questionnaire">
-                    Take the Quiz
+                    Start Now
                     <ArrowLeft className="w-4 h-4 ml-2 transform transition-transform group-hover:-translate-x-1" />
                   </Link>
                 </Button>
