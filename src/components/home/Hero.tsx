@@ -26,7 +26,6 @@ const Hero = () => {
                 >
                   <Link to="/questionnaire">
                     Take the Quiz
-                    <ArrowLeft className="w-4 h-4 ml-2 transform transition-transform group-hover:-translate-x-1" />
                   </Link>
                 </Button>
                 <Button
