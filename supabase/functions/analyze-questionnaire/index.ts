@@ -1,14 +1,10 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-// Set a timeout for the Eden AI API request
-const TIMEOUT_MS = 4000; // 4 seconds to allow for processing time
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -43,38 +39,21 @@ serve(async (req) => {
       );
     }
 
-    // Create a promise that rejects after the timeout
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Request timeout')), TIMEOUT_MS);
-    });
-
-    // Create the API request promise
-    const apiRequestPromise = fetch('https://api.edenai.run/v2/text/chat', {
+    const response = await fetch('https://api.edenai.run/v2/text/chat', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${edenAiApiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        providers: "anthropic",
+        providers: ["anthropic"],
         text: prompt,
         temperature: 0.7,
         settings: {
-          anthropic: {
-            model: "claude-3-haiku-20240307"
-          }
+          anthropic: "claude-3-haiku-20240307"
         }
       })
     });
-
-    // Race between the timeout and the API request
-    const response = await Promise.race([apiRequestPromise, timeoutPromise])
-      .catch(error => {
-        console.error('Request failed:', error.message);
-        throw new Error(error.message === 'Request timeout' 
-          ? 'The request took too long to process' 
-          : 'Failed to connect to AI service');
-      });
 
     if (!response.ok) {
       const errorText = await response.text();
