@@ -8,8 +8,8 @@ const features = [
   },
   {
     icon: <Calculator className="w-12 h-12 text-swedish-blue" />,
-    title: "Cost Simulator",
-    description: "Calculate the costs of starting your business with our easy-to-use simulator.",
+    title: "Cost Calculator",
+    description: "Calculate the costs of starting your business with our easy-to-use calculator.",
   },
   {
     icon: <FileText className="w-12 h-12 text-swedish-blue" />,
