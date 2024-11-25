@@ -15,7 +15,7 @@ serve(async (req) => {
   try {
     const { responses, userId } = await req.json();
     
-    // Create prompts for each question
+    // Create prompts for each question with enhanced business type focus
     const businessIdeaPrompt = `Based on the business idea: ${responses.business_idea}, analyze the market potential and suggest key considerations for success in Sweden.`;
     const targetMarketPrompt = `For the target market: ${responses.target_market}, evaluate the market size in Sweden and suggest effective marketing strategies.`;
     const investmentPrompt = `With an investment capacity of ${responses.initial_investment}, recommend suitable business structures and initial resource allocation.`;
@@ -29,6 +29,10 @@ serve(async (req) => {
 3. ${investmentPrompt}
 4. ${experiencePrompt}
 5. ${structurePrompt}
+
+Additionally, based on all the information provided:
+- Recommend which business structure would be most suitable (Limited Company (Aktiebolag), Sole Proprietorship (Enskild Firma), Trading Partnership (Handelsbolag), or Limited Partnership (Kommanditbolag)) and explain why.
+- When mentioning business types in your response, always include the Swedish term in parentheses, e.g., "Limited Company (Aktiebolag)" or "Sole Proprietorship (Enskild Firma)".
 
 Please structure your response with clear sections for each aspect and provide actionable recommendations. Keep the total response under 800 words.`;
 
@@ -59,7 +63,7 @@ Please structure your response with clear sections for each aspect and provide a
         temperature: 0.7,
         max_tokens: 1000,
         settings: {
-          openai: "gpt-4"  // Changed format: directly specify the model name as a string
+          openai: "gpt-4"
         }
       })
     });
