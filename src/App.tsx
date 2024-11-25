@@ -11,6 +11,7 @@ import Simulator from "./pages/Simulator";
 import Login from "./pages/Login";
 import Guide from "./pages/Guide";
 import Questionnaire from "./pages/Questionnaire";
+import HowItWorks from "./pages/HowItWorks";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/simulator" element={<Simulator />} />
             <Route path="/guide" element={<Guide />} />
             <Route path="/questionnaire" element={<Questionnaire />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
