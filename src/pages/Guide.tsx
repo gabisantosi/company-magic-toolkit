@@ -5,19 +5,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle, ExternalLink, Info } from "lucide-react";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import GuideHeader from "@/components/guide/GuideHeader";
+import GuideContent from "@/components/guide/GuideContent";
 
 interface GuideContent {
   id: number;
@@ -114,32 +103,11 @@ const Guide = () => {
       <Navbar />
       <main className="flex-grow bg-gradient-to-br from-accent via-white to-transparent">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-8">
-            <Button
-              variant="ghost"
-              className="flex items-center gap-2 hover:bg-accent"
-              onClick={handleBack}
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Checklist
-            </Button>
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Info className="h-5 w-5 text-swedish-blue" />
-                </Button>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <div className="space-y-2">
-                  <h4 className="text-sm font-semibold">About This Guide</h4>
-                  <p className="text-sm text-muted-foreground">
-                    This guide provides detailed instructions and resources for {businessType} businesses 
-                    in the {industry} sector. Each step includes official resources and practical tips.
-                  </p>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-          </div>
+          <GuideHeader 
+            businessType={businessType}
+            industry={industry}
+            onBack={handleBack}
+          />
 
           {loading ? (
             <div className="text-center py-12">
@@ -148,71 +116,30 @@ const Guide = () => {
             </div>
           ) : (
             <div className="max-w-3xl mx-auto space-y-8">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-swedish-blue/10 mb-8">
-                <h1 className="text-2xl font-semibold text-swedish-blue mb-2">
-                  Guide for {businessType}
+              <div className="bg-white rounded-xl p-6 border border-swedish-blue/10 mb-8">
+                <h1 className="text-2xl font-semibold text-swedish-blue mb-4">
+                  Guide for {businessType} in {industry}
                 </h1>
-                <p className="text-muted-foreground">
-                  Industry: {industry}
-                </p>
+                <div className="space-y-4">
+                  <p className="text-gray-600">
+                    This comprehensive guide will walk you through all the necessary steps to establish and run your {businessType} in Sweden's {industry} sector. Each step includes detailed instructions, official resources, and practical tips to ensure a smooth process.
+                  </p>
+                  <div className="bg-accent/30 p-4 rounded-lg">
+                    <h2 className="font-semibold text-swedish-blue mb-2">Important Notes:</h2>
+                    <ul className="list-disc list-inside space-y-2 text-gray-600">
+                      <li>Complete each step in order for the best results</li>
+                      <li>Save your progress by marking steps as complete</li>
+                      <li>Access official resources through the provided links</li>
+                      <li>Contact relevant authorities if you need additional guidance</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
 
-              <Accordion type="single" collapsible className="space-y-4">
-                {guideContent.map((content) => (
-                  <AccordionItem
-                    key={content.id}
-                    value={content.step}
-                    className="bg-white/80 backdrop-blur-sm rounded-xl border border-swedish-blue/10 px-6 transition-all duration-300 hover:border-swedish-blue/20 hover:shadow-lg"
-                  >
-                    <AccordionTrigger className="hover:no-underline py-4">
-                      <div className="flex items-start gap-4">
-                        <div className="flex-1 text-left">
-                          <h3 className="text-lg font-semibold text-swedish-blue">
-                            {content.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Step: {content.step}
-                          </p>
-                        </div>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-2 pb-6">
-                      <div className="prose prose-blue max-w-none">
-                        <div
-                          dangerouslySetInnerHTML={{ __html: content.content }}
-                          className="text-gray-700 leading-relaxed"
-                        />
-                      </div>
-                      <div className="mt-6 flex flex-wrap items-center gap-4">
-                        {content.action_url && content.action_label && (
-                          <Button
-                            onClick={() => window.open(content.action_url!, '_blank')}
-                            className="flex items-center gap-2 bg-swedish-blue hover:bg-swedish-blue/90 transition-all duration-300"
-                          >
-                            <ExternalLink className="h-4 w-4" />
-                            {content.action_label}
-                          </Button>
-                        )}
-                        <Button
-                          onClick={() => markAsComplete(content.step)}
-                          variant="outline"
-                          className="flex items-center gap-2 border-swedish-blue/20 hover:bg-accent transition-all duration-300"
-                        >
-                          <CheckCircle className="h-4 w-4" />
-                          Mark as Complete
-                        </Button>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-                {guideContent.length === 0 && (
-                  <div className="text-center py-12 bg-accent/50 rounded-lg">
-                    <p className="text-muted-foreground">
-                      No guide content available for this business type and industry.
-                    </p>
-                  </div>
-                )}
-              </Accordion>
+              <GuideContent 
+                content={guideContent}
+                onMarkComplete={markAsComplete}
+              />
             </div>
           )}
         </div>
