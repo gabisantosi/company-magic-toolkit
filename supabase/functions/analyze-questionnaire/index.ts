@@ -57,8 +57,13 @@ Please structure your response with clear sections for each aspect and provide a
         providers: ["anthropic"],
         text: prompt,
         temperature: 0.7,
+        max_tokens: 1000,
         settings: {
-          anthropic: "claude-2"  // Updated to use the correct model name
+          anthropic: {
+            model: "claude-2",
+            temperature: 0.7,
+            max_tokens: 1000
+          }
         }
       })
     });
