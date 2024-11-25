@@ -35,9 +35,9 @@ Please structure your response with clear sections for each aspect and provide a
     console.log('Processing request for user:', userId);
     console.log('Generated prompt:', prompt);
 
-    const edenAiApiKey = Deno.env.get('EDEN_AI_API_KEY');
-    if (!edenAiApiKey) {
-      console.error('Eden AI API key not found');
+    const openAiApiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAiApiKey) {
+      console.error('OpenAI API key not found');
       return new Response(
         JSON.stringify({ error: 'Configuration error: API key not found' }),
         { 
@@ -47,25 +47,31 @@ Please structure your response with clear sections for each aspect and provide a
       );
     }
 
-    const response = await fetch('https://api.edenai.run/v2/text/chat', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${edenAiApiKey}`,
+        'Authorization': `Bearer ${openAiApiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        providers: ["anthropic"],
-        text: prompt,
-        temperature: 0.7,
-        settings: {
-          anthropic: "claude-2"  // Updated to use the correct model name
-        }
+        model: 'gpt-4o-mini',
+        messages: [
+          { 
+            role: 'system', 
+            content: 'You are a business consultant specializing in helping entrepreneurs start businesses in Sweden. Provide clear, actionable advice based on the information provided.'
+          },
+          { 
+            role: 'user', 
+            content: prompt 
+          }
+        ],
+        temperature: 0.7
       })
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('API error:', response.status, errorText);
+      console.error('OpenAI API error:', response.status, errorText);
       return new Response(
         JSON.stringify({ 
           error: 'Failed to generate recommendations',
@@ -80,22 +86,10 @@ Please structure your response with clear sections for each aspect and provide a
     }
 
     const result = await response.json();
-    console.log('Eden AI response:', JSON.stringify(result));
+    console.log('OpenAI response received');
     
-    if (!result?.anthropic?.generated_text) {
+    if (!result?.choices?.[0]?.message?.content) {
       console.error('Invalid API response:', result);
-      if (result?.anthropic?.error) {
-        return new Response(
-          JSON.stringify({ 
-            error: 'AI service error',
-            details: result.anthropic.error.message
-          }),
-          { 
-            status: 500,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-          }
-        );
-      }
       return new Response(
         JSON.stringify({ 
           error: 'Invalid response format',
@@ -108,7 +102,7 @@ Please structure your response with clear sections for each aspect and provide a
       );
     }
 
-    const generatedText = result.anthropic.generated_text.trim();
+    const generatedText = result.choices[0].message.content.trim();
     console.log('Generated recommendations length:', generatedText.length);
 
     return new Response(
