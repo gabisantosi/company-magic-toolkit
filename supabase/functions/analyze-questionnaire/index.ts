@@ -7,36 +7,35 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Set a timeout for the Eden AI API request
+const TIMEOUT_MS = 4000; // 4 seconds to allow for processing time
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { 
-      headers: {
-        ...corsHeaders,
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      }
-    });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const { responses, userId } = await req.json();
     
-    const prompt = `Based on the following information, what is the best type of company to open in Sweden?
+    const prompt = `Based on the following information, provide a concise recommendation for the best type of company to open in Sweden:
     
     Business Idea: ${responses.business_idea}
     Target Market: ${responses.target_market}
-    Initial Investment Available: ${responses.initial_investment}
-    Business Experience Level: ${responses.experience_level}
+    Initial Investment: ${responses.initial_investment}
+    Experience Level: ${responses.experience_level}
     Current Structure Preference: ${responses.preferred_structure}
     
-    Please provide a detailed analysis considering these factors and recommend the most suitable company type.`;
+    Focus on key points and keep the response under 300 words.`;
 
-    console.log('Formatted prompt:', prompt);
+    console.log('Processing request for user:', userId);
 
     const edenAiApiKey = Deno.env.get('EDEN_AI_API_KEY');
     if (!edenAiApiKey) {
+      console.error('Eden AI API key not found');
       return new Response(
-        JSON.stringify({ error: 'Eden AI API key not configured' }),
+        JSON.stringify({ error: 'Configuration error: API key not found' }),
         { 
           status: 500,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -44,7 +43,13 @@ serve(async (req) => {
       );
     }
 
-    const response = await fetch('https://api.edenai.run/v2/text/chat', {
+    // Create a promise that rejects after the timeout
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Request timeout')), TIMEOUT_MS);
+    });
+
+    // Create the API request promise
+    const apiRequestPromise = fetch('https://api.edenai.run/v2/text/chat', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${edenAiApiKey}`,
@@ -60,14 +65,23 @@ serve(async (req) => {
       })
     });
 
+    // Race between the timeout and the API request
+    const response = await Promise.race([apiRequestPromise, timeoutPromise])
+      .catch(error => {
+        console.error('Request failed:', error.message);
+        throw new Error(error.message === 'Request timeout' 
+          ? 'The request took too long to process' 
+          : 'Failed to connect to AI service');
+      });
+
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Eden AI API error response:', errorText);
+      console.error('API error:', response.status, errorText);
       return new Response(
         JSON.stringify({ 
-          error: 'Eden AI API request failed', 
-          details: errorText,
-          status: response.status 
+          error: 'Failed to generate recommendations',
+          status: response.status,
+          details: errorText
         }),
         { 
           status: response.status,
@@ -77,15 +91,13 @@ serve(async (req) => {
     }
 
     const result = await response.json();
-    console.log('Eden AI raw response:', JSON.stringify(result, null, 2));
-
-    // Validate the response structure
+    
     if (!result?.anthropic?.generated_text) {
-      console.error('Invalid or missing response from Eden AI:', result);
+      console.error('Invalid API response:', result);
       return new Response(
         JSON.stringify({ 
-          error: 'Invalid or missing response from Eden AI',
-          details: JSON.stringify(result)
+          error: 'Invalid response format',
+          details: 'The AI service returned an unexpected response format'
         }),
         { 
           status: 500,
@@ -95,19 +107,9 @@ serve(async (req) => {
     }
 
     const generatedText = result.anthropic.generated_text.trim();
-    if (!generatedText) {
-      return new Response(
-        JSON.stringify({ error: 'Empty response from Eden AI' }),
-        { 
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
-      );
-    }
+    console.log('Generated recommendations length:', generatedText.length);
 
-    console.log('Generated recommendations:', generatedText);
-
-    // Save to Supabase
+    // Save to Supabase with a shorter timeout
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -120,11 +122,11 @@ serve(async (req) => {
       .limit(1);
 
     if (updateError) {
-      console.error('Supabase update error:', updateError);
+      console.error('Database update failed:', updateError);
       return new Response(
         JSON.stringify({ 
-          error: 'Failed to save recommendations', 
-          details: updateError 
+          error: 'Failed to save recommendations',
+          details: 'Database update error'
         }),
         { 
           status: 500,
@@ -135,17 +137,15 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ recommendations: generatedText }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
-    console.error('Error in analyze-questionnaire function:', error);
+    console.error('Function error:', error.message);
     return new Response(
       JSON.stringify({ 
-        error: error.message,
-        details: error.stack || 'No stack trace available'
+        error: 'Internal server error',
+        message: error.message
       }),
       { 
         status: 500,
