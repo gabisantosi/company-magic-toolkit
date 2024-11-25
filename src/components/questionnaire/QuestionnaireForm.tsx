@@ -15,6 +15,13 @@ import {
 import { QuestionInput } from "./QuestionInput";
 import { questions } from "./questions";
 import { Loader2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const QuestionnaireForm = () => {
   const navigate = useNavigate();
@@ -23,6 +30,8 @@ export const QuestionnaireForm = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [aiRecommendations, setAiRecommendations] = useState<string>("");
+  const [showRecommendations, setShowRecommendations] = useState(false);
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
@@ -71,14 +80,15 @@ export const QuestionnaireForm = () => {
 
         if (aiResponse.error) throw aiResponse.error;
 
+        // Store AI recommendations and show dialog
+        setAiRecommendations(aiResponse.data.recommendations);
+        setShowRecommendations(true);
+        
         toast({
           title: "Analysis Complete!",
-          description: "Your responses have been analyzed. Redirecting to recommendations...",
+          description: "Review your personalized recommendations.",
         });
 
-        navigate("/checklist", {
-          state: { businessType: answers.preferred_structure || "Aktiebolag" },
-        });
       } catch (error: any) {
         toast({
           title: "Error",
@@ -94,46 +104,74 @@ export const QuestionnaireForm = () => {
     }
   };
 
+  const handleCloseRecommendations = () => {
+    setShowRecommendations(false);
+    navigate("/checklist", {
+      state: { businessType: answers.preferred_structure || "Aktiebolag" },
+    });
+  };
+
   const currentQ = questions[currentQuestion];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{currentQ.title}</CardTitle>
-        <CardDescription>{currentQ.description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Progress value={progress} className="mb-6" />
-        
-        <QuestionInput
-          question={currentQ}
-          value={answers[currentQ.id] || ""}
-          onChange={handleAnswer}
-        />
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>{currentQ.title}</CardTitle>
+          <CardDescription>{currentQ.description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Progress value={progress} className="mb-6" />
+          
+          <QuestionInput
+            question={currentQ}
+            value={answers[currentQ.id] || ""}
+            onChange={handleAnswer}
+          />
 
-        <div className="mt-6 flex justify-between">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentQuestion((prev) => prev - 1)}
-            disabled={currentQuestion === 0}
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={!answers[currentQ.id] || isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Analyzing...
-              </>
-            ) : (
-              currentQuestion === questions.length - 1 ? "Finish" : "Next"
-            )}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="mt-6 flex justify-between">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentQuestion((prev) => prev - 1)}
+              disabled={currentQuestion === 0}
+            >
+              Previous
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={!answers[currentQ.id] || isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                currentQuestion === questions.length - 1 ? "Finish" : "Next"
+              )}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Dialog open={showRecommendations} onOpenChange={handleCloseRecommendations}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Your Personalized Business Recommendations</DialogTitle>
+            <DialogDescription>
+              Based on your responses, here are our AI-powered recommendations:
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 space-y-4 whitespace-pre-wrap">
+            {aiRecommendations}
+          </div>
+          <div className="mt-6 flex justify-end">
+            <Button onClick={handleCloseRecommendations}>
+              Continue to Checklist
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
