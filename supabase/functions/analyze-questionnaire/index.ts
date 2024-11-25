@@ -44,7 +44,9 @@ serve(async (req) => {
         temperature: 0.7,
         max_tokens: 500,
         settings: {
-          anthropic: "claude-2"
+          anthropic: {
+            model: "claude-2"
+          }
         }
       })
     });
@@ -58,13 +60,21 @@ serve(async (req) => {
     const result = await response.json();
     console.log('Eden AI raw response:', JSON.stringify(result, null, 2));
 
-    if (!result.anthropic || typeof result.anthropic.generated_text !== 'string') {
-      console.error('Invalid response structure from Eden AI:', result);
-      throw new Error('Invalid response structure from Eden AI');
+    // More detailed validation of the response structure
+    if (!result || typeof result !== 'object') {
+      throw new Error('Invalid response from Eden AI: Response is not an object');
     }
 
-    const recommendations = result.anthropic.generated_text;
-    console.log('Generated recommendations:', recommendations);
+    if (!result.anthropic) {
+      throw new Error('Invalid response from Eden AI: Missing anthropic field');
+    }
+
+    const generatedText = result.anthropic.generated_text;
+    if (typeof generatedText !== 'string') {
+      throw new Error('Invalid response from Eden AI: generated_text is not a string');
+    }
+
+    console.log('Generated recommendations:', generatedText);
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -72,7 +82,7 @@ serve(async (req) => {
 
     const { error: updateError } = await supabase
       .from('questionnaire_responses')
-      .update({ ai_recommendations: recommendations })
+      .update({ ai_recommendations: generatedText })
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(1);
@@ -83,7 +93,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ recommendations }),
+      JSON.stringify({ recommendations: generatedText }),
       { 
         headers: { 
           ...corsHeaders,
