@@ -50,7 +50,7 @@ serve(async (req) => {
         text: prompt,
         temperature: 0.7,
         settings: {
-          anthropic: "claude-3-haiku-20240307"
+          anthropic: "claude-2"  // Updated to use the correct model name
         }
       })
     });
@@ -102,32 +102,6 @@ serve(async (req) => {
 
     const generatedText = result.anthropic.generated_text.trim();
     console.log('Generated recommendations length:', generatedText.length);
-
-    // Save to Supabase with a shorter timeout
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    const { error: updateError } = await supabase
-      .from('questionnaire_responses')
-      .update({ ai_recommendations: generatedText })
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(1);
-
-    if (updateError) {
-      console.error('Database update failed:', updateError);
-      return new Response(
-        JSON.stringify({ 
-          error: 'Failed to save recommendations',
-          details: 'Database update error'
-        }),
-        { 
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
-      );
-    }
 
     return new Response(
       JSON.stringify({ recommendations: generatedText }),
