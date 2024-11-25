@@ -57,13 +57,17 @@ serve(async (req) => {
     const result = await response.json();
     console.log('Eden AI raw response:', JSON.stringify(result, null, 2));
 
-    // Extract the generated text from the response
-    if (!result.anthropic || !result.anthropic.generated_text) {
-      console.error('Invalid response structure from Eden AI:', result);
-      throw new Error('Invalid response structure from Eden AI');
+    // Validate the response structure
+    if (!result?.anthropic?.generated_text) {
+      console.error('Invalid or missing response from Eden AI:', result);
+      throw new Error('Invalid or missing response from Eden AI');
     }
 
-    const generatedText = result.anthropic.generated_text;
+    const generatedText = result.anthropic.generated_text.trim();
+    if (!generatedText) {
+      throw new Error('Empty response from Eden AI');
+    }
+
     console.log('Generated recommendations:', generatedText);
 
     // Save to Supabase
