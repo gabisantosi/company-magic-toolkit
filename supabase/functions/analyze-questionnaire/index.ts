@@ -60,7 +60,7 @@ Please structure your response with clear sections for each aspect and provide a
         max_tokens: 1000,
         settings: {
           anthropic: {
-            model: "claude-2",
+            model: "claude-v2",  // Updated to use the correct model name
             temperature: 0.7,
             max_tokens: 1000
           }
