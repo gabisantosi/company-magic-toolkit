@@ -55,8 +55,8 @@ const BusinessDetailsForm = ({
             <SelectValue placeholder="Select business type" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Aktiebolag">Aktiebolag (AB)</SelectItem>
-            <SelectItem value="Enskild Firma">Enskild Firma</SelectItem>
+            <SelectItem value="Aktiebolag">Limited Company (AB)</SelectItem>
+            <SelectItem value="Enskild Firma">Sole Proprietorship</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -74,6 +74,7 @@ const BusinessDetailsForm = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="Technology">Technology</SelectItem>
+            <SelectItem value="Services">Services</SelectItem>
             <SelectItem value="Retail">Retail</SelectItem>
           </SelectContent>
         </Select>
