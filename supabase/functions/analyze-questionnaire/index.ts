@@ -22,7 +22,7 @@ serve(async (req) => {
     const experiencePrompt = `For someone with ${responses.experience_level} business experience, suggest key areas to focus on and potential challenges to prepare for.`;
     const structurePrompt = `Regarding the ${responses.preferred_structure} business structure, explain its advantages, requirements, and potential limitations.`;
 
-    const prompt = `Please provide a comprehensive business analysis and recommendations based on the following aspects:
+    const prompt = `Please provide a concise business analysis and recommendations based on the following aspects:
 
 1. ${businessIdeaPrompt}
 2. ${targetMarketPrompt}
@@ -34,7 +34,7 @@ Additionally, based on all the information provided:
 - Recommend which business structure would be most suitable (Limited Company (Aktiebolag), Sole Proprietorship (Enskild Firma), Trading Partnership (Handelsbolag), or Limited Partnership (Kommanditbolag)) and explain why.
 - When mentioning business types in your response, always include the Swedish term in parentheses, e.g., "Limited Company (Aktiebolag)" or "Sole Proprietorship (Enskild Firma)".
 
-Please structure your response with clear sections for each aspect and provide actionable recommendations. Keep the total response under 800 words.`;
+Please structure your response with clear sections for each aspect and provide actionable recommendations. Keep the total response under 600 words.`;
 
     console.log('Processing request for user:', userId);
     console.log('Generated prompt:', prompt);
@@ -60,10 +60,10 @@ Please structure your response with clear sections for each aspect and provide a
       body: JSON.stringify({
         providers: ["openai"],
         text: prompt,
-        temperature: 0.7,
-        max_tokens: 1000,
+        temperature: 0.5,
+        max_tokens: 800,
         settings: {
-          openai: "gpt-4"
+          openai: "gpt-4o-mini"
         }
       })
     });
