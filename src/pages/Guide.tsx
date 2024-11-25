@@ -29,7 +29,7 @@ const Guide = () => {
 
   const step = searchParams.get("step");
   const businessType = searchParams.get("businessType") || "Aktiebolag";
-  const industry = searchParams.get("industry") || "General"; // Changed default to General
+  const industry = searchParams.get("industry") || "General";
 
   useEffect(() => {
     fetchGuideContent();
@@ -37,22 +37,16 @@ const Guide = () => {
 
   const fetchGuideContent = async () => {
     try {
-      console.log('Fetching guide content for:', { businessType, industry }); // Debug log
       const { data, error } = await supabase
         .from("guide_content")
         .select("*")
         .eq("business_type", businessType)
-        .eq("industry", industry);
+        .eq("industry", industry)
+        .order("order_number");
 
-      if (error) {
-        console.error('Supabase error:', error); // Debug log
-        throw error;
-      }
-
-      console.log('Fetched guide content:', data); // Debug log
+      if (error) throw error;
       setGuideContent(data || []);
     } catch (error) {
-      console.error('Error fetching guide content:', error); // Debug log
       toast({
         title: "Error",
         description: "Failed to load guide content",
@@ -124,7 +118,7 @@ const Guide = () => {
             <div className="max-w-3xl mx-auto space-y-8">
               <div className="bg-white rounded-xl p-6 border border-swedish-blue/10 mb-8">
                 <h1 className="text-2xl font-semibold text-swedish-blue mb-4">
-                  Guide for {businessType} in {industry}
+                  Guide for {businessType}
                 </h1>
                 <div className="space-y-4">
                   <p className="text-gray-600">
