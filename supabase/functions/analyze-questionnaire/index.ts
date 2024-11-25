@@ -32,7 +32,6 @@ serve(async (req) => {
       throw new Error('Eden AI API key not found in environment variables');
     }
 
-    // Using Eden AI's chat API instead of text generation
     const response = await fetch('https://api.edenai.run/v2/text/chat', {
       method: 'POST',
       headers: {
@@ -59,7 +58,7 @@ serve(async (req) => {
     console.log('Eden AI raw response:', JSON.stringify(result, null, 2));
 
     // Extract the message from the chat response
-    const generatedText = result.anthropic?.message;
+    const generatedText = result.anthropic?.generated_text;
     
     if (!generatedText || typeof generatedText !== 'string' || !generatedText.trim()) {
       console.error('Invalid response structure:', result);
