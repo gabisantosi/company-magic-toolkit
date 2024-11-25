@@ -60,6 +60,36 @@ export type Database = {
         }
         Relationships: []
       }
+      business_types: {
+        Row: {
+          created_at: string
+          default_fixed_cost: number
+          description: string
+          id: number
+          name: string
+          registration_cost: number
+          tax_rate: number
+        }
+        Insert: {
+          created_at?: string
+          default_fixed_cost: number
+          description: string
+          id?: number
+          name: string
+          registration_cost: number
+          tax_rate: number
+        }
+        Update: {
+          created_at?: string
+          default_fixed_cost?: number
+          description?: string
+          id?: number
+          name?: string
+          registration_cost?: number
+          tax_rate?: number
+        }
+        Relationships: []
+      }
       checklist: {
         Row: {
           business_type: string
@@ -196,6 +226,57 @@ export type Database = {
         }
         Relationships: []
       }
+      predefined_scenarios: {
+        Row: {
+          business_type_id: number | null
+          created_at: string
+          description: string
+          employees: number | null
+          fixed_costs: number
+          id: number
+          name: string
+          revenue: number
+          sector_id: number | null
+        }
+        Insert: {
+          business_type_id?: number | null
+          created_at?: string
+          description: string
+          employees?: number | null
+          fixed_costs: number
+          id?: number
+          name: string
+          revenue: number
+          sector_id?: number | null
+        }
+        Update: {
+          business_type_id?: number | null
+          created_at?: string
+          description?: string
+          employees?: number | null
+          fixed_costs?: number
+          id?: number
+          name?: string
+          revenue?: number
+          sector_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "predefined_scenarios_business_type_id_fkey"
+            columns: ["business_type_id"]
+            isOneToOne: false
+            referencedRelation: "business_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "predefined_scenarios_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       questionnaire_responses: {
         Row: {
           ai_recommendations: string | null
@@ -229,6 +310,33 @@ export type Database = {
           preferred_structure?: string | null
           target_market?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      sectors: {
+        Row: {
+          average_fixed_cost: number
+          average_revenue: number
+          created_at: string
+          description: string
+          id: number
+          name: string
+        }
+        Insert: {
+          average_fixed_cost: number
+          average_revenue: number
+          created_at?: string
+          description: string
+          id?: number
+          name: string
+        }
+        Update: {
+          average_fixed_cost?: number
+          average_revenue?: number
+          created_at?: string
+          description?: string
+          id?: number
+          name?: string
         }
         Relationships: []
       }

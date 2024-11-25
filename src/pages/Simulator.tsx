@@ -8,13 +8,14 @@ const Simulator = () => {
       <Navbar />
       <main className="flex-grow bg-gradient-to-br from-accent via-white to-transparent">
         <div className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto space-y-8">
+          <div className="max-w-6xl mx-auto space-y-8">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold text-swedish-blue">
                 Business Cost Simulator
               </h1>
               <p className="text-muted-foreground">
-                Compare costs and financial implications of different business types in Sweden
+                Explore the financial implications of different business types in Sweden. 
+                Get detailed cost breakdowns, tax calculations, and recommendations based on your specific situation.
               </p>
             </div>
 
