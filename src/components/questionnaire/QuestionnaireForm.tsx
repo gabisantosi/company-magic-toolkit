@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useToast } from "@/hooks/use-toast";
@@ -23,6 +23,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+const STORAGE_KEY = "questionnaire_answers";
+
 export const QuestionnaireForm = () => {
   const navigate = useNavigate();
   const session = useSession();
@@ -32,6 +34,19 @@ export const QuestionnaireForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiRecommendations, setAiRecommendations] = useState<string>("");
   const [showRecommendations, setShowRecommendations] = useState(false);
+
+  // Load saved answers from localStorage on component mount
+  useEffect(() => {
+    const savedAnswers = localStorage.getItem(STORAGE_KEY);
+    if (savedAnswers) {
+      setAnswers(JSON.parse(savedAnswers));
+    }
+  }, []);
+
+  // Save answers to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+  }, [answers]);
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
@@ -44,17 +59,19 @@ export const QuestionnaireForm = () => {
 
   const handleNext = async () => {
     if (currentQuestion === questions.length - 1) {
+      if (!session) {
+        // Save current answers and redirect to login
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+        toast({
+          title: "Please log in",
+          description: "You need to be logged in to submit your responses. Your answers will be saved.",
+        });
+        navigate("/login");
+        return;
+      }
+
       try {
         setIsSubmitting(true);
-
-        if (!session) {
-          toast({
-            title: "Not logged in",
-            description: "Your responses won't be saved. Please log in first.",
-          });
-          navigate("/login");
-          return;
-        }
 
         // Save responses to Supabase
         const { error: responseError } = await supabase
@@ -83,6 +100,9 @@ export const QuestionnaireForm = () => {
         // Store AI recommendations and show dialog
         setAiRecommendations(aiResponse.data.recommendations);
         setShowRecommendations(true);
+        
+        // Clear saved answers from localStorage after successful submission
+        localStorage.removeItem(STORAGE_KEY);
         
         toast({
           title: "Analysis Complete!",
