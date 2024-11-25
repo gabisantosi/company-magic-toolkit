@@ -30,9 +30,14 @@ const GuideContent = ({ content, onMarkComplete }: GuideContentProps) => {
     );
   }
 
+  // Sort content by step number
+  const sortedContent = [...content].sort((a, b) => 
+    parseInt(a.step) - parseInt(b.step)
+  );
+
   return (
     <Accordion type="single" collapsible className="space-y-4">
-      {content.map((item) => (
+      {sortedContent.map((item) => (
         <AccordionItem
           key={item.id}
           value={item.step}
@@ -56,7 +61,7 @@ const GuideContent = ({ content, onMarkComplete }: GuideContentProps) => {
             <div className="prose prose-blue max-w-none">
               <div
                 dangerouslySetInnerHTML={{ __html: item.content }}
-                className="text-gray-700 leading-relaxed"
+                className="text-gray-700 leading-relaxed [&>ul]:list-disc [&>ul]:ml-6 [&>ul]:mt-4 [&>p]:mb-4"
               />
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-4">
