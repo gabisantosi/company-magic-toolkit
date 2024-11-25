@@ -15,17 +15,25 @@ serve(async (req) => {
   try {
     const { responses, userId } = await req.json();
     
-    const prompt = `Based on the following information, provide a concise recommendation for the best type of company to open in Sweden:
-    
-    Business Idea: ${responses.business_idea}
-    Target Market: ${responses.target_market}
-    Initial Investment: ${responses.initial_investment}
-    Experience Level: ${responses.experience_level}
-    Current Structure Preference: ${responses.preferred_structure}
-    
-    Focus on key points and keep the response under 300 words.`;
+    // Create prompts for each question
+    const businessIdeaPrompt = `Based on the business idea: ${responses.business_idea}, analyze the market potential and suggest key considerations for success in Sweden.`;
+    const targetMarketPrompt = `For the target market: ${responses.target_market}, evaluate the market size in Sweden and suggest effective marketing strategies.`;
+    const investmentPrompt = `With an investment capacity of ${responses.initial_investment}, recommend suitable business structures and initial resource allocation.`;
+    const experiencePrompt = `For someone with ${responses.experience_level} business experience, suggest key areas to focus on and potential challenges to prepare for.`;
+    const structurePrompt = `Regarding the ${responses.preferred_structure} business structure, explain its advantages, requirements, and potential limitations.`;
+
+    const prompt = `Please provide a comprehensive business analysis and recommendations based on the following aspects:
+
+1. ${businessIdeaPrompt}
+2. ${targetMarketPrompt}
+3. ${investmentPrompt}
+4. ${experiencePrompt}
+5. ${structurePrompt}
+
+Please structure your response with clear sections for each aspect and provide actionable recommendations. Keep the total response under 800 words.`;
 
     console.log('Processing request for user:', userId);
+    console.log('Generated prompt:', prompt);
 
     const edenAiApiKey = Deno.env.get('EDEN_AI_API_KEY');
     if (!edenAiApiKey) {
