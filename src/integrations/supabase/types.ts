@@ -312,6 +312,24 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          email: string | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          email?: string | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          email?: string | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       questionnaire_responses: {
         Row: {
           ai_recommendations: string | null

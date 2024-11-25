@@ -50,21 +50,23 @@ export const QuestionnaireForm = () => {
   };
 
   const ensureUserProfile = async (userId: string) => {
-    const { data: profile } = await supabase
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData?.user) return;
+
+    const { data: existingProfile } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
       .single();
 
-    if (!profile) {
-      const { data: userData } = await supabase.auth.getUser();
-      if (userData?.user) {
-        await supabase.from('profiles').insert({
+    if (!existingProfile) {
+      await supabase
+        .from('profiles')
+        .insert({
           id: userId,
           email: userData.user.email,
           full_name: userData.user.user_metadata?.full_name || null
         });
-      }
     }
   };
 
