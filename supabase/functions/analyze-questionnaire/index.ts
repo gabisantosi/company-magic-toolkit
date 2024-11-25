@@ -15,25 +15,18 @@ serve(async (req) => {
   try {
     const { responses, userId } = await req.json();
     
-    // Create prompt for analysis in English
-    const prompt = `Analyze this questionnaire response and provide specific recommendations:
+    // Format questionnaire responses into a comprehensive text
+    const prompt = `Based on the following information, what is the best type of company to open in Sweden?
     
     Business Idea: ${responses.business_idea}
     Target Market: ${responses.target_market}
-    Initial Investment: ${responses.initial_investment}
-    Experience Level: ${responses.experience_level}
-    Preferred Structure: ${responses.preferred_structure}
+    Initial Investment Available: ${responses.initial_investment}
+    Business Experience Level: ${responses.experience_level}
+    Current Structure Preference: ${responses.preferred_structure}
     
-    Please provide detailed recommendations about:
-    1. Business structure suggestions
-    2. Key steps to take
-    3. Potential challenges to prepare for
-    4. Resources to consult
-    5. Timeline expectations
-    
-    Format the response in clear sections.`;
+    Please provide a detailed analysis considering these factors and recommend the most suitable company type.`;
 
-    console.log('Making request to Eden AI with prompt:', prompt);
+    console.log('Formatted prompt:', prompt);
 
     // Get Eden AI API key from environment variables
     const edenAiApiKey = Deno.env.get('EDEN_AI_API_KEY');
@@ -41,7 +34,7 @@ serve(async (req) => {
       throw new Error('Eden AI API key not found in environment variables');
     }
 
-    // Make request to Eden AI with correct settings format
+    // Make request to Eden AI
     const response = await fetch('https://api.edenai.run/v2/text/generation', {
       method: 'POST',
       headers: {
@@ -69,15 +62,15 @@ serve(async (req) => {
     console.log('Eden AI response:', result);
 
     if (!result.anthropic || !result.anthropic.generated_text) {
-      console.error('Invalid Eden AI response format:', result);
+      console.error('Invalid response format from Eden AI:', result);
       throw new Error('Invalid response format from Eden AI');
     }
 
     // Extract recommendations from Eden AI response
     const recommendations = result.anthropic.generated_text;
-    console.log('Recommendations generated:', recommendations);
+    console.log('Generated recommendations:', recommendations);
 
-    // Update questionnaire response with recommendations
+    // Update questionnaire response with AI recommendations
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -96,7 +89,12 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ recommendations }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { 
+        headers: { 
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        }
+      }
     );
 
   } catch (error) {
@@ -105,7 +103,10 @@ serve(async (req) => {
       JSON.stringify({ error: error.message }),
       { 
         status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        headers: { 
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        }
       }
     );
   }
