@@ -1,7 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-import { HfInference } from 'https://esm.sh/@huggingface/inference@2.3.2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -34,20 +33,31 @@ serve(async (req) => {
     
     Formate a resposta em seções claras.`;
 
-    // Inicializar o cliente Hugging Face
-    const hf = new HfInference(Deno.env.get('HUGGING_FACE_ACCESS_TOKEN'));
-
-    // Usar o modelo de linguagem do Hugging Face
-    const result = await hf.textGeneration({
-      model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-      inputs: prompt,
-      parameters: {
-        max_new_tokens: 500,
+    // Fazer requisição para Eden AI
+    const response = await fetch('https://api.edenai.run/v2/text/generation', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${Deno.env.get('EDEN_AI_API_KEY')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        providers: "anthropic",
+        text: prompt,
         temperature: 0.7,
-      }
+        max_tokens: 500,
+        settings: {
+          anthropic: {
+            model: "claude-2"
+          }
+        }
+      })
     });
 
-    const recommendations = result.generated_text;
+    const result = await response.json();
+    console.log('Eden AI response:', result);
+
+    // Extrair recomendações da resposta do Eden AI
+    const recommendations = result.anthropic.generated_text;
     console.log('Recommendations generated:', recommendations);
 
     // Atualizar a resposta do questionário com as recomendações
