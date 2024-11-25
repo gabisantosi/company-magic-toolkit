@@ -1,6 +1,11 @@
-import { CheckCircle, Calculator, FileText, ArrowRight, Sparkles, ChevronRight } from "lucide-react";
+import { ArrowRight, Calculator, CheckCircle, ChevronRight, Sparkles } from "lucide-react";
 
 const features = [
+  {
+    icon: <ArrowRight className="w-12 h-12 text-swedish-blue" />,
+    title: "Get Started",
+    description: "Begin your journey to start your business in Sweden with our step-by-step guidance.",
+  },
   {
     icon: <CheckCircle className="w-12 h-12 text-swedish-blue" />,
     title: "Interactive Checklist",
@@ -10,11 +15,6 @@ const features = [
     icon: <Calculator className="w-12 h-12 text-swedish-blue" />,
     title: "Cost Calculator",
     description: "Calculate the costs of starting your business with our easy-to-use calculator.",
-  },
-  {
-    icon: <FileText className="w-12 h-12 text-swedish-blue" />,
-    title: "Form Automation",
-    description: "Automatically generate and fill necessary forms for your business registration.",
   },
 ];
 
