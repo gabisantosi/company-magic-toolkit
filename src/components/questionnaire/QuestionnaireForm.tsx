@@ -49,6 +49,25 @@ export const QuestionnaireForm = () => {
     }));
   };
 
+  const ensureUserProfile = async (userId: string) => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (!profile) {
+      const { data: userData } = await supabase.auth.getUser();
+      if (userData?.user) {
+        await supabase.from('profiles').insert({
+          id: userId,
+          email: userData.user.email,
+          full_name: userData.user.user_metadata?.full_name || null
+        });
+      }
+    }
+  };
+
   const handleNext = async () => {
     if (currentQuestion === questions.length - 1) {
       if (!session) {
@@ -68,6 +87,9 @@ export const QuestionnaireForm = () => {
 
       try {
         setIsSubmitting(true);
+
+        // Ensure user profile exists before submitting
+        await ensureUserProfile(session.user.id);
 
         const { error: responseError } = await supabase
           .from("questionnaire_responses")
