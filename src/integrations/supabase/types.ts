@@ -417,6 +417,36 @@ export type Database = {
         }
         Relationships: []
       }
+      sni_codes: {
+        Row: {
+          category: string | null
+          code: string
+          created_at: string
+          description: string | null
+          id: number
+          name: string
+          subcategory: string | null
+        }
+        Insert: {
+          category?: string | null
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          name: string
+          subcategory?: string | null
+        }
+        Update: {
+          category?: string | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          name?: string
+          subcategory?: string | null
+        }
+        Relationships: []
+      }
       success_stories: {
         Row: {
           business_type: string

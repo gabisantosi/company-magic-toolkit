@@ -6,8 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
-import Checklist from "./pages/Checklist";
-import Simulator from "./pages/Simulator";
+import SNISelector from "./pages/SNISelector";
 import Login from "./pages/Login";
 import Guide from "./pages/Guide";
 import Questionnaire from "./pages/Questionnaire";
@@ -27,8 +26,7 @@ const App = () => (
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Index />} />
-            <Route path="/checklist" element={<Checklist />} />
-            <Route path="/simulator" element={<Simulator />} />
+            <Route path="/sni" element={<SNISelector />} />
             <Route path="/guide" element={<Guide />} />
             <Route path="/questionnaire" element={<Questionnaire />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
