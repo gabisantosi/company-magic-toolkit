@@ -10,14 +10,14 @@ const Navbar = () => {
           <Logo />
         </Link>
         <div className="flex items-center gap-4">
-          <Link to="/checklist">
-            <Button variant="ghost">Checklist</Button>
-          </Link>
-          <Link to="/simulator">
-            <Button variant="ghost">Cost Calculator</Button>
+          <Link to="/sni">
+            <Button variant="ghost">SNI Codes</Button>
           </Link>
           <Link to="/guide">
             <Button variant="ghost">Guide</Button>
+          </Link>
+          <Link to="/how-it-works">
+            <Button variant="ghost">How It Works</Button>
           </Link>
           <Link to="/questionnaire">
             <Button>Get Started</Button>

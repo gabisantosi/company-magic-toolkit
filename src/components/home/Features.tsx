@@ -4,21 +4,21 @@ import { Link } from "react-router-dom";
 const features = [
   {
     icon: <ArrowRight className="w-12 h-12 text-swedish-blue" />,
-    title: "Get Started",
-    description: "Begin your journey to start your business in Sweden with our step-by-step guidance.",
-    link: "/questionnaire"
+    title: "SNI Code Selection",
+    description: "Find and select the right SNI code for your business with our easy-to-use search tool.",
+    link: "/sni"
   },
   {
     icon: <CheckCircle className="w-12 h-12 text-swedish-blue" />,
-    title: "Interactive Checklist",
-    description: "Track your progress with our dynamic checklist tailored to your business type.",
-    link: "/checklist"
+    title: "Business Guide",
+    description: "Get comprehensive guidance on starting your business in Sweden.",
+    link: "/guide"
   },
   {
     icon: <Calculator className="w-12 h-12 text-swedish-blue" />,
-    title: "Cost Calculator",
-    description: "Calculate the costs of starting your business with our easy-to-use calculator.",
-    link: "/simulator"
+    title: "How It Works",
+    description: "Learn about the process of starting a business in Sweden.",
+    link: "/how-it-works"
   },
 ];
 
