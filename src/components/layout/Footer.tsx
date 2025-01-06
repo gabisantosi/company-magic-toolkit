@@ -7,32 +7,17 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-swedish-blue mb-4">Start Sweden</h3>
             <p className="text-gray-600">
-              Making company registration in Sweden simple and accessible.
+              Making business registration in Sweden simple and accessible.
             </p>
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold text-swedish-blue mb-4">Contact</h3>
-              <a 
-                href="mailto:gabisantos.enf@gmail.com" 
-                className="text-gray-600 hover:text-swedish-blue transition-colors duration-300"
-              >
-                Mail us
-              </a>
-            </div>
           </div>
-          <div>
-            <h4 className="text-lg font-semibold text-swedish-blue mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="/about" className="text-gray-600 hover:text-swedish-blue transition-colors duration-300 hover:-translate-y-0.5 inline-flex">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="/faq" className="text-gray-600 hover:text-swedish-blue transition-colors duration-300 hover:-translate-y-0.5 inline-flex">
-                  FAQ
-                </a>
-              </li>
-            </ul>
+          <div className="text-right">
+            <h4 className="text-lg font-semibold text-swedish-blue mb-4">Contact</h4>
+            <a 
+              href="mailto:contact@startsweden.com" 
+              className="text-gray-600 hover:text-swedish-blue transition-colors duration-300"
+            >
+              contact@startsweden.com
+            </a>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-200/50 text-center text-gray-600">
