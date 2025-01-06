@@ -420,7 +420,64 @@ export type Database = {
         }
         Relationships: []
       }
+      sni_changes: {
+        Row: {
+          change_type: string
+          code: string
+          detected_at: string | null
+          id: number
+          new_value: Json | null
+          old_value: Json | null
+        }
+        Insert: {
+          change_type: string
+          code: string
+          detected_at?: string | null
+          id?: number
+          new_value?: Json | null
+          old_value?: Json | null
+        }
+        Update: {
+          change_type?: string
+          code?: string
+          detected_at?: string | null
+          id?: number
+          new_value?: Json | null
+          old_value?: Json | null
+        }
+        Relationships: []
+      }
       sni_codes: {
+        Row: {
+          category: string | null
+          code: string
+          created_at: string
+          description: string | null
+          id: number
+          name: string
+          subcategory: string | null
+        }
+        Insert: {
+          category?: string | null
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          name: string
+          subcategory?: string | null
+        }
+        Update: {
+          category?: string | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          name?: string
+          subcategory?: string | null
+        }
+        Relationships: []
+      }
+      sni_codes_snapshot: {
         Row: {
           category: string | null
           code: string
@@ -512,7 +569,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_sni_changes: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
