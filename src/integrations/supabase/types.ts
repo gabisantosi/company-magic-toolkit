@@ -339,6 +339,7 @@ export type Database = {
           id: number
           initial_investment: string | null
           preferred_structure: string | null
+          sni_code: string | null
           target_market: string | null
           user_id: string | null
         }
@@ -350,6 +351,7 @@ export type Database = {
           id?: number
           initial_investment?: string | null
           preferred_structure?: string | null
+          sni_code?: string | null
           target_market?: string | null
           user_id?: string | null
         }
@@ -361,6 +363,7 @@ export type Database = {
           id?: number
           initial_investment?: string | null
           preferred_structure?: string | null
+          sni_code?: string | null
           target_market?: string | null
           user_id?: string | null
         }

@@ -14,6 +14,13 @@ export const questions = [
     aiPrompt: "For the target market: {value}, evaluate the market size in Sweden and suggest effective marketing strategies.",
   },
   {
+    id: "sni_code",
+    title: "What's your business activity?",
+    description: "Select the SNI code that best matches your business",
+    type: "sni_select" as const,
+    aiPrompt: "Based on the selected SNI code: {value}, provide specific recommendations and requirements for this type of business activity in Sweden.",
+  },
+  {
     id: "initial_investment",
     title: "What's your initial investment capacity?",
     description: "Choose your investment range",
