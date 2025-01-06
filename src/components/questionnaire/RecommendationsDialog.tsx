@@ -50,7 +50,7 @@ export const RecommendationsDialog = ({
         <div className="mt-4 space-y-4 whitespace-pre-wrap">
           {recommendations}
         </div>
-        <div className="mt-6 flex justify-between items-center">
+        <div className="mt-6 flex justify-end">
           <Button
             variant="outline"
             onClick={handleSaveAsPDF}
@@ -58,9 +58,6 @@ export const RecommendationsDialog = ({
           >
             <Download className="h-4 w-4" />
             Save as PDF
-          </Button>
-          <Button onClick={onClose}>
-            Continue to Checklist
           </Button>
         </div>
       </DialogContent>
