@@ -37,17 +37,4 @@ export const questions = [
     ],
     aiPrompt: "For someone with {value} business experience, suggest key areas to focus on and potential challenges to prepare for.",
   },
-  {
-    id: "preferred_structure",
-    title: "Do you have a preferred business structure?",
-    description: "Select your preference",
-    type: "select" as const,
-    options: [
-      { value: "unsure", label: "Not sure yet" },
-      { value: "Enskild Firma", label: "Enskild Firma" },
-      { value: "Aktiebolag", label: "Aktiebolag (AB)" },
-      { value: "Handelsbolag", label: "Handelsbolag" },
-    ],
-    aiPrompt: "Regarding the {value} business structure, explain its advantages, requirements, and potential limitations.",
-  },
 ];
