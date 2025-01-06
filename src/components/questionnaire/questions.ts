@@ -4,7 +4,7 @@ export const questions = [
     title: "What's your business idea?",
     description: "Briefly describe your business concept",
     type: "text" as const,
-    aiPrompt: "Based on the business idea: {value}, analyze the market potential and suggest key considerations for success in Sweden.",
+    aiPrompt: "Based on the business idea: {value}, analyze the market potential and suggest key considerations for success in Sweden. Also, suggest relevant SNI codes that would be appropriate for this type of business.",
   },
   {
     id: "target_market",
@@ -12,13 +12,6 @@ export const questions = [
     description: "Describe your ideal customers",
     type: "text" as const,
     aiPrompt: "For the target market: {value}, evaluate the market size in Sweden and suggest effective marketing strategies.",
-  },
-  {
-    id: "sni_code",
-    title: "What's your business activity?",
-    description: "Select the SNI code that best matches your business",
-    type: "sni_select" as const,
-    aiPrompt: "Based on the selected SNI code: {value}, provide specific recommendations and requirements for this type of business activity in Sweden.",
   },
   {
     id: "initial_investment",

@@ -15,8 +15,8 @@ serve(async (req) => {
   try {
     const { responses, userId } = await req.json();
     
-    // Create prompts for each question with enhanced business type focus
-    const businessIdeaPrompt = `Based on the business idea: ${responses.business_idea}, analyze the market potential and suggest key considerations for success in Sweden.`;
+    // Create prompts for each question with enhanced SNI code focus
+    const businessIdeaPrompt = `Based on the business idea: ${responses.business_idea}, analyze the market potential and suggest key considerations for success in Sweden. Additionally, suggest 2-3 relevant SNI codes that would be appropriate for this type of business, including their codes and descriptions.`;
     const targetMarketPrompt = `For the target market: ${responses.target_market}, evaluate the market size in Sweden and suggest effective marketing strategies.`;
     const investmentPrompt = `With an investment capacity of ${responses.initial_investment}, recommend suitable business structures and initial resource allocation.`;
     const experiencePrompt = `For someone with ${responses.experience_level} business experience, suggest key areas to focus on and potential challenges to prepare for.`;
@@ -31,10 +31,11 @@ serve(async (req) => {
 5. ${structurePrompt}
 
 Additionally, based on all the information provided:
+- Start your response with a section titled "Recommended SNI Codes" that lists 2-3 most relevant SNI codes for this business, including their codes and descriptions.
 - Recommend which business structure would be most suitable (Limited Company (Aktiebolag), Sole Proprietorship (Enskild Firma), Trading Partnership (Handelsbolag), or Limited Partnership (Kommanditbolag)) and explain why.
 - When mentioning business types in your response, always include the Swedish term in parentheses, e.g., "Limited Company (Aktiebolag)" or "Sole Proprietorship (Enskild Firma)".
 
-Please structure your response with clear sections for each aspect and provide actionable recommendations. Keep the total response under 600 words.`;
+Please structure your response with clear sections for each aspect and provide actionable recommendations. Keep the total response under 800 words.`;
 
     console.log('Processing request for user:', userId);
     console.log('Generated prompt:', prompt);
@@ -55,7 +56,7 @@ Please structure your response with clear sections for each aspect and provide a
         providers: ["openai"],
         text: prompt,
         temperature: 0.5,
-        max_tokens: 800,
+        max_tokens: 1000,
         settings: {
           openai: "gpt-4"
         }
