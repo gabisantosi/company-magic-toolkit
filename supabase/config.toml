@@ -15,3 +15,7 @@ port = 54323
 [[functions]]
 name = "analyze-questionnaire"
 verify_jwt = true
+
+[[functions]]
+name = "import-sni-codes"
+verify_jwt = true
