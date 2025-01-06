@@ -47,7 +47,7 @@ Please keep the total response under 800 words and format it clearly with header
 
     const edenAiApiKey = Deno.env.get('EDEN_AI_API_KEY');
     if (!edenAiApiKey) {
-      throw new Error('Configuration error: API key not found');
+      throw new Error('Configuration error: Eden AI API key not found');
     }
 
     const edenAiResponse = await fetch('https://api.edenai.run/v2/text/chat', {
@@ -62,7 +62,7 @@ Please keep the total response under 800 words and format it clearly with header
         temperature: 0.5,
         max_tokens: 1000,
         settings: {
-          openai: "gpt-4"
+          openai: "gpt-4o"
         }
       })
     });
