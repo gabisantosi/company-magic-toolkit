@@ -11,18 +11,18 @@ const Hero = () => {
           <div className="relative group backdrop-blur-sm bg-white/30 p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_20px_40px_rgb(0,106,167,0.2)] transition-all duration-500 before:absolute before:inset-0 before:rounded-2xl before:transition-all before:duration-500 before:opacity-0 before:bg-gradient-to-r before:from-swedish-blue/5 before:via-accent/10 before:to-swedish-yellow/5 group-hover:before:opacity-100 before:animate-pulse">
             <div className="absolute inset-[-2px] bg-gradient-to-r from-swedish-blue/10 via-accent/5 to-swedish-yellow/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-70 transition-all duration-500 group-hover:scale-105"></div>
             <div className="relative">
-              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-swedish-blue to-swedish-blue/80 bg-clip-text text-transparent mb-6 [text-shadow:_0_2px_4px_rgb(0_0_0_/_5%)] transform transition-all duration-300 group-hover:scale-[1.02] group-hover:[text-shadow:_0_4px_8px_rgb(0,106,167,0.2)]">
+              <h1 className="text-4xl md:text-6xl font-extrabold text-swedish-blue mb-6 [text-shadow:_0_2px_4px_rgb(0_0_0_/_10%)] transform transition-all duration-300 group-hover:scale-[1.02] group-hover:[text-shadow:_0_4px_8px_rgb(0,106,167,0.3)]">
                 Find the Perfect SNI Code for Your Business
                 <Search className="inline-block w-8 h-8 ml-2 text-swedish-yellow animate-pulse" />
               </h1>
-              <p className="text-xl text-gray-600 mb-8 [text-shadow:_0_1px_2px_rgb(0_0_0_/_5%)] transform transition-all duration-300 group-hover:translate-y-[-2px] group-hover:text-gray-700">
+              <p className="text-xl font-medium text-gray-700 mb-8 [text-shadow:_0_1px_2px_rgb(0_0_0_/_5%)] transform transition-all duration-300 group-hover:translate-y-[-2px] group-hover:text-gray-800">
                 Easily search and find the right SNI code for your Swedish company.
                 Our smart search helps you navigate through all industry classifications.
               </p>
               <div className="space-x-4 relative z-10">
                 <Button 
                   asChild 
-                  className="bg-swedish-blue hover:bg-swedish-blue/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent group"
+                  className="bg-swedish-blue hover:bg-swedish-blue/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent group font-semibold"
                 >
                   <Link to="/sni">
                     Search SNI Codes
@@ -31,7 +31,7 @@ const Hero = () => {
                 <Button
                   variant="outline"
                   asChild
-                  className="border-swedish-blue text-swedish-blue hover:bg-swedish-blue/10 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent backdrop-blur-sm"
+                  className="border-swedish-blue text-swedish-blue hover:bg-swedish-blue/10 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent backdrop-blur-sm font-semibold"
                 >
                   <Link to="/how-it-works">Learn More</Link>
                 </Button>
