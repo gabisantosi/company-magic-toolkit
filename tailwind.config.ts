@@ -25,15 +25,15 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         swedish: {
-          blue: "#405F73",  // More muted blue
-          yellow: "#E5D9B6", // Softer, desaturated yellow
+          blue: "#006AA7",
+          yellow: "#FECC02",
         },
         primary: {
-          DEFAULT: "#405F73",
+          DEFAULT: "#006AA7",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#E5D9B6",
+          DEFAULT: "#FECC02",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
@@ -45,7 +45,7 @@ export default {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#F6F8FA", // Very light grayish blue
+          DEFAULT: "#E6F3FF",
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
