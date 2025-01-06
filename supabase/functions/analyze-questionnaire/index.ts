@@ -62,7 +62,7 @@ Please keep the total response under 800 words and format it clearly with header
         temperature: 0.5,
         max_tokens: 1000,
         settings: {
-          openai: "gpt-4o"
+          openai: "gpt-4"
         }
       })
     });
