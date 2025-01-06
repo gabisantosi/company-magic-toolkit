@@ -16,8 +16,8 @@ const features = [
   },
   {
     icon: <Calculator className="w-12 h-12 text-swedish-blue" />,
-    title: "How It Works",
-    description: "Learn about the process of starting a business in Sweden.",
+    title: "Business Planning",
+    description: "Learn about the process and get help planning your business in Sweden.",
     link: "/how-it-works"
   },
 ];
