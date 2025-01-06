@@ -19,3 +19,7 @@ verify_jwt = true
 [[functions]]
 name = "import-sni-codes"
 verify_jwt = true
+
+[[functions]]
+name = "create-payment-intent"
+verify_jwt = false

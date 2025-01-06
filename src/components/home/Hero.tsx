@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
+import { PaymentElement } from "@/components/payment/PaymentElement";
 
 const Hero = () => {
   return (
@@ -19,22 +20,8 @@ const Hero = () => {
                 Easily search and find the right SNI code for your Swedish company.
                 Our smart search helps you navigate through all industry classifications.
               </p>
-              <div className="space-x-4 relative z-10">
-                <Button 
-                  asChild 
-                  className="bg-swedish-blue hover:bg-swedish-blue/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent group"
-                >
-                  <Link to="/sni">
-                    Search SNI Codes
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  asChild
-                  className="border-swedish-blue text-swedish-blue hover:bg-swedish-blue/10 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:ring-2 hover:ring-swedish-blue/20 hover:ring-offset-2 hover:ring-offset-transparent backdrop-blur-sm"
-                >
-                  <Link to="/how-it-works">Learn More</Link>
-                </Button>
+              <div className="space-y-8">
+                <PaymentElement />
               </div>
             </div>
           </div>
