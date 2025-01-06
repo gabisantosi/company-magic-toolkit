@@ -7,7 +7,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-swedish-blue mb-4">Start Sweden</h3>
             <p className="text-gray-600">
-              Making business registration in Sweden simple and accessible.
+              Making business structure decisions in Sweden simple and accessible.
             </p>
           </div>
           <div className="text-right">
