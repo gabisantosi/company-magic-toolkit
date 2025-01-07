@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import type { Appearance } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe('pk_test_51QeIX52LXOKOXavoC0jOAiuAtduL6P2rUo3Deqr9LBbOHzE1h5EE6pjlp4vdoRMrHRtbeGTxNgNDreGzOB37eCjh00uOInHcd8');
 
@@ -17,21 +18,24 @@ export const PaymentElement = () => {
         const stripe = await stripePromise;
         if (!stripe) throw new Error('Failed to load Stripe');
 
-        const appearance = {
-          theme: 'stripe',
+        const appearance: Appearance = {
+          theme: 'stripe' as const,
           variables: {
             colorPrimary: '#006AA7',
           },
         };
 
-        const options = {
-          layout: 'accordion',
+        const elements = stripe.elements({ 
+          appearance,
+          mode: 'payment',
           amount: 5000, // 50kr in öre
           currency: 'sek',
-        };
+        });
 
-        const elements = stripe.elements({ appearance });
-        const paymentElement = elements.create('payment', options);
+        const paymentElement = elements.create('paymentElement', {
+          layout: { type: 'accordion' }
+        });
+        
         paymentElement.mount('#payment-element');
 
       } catch (error) {
