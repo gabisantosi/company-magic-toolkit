@@ -5,23 +5,22 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XLV30044G2"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){window.dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-XLV30044G2');
+      // Add base URL configuration
+      gtag('config', 'G-XLV30044G2', {
+        'cookie_domain': 'lovableproject.com',
+        'transport_url': 'https://eb9e0800-75af-4f32-b35b-45da31999756.lovableproject.com'
+      });
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Start Sweden</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
-    <meta property="og:image" content="/og-image.svg" />
-    <link rel="icon" type="image/svg+xml" href="/magic-wand.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
   </head>
-
   <body>
     <div id="root"></div>
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
