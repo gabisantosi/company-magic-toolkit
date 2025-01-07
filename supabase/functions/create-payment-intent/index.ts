@@ -17,7 +17,7 @@ serve(async (req) => {
     });
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 5000, // 50kr in öre
+      amount: 10000, // 100kr in öre
       currency: 'sek',
       automatic_payment_methods: {
         enabled: true,

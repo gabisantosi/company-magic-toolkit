@@ -160,7 +160,7 @@ export const QuestionnaireForm = () => {
       <Card>
         <CardHeader>
           <CardTitle>Complete Your Payment</CardTitle>
-          <CardDescription>Pay 50kr to receive your personalized business analysis</CardDescription>
+          <CardDescription>Pay 100kr to receive your personalized business analysis</CardDescription>
         </CardHeader>
         <CardContent>
           <PaymentElement />
@@ -230,3 +230,5 @@ export const QuestionnaireForm = () => {
     </>
   );
 };
+
+export default QuestionnaireForm;
