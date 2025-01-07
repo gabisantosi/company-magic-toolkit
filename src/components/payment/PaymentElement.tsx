@@ -32,7 +32,7 @@ export const PaymentElement = () => {
           currency: 'sek',
         });
 
-        const paymentElement = elements.create('paymentElement', {
+        const paymentElement = elements.create('payment', {
           layout: { type: 'accordion' }
         });
         
