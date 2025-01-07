@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import type { Appearance } from '@stripe/stripe-js';
+import { supabase } from "@/integrations/supabase/client";
 
 const stripePromise = loadStripe('pk_test_51QeIX52LXOKOXavoC0jOAiuAtduL6P2rUo3Deqr9LBbOHzE1h5EE6pjlp4vdoRMrHRtbeGTxNgNDreGzOB37eCjh00uOInHcd8');
 
@@ -16,15 +17,11 @@ export const PaymentElement = () => {
   useEffect(() => {
     const initializePayment = async () => {
       try {
-        // Fetch the client secret from your Supabase Edge Function
-        const response = await fetch('/api/create-payment-intent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        // Call the Supabase Edge Function instead of a local API
+        const { data, error } = await supabase.functions.invoke('create-payment-intent');
         
-        const data = await response.json();
+        if (error) throw error;
+        
         setClientSecret(data.clientSecret);
 
         if (!clientSecret) return;
