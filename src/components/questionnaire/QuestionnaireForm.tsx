@@ -16,6 +16,7 @@ import { questions } from "./questions";
 import { Loader2 } from "lucide-react";
 import { QuestionnaireProgress } from "./QuestionnaireProgress";
 import { RecommendationsDialog } from "./RecommendationsDialog";
+import { PaymentElement } from "@/components/payment/PaymentElement";
 
 const STORAGE_KEY = "questionnaire_answers";
 
@@ -28,6 +29,7 @@ export const QuestionnaireForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiRecommendations, setAiRecommendations] = useState<string>("");
   const [showRecommendations, setShowRecommendations] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
     const savedAnswers = localStorage.getItem(STORAGE_KEY);
@@ -82,61 +84,65 @@ export const QuestionnaireForm = () => {
         return;
       }
 
-      toast({
-        title: "Starting Analysis",
-        description: "Please wait a few seconds while we analyze your responses...",
-      });
-
-      try {
-        setIsSubmitting(true);
-
-        // Ensure user profile exists before submitting
-        await ensureUserProfile(session.user.id);
-
-        const { error: responseError } = await supabase
-          .from("questionnaire_responses")
-          .insert({
-            user_id: session.user.id,
-            business_idea: answers.business_idea,
-            target_market: answers.target_market,
-            initial_investment: answers.initial_investment,
-            experience_level: answers.experience_level,
-            preferred_structure: answers.preferred_structure,
-          });
-
-        if (responseError) throw responseError;
-
-        const aiResponse = await supabase.functions.invoke('analyze-questionnaire', {
-          body: { 
-            responses: answers,
-            userId: session.user.id
-          }
-        });
-
-        if (aiResponse.error) throw aiResponse.error;
-
-        setAiRecommendations(aiResponse.data.recommendations);
-        setShowRecommendations(true);
-        
-        localStorage.removeItem(STORAGE_KEY);
-        
-        toast({
-          title: "Analysis Complete!",
-          description: "Review your personalized recommendations.",
-        });
-
-      } catch (error: any) {
-        toast({
-          title: "Error",
-          description: error.message || "Failed to save your responses. Please try again.",
-          variant: "destructive",
-        });
-        console.error('Questionnaire submission error:', error);
-      } finally {
-        setIsSubmitting(false);
-      }
+      setShowPayment(true);
     } else {
       setCurrentQuestion((prev) => prev + 1);
+    }
+  };
+
+  const handleAnalysis = async () => {
+    toast({
+      title: "Starting Analysis",
+      description: "Please wait a few seconds while we analyze your responses...",
+    });
+
+    try {
+      setIsSubmitting(true);
+
+      await ensureUserProfile(session!.user.id);
+
+      const { error: responseError } = await supabase
+        .from("questionnaire_responses")
+        .insert({
+          user_id: session!.user.id,
+          business_idea: answers.business_idea,
+          target_market: answers.target_market,
+          initial_investment: answers.initial_investment,
+          experience_level: answers.experience_level,
+          preferred_structure: answers.preferred_structure,
+        });
+
+      if (responseError) throw responseError;
+
+      const aiResponse = await supabase.functions.invoke('analyze-questionnaire', {
+        body: { 
+          responses: answers,
+          userId: session!.user.id
+        }
+      });
+
+      if (aiResponse.error) throw aiResponse.error;
+
+      setAiRecommendations(aiResponse.data.recommendations);
+      setShowRecommendations(true);
+      
+      localStorage.removeItem(STORAGE_KEY);
+      
+      toast({
+        title: "Analysis Complete!",
+        description: "Review your personalized recommendations.",
+      });
+
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to save your responses. Please try again.",
+        variant: "destructive",
+      });
+      console.error('Questionnaire submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+      setShowPayment(false);
     }
   };
 
@@ -148,6 +154,32 @@ export const QuestionnaireForm = () => {
   };
 
   const currentQ = questions[currentQuestion];
+
+  if (showPayment) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Complete Your Payment</CardTitle>
+          <CardDescription>Pay 50kr to receive your personalized business analysis</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <PaymentElement />
+          <div className="mt-4">
+            <Button
+              variant="outline"
+              onClick={() => setShowPayment(false)}
+              className="mr-2"
+            >
+              Back
+            </Button>
+            <Button onClick={handleAnalysis}>
+              Continue to Analysis
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <>
