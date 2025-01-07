@@ -11,25 +11,37 @@ const stripePromise = loadStripe('pk_test_51QeIX52LXOKOXavoC0jOAiuAtduL6P2rUo3De
 export const PaymentElement = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const [clientSecret, setClientSecret] = useState<string>();
 
   useEffect(() => {
     const initializePayment = async () => {
       try {
+        // Fetch the client secret from your Supabase Edge Function
+        const response = await fetch('/api/create-payment-intent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        const data = await response.json();
+        setClientSecret(data.clientSecret);
+
+        if (!clientSecret) return;
+
         const stripe = await stripePromise;
         if (!stripe) throw new Error('Failed to load Stripe');
 
         const appearance: Appearance = {
-          theme: 'stripe' as const,
+          theme: 'stripe',
           variables: {
             colorPrimary: '#006AA7',
           },
         };
 
         const elements = stripe.elements({ 
+          clientSecret,
           appearance,
-          mode: 'payment',
-          amount: 5000, // 50kr in öre
-          currency: 'sek',
         });
 
         const paymentElement = elements.create('payment', {
@@ -49,16 +61,27 @@ export const PaymentElement = () => {
     };
 
     initializePayment();
-  }, [toast]);
+  }, [toast, clientSecret]);
 
   const handlePayment = async () => {
     setLoading(true);
     try {
-      // Implement payment submission logic here
-      toast({
-        title: "Processing payment",
-        description: "Please wait while we process your payment...",
+      const stripe = await stripePromise;
+      if (!stripe || !clientSecret) {
+        throw new Error('Stripe not initialized');
+      }
+
+      const { error } = await stripe.confirmPayment({
+        elements: stripe.elements({ clientSecret }),
+        confirmParams: {
+          return_url: `${window.location.origin}/payment-success`,
+        },
       });
+
+      if (error) {
+        throw error;
+      }
+
     } catch (error) {
       console.error('Payment error:', error);
       toast({
@@ -81,7 +104,7 @@ export const PaymentElement = () => {
         <div id="payment-element" className="mb-6"></div>
         <Button 
           onClick={handlePayment} 
-          disabled={loading}
+          disabled={loading || !clientSecret}
           className="w-full"
         >
           {loading ? (
