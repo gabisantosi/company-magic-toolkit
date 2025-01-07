@@ -1,4 +1,13 @@
-export const questions = [
+export interface Question {
+  id: string;
+  title: string;
+  description: string;
+  type: "text" | "select";
+  options?: { value: string; label: string; }[];
+  aiPrompt: string;
+}
+
+export const questions: Question[] = [
   {
     id: "business_idea",
     title: "What's your business idea?",
