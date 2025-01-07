@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Elements } from "@stripe/stripe-js";
-import { PaymentElement as StripePaymentElement } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { useToast } from "@/hooks/use-toast";
 import { stripePromise, getPaymentIntent, stripeAppearance } from "@/utils/stripe";
 import { LoadingState } from "./LoadingState";

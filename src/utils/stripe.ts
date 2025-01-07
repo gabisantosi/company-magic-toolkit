@@ -1,4 +1,5 @@
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe, Appearance } from '@stripe/stripe-js';
+import { supabase } from "@/integrations/supabase/client";
 
 export const stripePromise = loadStripe('pk_test_51QeIX52LXOKOXavoC0jOAiuAtduL6P2rUo3Deqr9LBbOHzE1h5EE6pjlp4vdoRMrHRtbeGTxNgNDreGzOB37eCjh00uOInHcd8');
 
