@@ -40,9 +40,6 @@ const PaymentElementContent = ({ onPaymentSuccess }: PaymentElementProps) => {
           applePay: 'never',
           googlePay: 'never',
         },
-        terms: {
-          card: 'never',
-        },
       }} />
       <Button
         type="submit"
