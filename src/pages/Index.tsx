@@ -27,11 +27,11 @@ const Index = () => {
                 {/* Heading */}
                 <div className="space-y-4 text-center">
                   <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-swedish-blue to-swedish-blue/80 bg-clip-text text-transparent [text-shadow:_0_2px_4px_rgb(0_0_0_/_5%)] animate-fade-in">
-                    Find Your Perfect Business Structure
+                    Start Your Swedish Business Journey
                     <Sparkles className="inline-block w-8 h-8 ml-2 text-swedish-yellow animate-pulse" />
                   </h1>
                   <p className="text-xl text-gray-600 max-w-2xl mx-auto animate-fade-in delay-100">
-                    Get AI-powered recommendations for your Swedish business structure and SNI codes
+                    Expert guidance for choosing your business structure and SNI codes in Sweden
                   </p>
                 </div>
 
@@ -81,7 +81,7 @@ const Index = () => {
                 {/* Trust Indicators */}
                 <div className="mt-16 pt-8 border-t border-swedish-blue/10 text-center animate-fade-in delay-400">
                   <p className="text-sm text-gray-500">
-                    Powered by advanced AI to help entrepreneurs make informed decisions about their Swedish business journey
+                    Helping entrepreneurs make informed decisions about their Swedish business journey
                   </p>
                 </div>
               </div>
