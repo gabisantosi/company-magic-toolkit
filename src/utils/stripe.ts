@@ -1,17 +1,27 @@
-import { loadStripe, Appearance } from '@stripe/stripe-js';
-import { supabase } from "@/integrations/supabase/client";
+import { loadStripe } from "@stripe/stripe-js";
 
-export const stripePromise = loadStripe('pk_test_51QeIX52LXOKOXavoC0jOAiuAtduL6P2rUo3Deqr9LBbOHzE1h5EE6pjlp4vdoRMrHRtbeGTxNgNDreGzOB37eCjh00uOInHcd8');
+// This is your publishable key, it's safe to commit this
+export const stripePromise = loadStripe("pk_test_your_publishable_key_here");
 
-export const getPaymentIntent = async () => {
-  const { data, error } = await supabase.functions.invoke('create-payment-intent');
-  if (error) throw error;
-  return data.clientSecret;
-};
-
-export const stripeAppearance: Appearance = {
+export const stripeAppearance = {
   theme: 'stripe',
   variables: {
-    colorPrimary: '#0369a1',
+    colorPrimary: '#0F172A',
   },
+};
+
+export const getPaymentIntent = async () => {
+  const response = await fetch('https://dqebigulyemxctgrpftf.supabase.co/functions/v1/create-payment-intent', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create payment intent');
+  }
+
+  const data = await response.json();
+  return data.clientSecret;
 };
