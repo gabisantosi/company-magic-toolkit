@@ -1,14 +1,15 @@
 import { useEffect } from "react";
-import { useStripe, useElements, PaymentElement as StripePaymentElement } from "@stripe/react-stripe-js";
+import { useStripe, useElements, PaymentElement as StripePaymentElement, Elements } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "./LoadingState";
 import { usePaymentFlow } from "@/hooks/usePaymentFlow";
+import { stripePromise, stripeAppearance } from "@/utils/stripe";
 
 interface PaymentElementProps {
   onPaymentSuccess?: () => void;
 }
 
-export const PaymentElement = ({ onPaymentSuccess }: PaymentElementProps) => {
+const PaymentElementContent = ({ onPaymentSuccess }: PaymentElementProps) => {
   const stripe = useStripe();
   const elements = useElements();
   
@@ -49,5 +50,25 @@ export const PaymentElement = ({ onPaymentSuccess }: PaymentElementProps) => {
         {isLoading ? "Processing..." : "Pay Now"}
       </Button>
     </form>
+  );
+};
+
+export const PaymentElement = (props: PaymentElementProps) => {
+  const {
+    clientSecret,
+    isLoading,
+  } = usePaymentFlow(props.onPaymentSuccess || (() => {}));
+
+  if (isLoading || !clientSecret) {
+    return <LoadingState />;
+  }
+
+  return (
+    <Elements stripe={stripePromise} options={{ 
+      appearance: stripeAppearance,
+      clientSecret
+    }}>
+      <PaymentElementContent {...props} />
+    </Elements>
   );
 };
