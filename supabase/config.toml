@@ -13,13 +13,13 @@ enabled = true
 port = 54323
 
 [[functions]]
-name = "analyze-questionnaire"
+[functions.analyze-questionnaire]
 verify_jwt = true
 
 [[functions]]
-name = "import-sni-codes"
+[functions.import-sni-codes]
 verify_jwt = true
 
 [[functions]]
-name = "create-payment-intent"
+[functions.create-payment-intent]
 verify_jwt = false
