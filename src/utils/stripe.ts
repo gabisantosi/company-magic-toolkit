@@ -1,10 +1,10 @@
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, Appearance } from "@stripe/stripe-js";
 
 // This is your publishable key, it's safe to commit this
-export const stripePromise = loadStripe("pk_test_your_publishable_key_here");
+export const stripePromise = loadStripe("pk_test_51QeIX52LXOKOXavoC0jOAiuAtduL6P2rUo3Deqr9LBbOHzE1h5EE6pjlp4vdoRMrHRtbeGTxNgNDreGzOB37eCjh00uOInHcd8");
 
-export const stripeAppearance = {
-  theme: 'stripe',
+export const stripeAppearance: Appearance = {
+  theme: 'stripe' as const,
   variables: {
     colorPrimary: '#0F172A',
   },
