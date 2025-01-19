@@ -17,6 +17,7 @@ serve(async (req) => {
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
       apiVersion: '2023-10-16',
       httpClient: Stripe.createFetchHttpClient(),
+      timeout: 10000, // 10 second timeout
     });
 
     const paymentIntent = await stripe.paymentIntents.create({
@@ -29,22 +30,25 @@ serve(async (req) => {
     });
 
     console.log('Payment intent created:', paymentIntent.id);
-
+    
     return new Response(
       JSON.stringify({ clientSecret: paymentIntent.client_secret }),
-      {
+      { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       }
     );
   } catch (error) {
     console.error('Error creating payment intent:', error);
+    const errorResponse = {
+      error: error.message,
+      type: error.type,
+      code: error.statusCode,
+      details: error.raw || null
+    };
+    
     return new Response(
-      JSON.stringify({ 
-        error: error.message,
-        type: error.type,
-        code: error.statusCode 
-      }),
+      JSON.stringify(errorResponse),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: error.statusCode || 500,
