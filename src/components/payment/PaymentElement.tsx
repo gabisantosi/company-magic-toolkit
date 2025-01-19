@@ -31,23 +31,18 @@ const PaymentElementContent = ({ onPaymentSuccess }: PaymentElementProps) => {
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-6">
       <StripePaymentElement options={{
-        layout: {
-          type: 'tabs',
-          defaultCollapsed: false,
-        },
+        layout: 'tabs',
         paymentMethodOrder: ['card'],
-        business: {
-          name: 'Start Sweden',
-        },
         fields: {
-          billingDetails: {
-            address: 'never'
-          }
+          billingDetails: 'never',
         },
         wallets: {
           applePay: 'never',
-          googlePay: 'never'
-        }
+          googlePay: 'never',
+        },
+        terms: {
+          card: 'never',
+        },
       }} />
       <Button
         type="submit"

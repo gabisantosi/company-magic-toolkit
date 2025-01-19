@@ -12,11 +12,11 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Creating payment intent...');
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
       apiVersion: '2023-10-16',
     });
 
-    console.log('Creating payment intent...');
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 10000, // 100kr in öre
       currency: 'sek',
@@ -24,6 +24,9 @@ serve(async (req) => {
         enabled: false,
       },
       payment_method_types: ['card'],
+      metadata: {
+        integration_check: 'accept_a_payment',
+      },
     });
 
     console.log('Payment intent created:', paymentIntent.id);
