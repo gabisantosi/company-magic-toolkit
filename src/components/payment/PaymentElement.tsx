@@ -27,6 +27,10 @@ export const PaymentElement = ({ onPaymentSuccess }: PaymentElementProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     console.log("Handling payment submission...");
+    if (!stripe || !elements) {
+      console.error("Stripe or Elements not initialized");
+      return;
+    }
     await handlePaymentConfirmation(stripe, elements);
   };
 

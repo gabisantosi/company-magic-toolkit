@@ -25,7 +25,10 @@ export const PaymentCard = ({ onBack, onAnalysis }: PaymentCardProps) => {
         <CardDescription>Pay 100kr to receive your personalized business analysis</CardDescription>
       </CardHeader>
       <CardContent>
-        <Elements stripe={stripePromise} options={{ appearance: stripeAppearance }}>
+        <Elements stripe={stripePromise} options={{ 
+          appearance: stripeAppearance,
+          clientSecret: undefined // Will be set by PaymentElement
+        }}>
           <PaymentElement onPaymentSuccess={handlePaymentSuccess} />
         </Elements>
         <div className="mt-4">
