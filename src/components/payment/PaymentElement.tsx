@@ -35,6 +35,19 @@ const PaymentElementContent = ({ onPaymentSuccess }: PaymentElementProps) => {
           type: 'tabs',
           defaultCollapsed: false,
         },
+        paymentMethodOrder: ['card'],
+        business: {
+          name: 'Start Sweden',
+        },
+        fields: {
+          billingDetails: {
+            address: 'never'
+          }
+        },
+        wallets: {
+          applePay: 'never',
+          googlePay: 'never'
+        }
       }} />
       <Button
         type="submit"
