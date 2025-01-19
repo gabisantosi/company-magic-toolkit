@@ -16,13 +16,17 @@ serve(async (req) => {
       apiVersion: '2023-10-16',
     });
 
+    console.log('Creating payment intent...');
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 10000, // 100kr in öre
       currency: 'sek',
+      payment_method_types: ['card'],
       automatic_payment_methods: {
-        enabled: true,
+        enabled: false,
       },
     });
+
+    console.log('Payment intent created:', paymentIntent.id);
 
     return new Response(
       JSON.stringify({ clientSecret: paymentIntent.client_secret }),
