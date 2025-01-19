@@ -15,15 +15,8 @@ const PaymentElementContent = ({ onPaymentSuccess }: PaymentElementProps) => {
   
   const {
     isLoading,
-    clientSecret,
-    initializePayment,
     handlePaymentConfirmation,
   } = usePaymentFlow(onPaymentSuccess || (() => {}));
-
-  useEffect(() => {
-    console.log("Initializing payment...");
-    initializePayment();
-  }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -34,10 +27,6 @@ const PaymentElementContent = ({ onPaymentSuccess }: PaymentElementProps) => {
     }
     await handlePaymentConfirmation(stripe, elements);
   };
-
-  if (isLoading || !clientSecret) {
-    return <LoadingState />;
-  }
 
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-6">
@@ -57,12 +46,20 @@ export const PaymentElement = (props: PaymentElementProps) => {
   const {
     clientSecret,
     isLoading,
+    initializePayment,
   } = usePaymentFlow(props.onPaymentSuccess || (() => {}));
+
+  useEffect(() => {
+    console.log("Initializing payment in PaymentElement...");
+    initializePayment();
+  }, []);
 
   if (isLoading || !clientSecret) {
     return <LoadingState />;
   }
 
+  console.log("Rendering Elements with client secret:", clientSecret ? "Present" : "Missing");
+  
   return (
     <Elements stripe={stripePromise} options={{ 
       appearance: stripeAppearance,

@@ -29,8 +29,8 @@ export const usePaymentFlow = (onPaymentSuccess: () => void) => {
   };
 
   const handlePaymentConfirmation = async (stripe: any, elements: any) => {
-    if (!stripe || !elements || !clientSecret) {
-      console.error("Stripe not initialized or client secret missing");
+    if (!stripe || !elements) {
+      console.error("Stripe not initialized or elements missing");
       return;
     }
 
@@ -40,6 +40,9 @@ export const usePaymentFlow = (onPaymentSuccess: () => void) => {
       console.log("Confirming payment...");
       const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
         elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/payment-success`,
+        },
         redirect: 'if_required',
       });
 

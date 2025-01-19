@@ -2,8 +2,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { PaymentElement } from "@/components/payment/PaymentElement";
 import { useToast } from "@/hooks/use-toast";
-import { Elements } from "@stripe/react-stripe-js";
-import { stripePromise, stripeAppearance } from "@/utils/stripe";
 
 interface PaymentCardProps {
   onBack: () => void;
