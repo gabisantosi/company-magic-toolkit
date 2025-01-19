@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PaymentElement } from "@/components/payment/PaymentElement";
+import { useToast } from "@/hooks/use-toast";
 
 interface PaymentCardProps {
   onBack: () => void;
@@ -8,6 +9,12 @@ interface PaymentCardProps {
 }
 
 export const PaymentCard = ({ onBack, onAnalysis }: PaymentCardProps) => {
+  const { toast } = useToast();
+
+  const handlePaymentSuccess = () => {
+    onAnalysis();
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -15,7 +22,7 @@ export const PaymentCard = ({ onBack, onAnalysis }: PaymentCardProps) => {
         <CardDescription>Pay 100kr to receive your personalized business analysis</CardDescription>
       </CardHeader>
       <CardContent>
-        <PaymentElement />
+        <PaymentElement onPaymentSuccess={handlePaymentSuccess} />
         <div className="mt-4">
           <Button
             variant="outline"
@@ -23,9 +30,6 @@ export const PaymentCard = ({ onBack, onAnalysis }: PaymentCardProps) => {
             className="mr-2"
           >
             Back
-          </Button>
-          <Button onClick={onAnalysis}>
-            Continue to Analysis
           </Button>
         </div>
       </CardContent>

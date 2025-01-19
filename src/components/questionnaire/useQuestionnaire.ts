@@ -17,6 +17,7 @@ export const useQuestionnaire = () => {
   const [aiRecommendations, setAiRecommendations] = useState<string>("");
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
 
   useEffect(() => {
     const savedAnswers = localStorage.getItem(STORAGE_KEY);
@@ -78,6 +79,15 @@ export const useQuestionnaire = () => {
   };
 
   const handleAnalysis = async () => {
+    if (!paymentCompleted) {
+      toast({
+        title: "Payment Required",
+        description: "Please complete the payment to receive your analysis.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     toast({
       title: "Starting Analysis",
       description: "Please wait a few seconds while we analyze your responses...",
@@ -140,6 +150,11 @@ export const useQuestionnaire = () => {
     });
   };
 
+  const handlePaymentSuccess = () => {
+    setPaymentCompleted(true);
+    handleAnalysis();
+  };
+
   return {
     currentQuestion: questions[currentQuestion],
     progress,
@@ -151,7 +166,7 @@ export const useQuestionnaire = () => {
     handleAnswer,
     handleNext,
     handlePrevious: () => setCurrentQuestion((prev) => prev - 1),
-    handleAnalysis,
+    handleAnalysis: handlePaymentSuccess,
     handleCloseRecommendations,
     setShowPayment,
     isLastQuestion: currentQuestion === questions.length - 1,
