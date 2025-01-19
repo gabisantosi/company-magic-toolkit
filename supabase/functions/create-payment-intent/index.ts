@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -15,14 +16,12 @@ serve(async (req) => {
     console.log('Creating payment intent...');
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
       apiVersion: '2023-10-16',
+      httpClient: Stripe.createFetchHttpClient(),
     });
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 10000, // 100kr in öre
       currency: 'sek',
-      automatic_payment_methods: {
-        enabled: false,
-      },
       payment_method_types: ['card'],
       metadata: {
         integration_check: 'accept_a_payment',
@@ -41,10 +40,14 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error creating payment intent:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        type: error.type,
+        code: error.statusCode 
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
+        status: error.statusCode || 500,
       }
     );
   }
