@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useToast } from "@/hooks/use-toast";
 import { stripePromise, getPaymentIntent, stripeAppearance } from "@/utils/stripe";
@@ -13,9 +12,12 @@ export const PaymentElement = () => {
   useEffect(() => {
     const initializePayment = async () => {
       try {
+        console.log("Initializing payment...");
         const secret = await getPaymentIntent();
+        console.log("Payment intent created successfully");
         setClientSecret(secret);
       } catch (error) {
+        console.error("Payment initialization error:", error);
         toast({
           title: "Error",
           description: "Failed to initialize payment. Please try again.",

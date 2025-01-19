@@ -14,12 +14,14 @@ export const PaymentForm = () => {
     e.preventDefault();
 
     if (!stripe || !elements) {
+      console.log("Stripe.js hasn't loaded yet");
       return;
     }
 
     setIsProcessing(true);
 
     try {
+      console.log("Starting payment confirmation...");
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -28,13 +30,21 @@ export const PaymentForm = () => {
       });
 
       if (error) {
+        console.error("Payment error:", error);
         toast({
           title: "Payment Failed",
           description: error.message || "An error occurred during payment.",
           variant: "destructive",
         });
+      } else {
+        console.log("Payment successful!");
+        toast({
+          title: "Success",
+          description: "Payment processed successfully!",
+        });
       }
     } catch (error) {
+      console.error("Unexpected error:", error);
       toast({
         title: "Error",
         description: "An unexpected error occurred.",
