@@ -81,7 +81,6 @@ export const useQuestionnaire = () => {
         title: "Analysis Complete!",
         description: "Review your personalized recommendations.",
       });
-
     } catch (error: any) {
       toast({
         title: "Error",
@@ -103,6 +102,7 @@ export const useQuestionnaire = () => {
   };
 
   const handlePaymentSuccess = () => {
+    console.log("Payment successful, proceeding with analysis");
     setPaymentCompleted(true);
     handleAnalysis();
   };

@@ -9,9 +9,9 @@ export const usePaymentFlow = (onPaymentSuccess: () => void) => {
 
   const initializePayment = async () => {
     try {
-      console.log("Initializing payment...");
+      console.log("Getting payment intent...");
       const secret = await getPaymentIntent();
-      console.log("Payment intent created successfully");
+      console.log("Payment intent received:", secret ? "Success" : "Failed");
       if (!secret) {
         throw new Error("Failed to get client secret");
       }
@@ -37,6 +37,7 @@ export const usePaymentFlow = (onPaymentSuccess: () => void) => {
     setIsLoading(true);
 
     try {
+      console.log("Confirming payment...");
       const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {

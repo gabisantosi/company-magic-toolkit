@@ -20,11 +20,13 @@ export const PaymentElement = ({ onPaymentSuccess }: PaymentElementProps) => {
   } = usePaymentFlow(onPaymentSuccess || (() => {}));
 
   useEffect(() => {
+    console.log("Initializing payment...");
     initializePayment();
   }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log("Handling payment submission...");
     await handlePaymentConfirmation(stripe, elements);
   };
 
