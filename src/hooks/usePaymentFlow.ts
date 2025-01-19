@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "./use-toast";
 import { getPaymentIntent } from "@/utils/stripe";
 
@@ -7,7 +7,7 @@ export const usePaymentFlow = (onPaymentSuccess: () => void) => {
   const [clientSecret, setClientSecret] = useState("");
   const { toast } = useToast();
 
-  const initializePayment = async () => {
+  const initializePayment = useCallback(async () => {
     try {
       console.log("Getting payment intent...");
       const secret = await getPaymentIntent();
@@ -26,7 +26,7 @@ export const usePaymentFlow = (onPaymentSuccess: () => void) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   const handlePaymentConfirmation = async (stripe: any, elements: any) => {
     if (!stripe || !elements) {
@@ -43,7 +43,6 @@ export const usePaymentFlow = (onPaymentSuccess: () => void) => {
         confirmParams: {
           return_url: `${window.location.origin}/payment-success`,
         },
-        redirect: 'if_required',
       });
 
       if (confirmError) {

@@ -52,7 +52,7 @@ export const PaymentElement = (props: PaymentElementProps) => {
   useEffect(() => {
     console.log("Initializing payment in PaymentElement...");
     initializePayment();
-  }, []);
+  }, [initializePayment]);
 
   if (isLoading || !clientSecret) {
     return <LoadingState />;
