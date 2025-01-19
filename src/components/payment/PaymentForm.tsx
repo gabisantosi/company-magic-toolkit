@@ -12,6 +12,7 @@ export const PaymentForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Payment form submitted");
 
     if (!stripe || !elements) {
       console.log("Stripe.js hasn't loaded yet");
@@ -45,7 +46,6 @@ export const PaymentForm = () => {
         });
       } else {
         console.log("Payment status:", paymentIntent?.status);
-        // Handle other payment intent statuses
         toast({
           title: "Payment Status",
           description: "Please check your payment status and try again if needed.",

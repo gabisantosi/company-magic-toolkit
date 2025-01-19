@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { PaymentElement } from "@/components/payment/PaymentElement";
 import { useToast } from "@/hooks/use-toast";
+import { Elements } from "@stripe/react-stripe-js";
+import { stripePromise, stripeAppearance } from "@/utils/stripe";
 
 interface PaymentCardProps {
   onBack: () => void;
@@ -12,6 +14,7 @@ export const PaymentCard = ({ onBack, onAnalysis }: PaymentCardProps) => {
   const { toast } = useToast();
 
   const handlePaymentSuccess = () => {
+    console.log("Payment success callback triggered");
     onAnalysis();
   };
 
@@ -22,7 +25,9 @@ export const PaymentCard = ({ onBack, onAnalysis }: PaymentCardProps) => {
         <CardDescription>Pay 100kr to receive your personalized business analysis</CardDescription>
       </CardHeader>
       <CardContent>
-        <PaymentElement onPaymentSuccess={handlePaymentSuccess} />
+        <Elements stripe={stripePromise} options={{ appearance: stripeAppearance }}>
+          <PaymentElement onPaymentSuccess={handlePaymentSuccess} />
+        </Elements>
         <div className="mt-4">
           <Button
             variant="outline"
