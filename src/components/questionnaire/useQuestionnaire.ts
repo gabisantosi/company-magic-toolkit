@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useQuestionnaireState } from "@/hooks/useQuestionnaireState";
+import { useQuestionnaireApi } from "@/hooks/useQuestionnaireApi";
 
 const STORAGE_KEY = "questionnaire_answers";
 
@@ -11,6 +11,7 @@ export const useQuestionnaire = () => {
   const navigate = useNavigate();
   const session = useSession();
   const { toast } = useToast();
+  const { submitQuestionnaire } = useQuestionnaireApi();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentCompleted, setPaymentCompleted] = useState(false);
   
@@ -42,27 +43,6 @@ export const useQuestionnaire = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
   }, [answers]);
 
-  const ensureUserProfile = async (userId: string) => {
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData?.user) return;
-
-    const { data: existingProfile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-
-    if (!existingProfile) {
-      await supabase
-        .from('profiles')
-        .insert({
-          id: userId,
-          email: userData.user.email,
-          full_name: userData.user.user_metadata?.full_name || null
-        });
-    }
-  };
-
   const handleNext = async () => {
     if (isLastQuestion) {
       if (!session) {
@@ -74,7 +54,6 @@ export const useQuestionnaire = () => {
         navigate("/login");
         return;
       }
-
       setShowPayment(true);
     } else {
       setCurrentQuestion((prev) => prev + 1);
@@ -93,33 +72,9 @@ export const useQuestionnaire = () => {
 
     try {
       setIsSubmitting(true);
-      await ensureUserProfile(session!.user.id);
-
-      const { error: responseError } = await supabase
-        .from("questionnaire_responses")
-        .insert({
-          user_id: session!.user.id,
-          business_idea: answers.business_idea,
-          target_market: answers.target_market,
-          initial_investment: answers.initial_investment,
-          experience_level: answers.experience_level,
-          preferred_structure: answers.preferred_structure,
-        });
-
-      if (responseError) throw responseError;
-
-      const aiResponse = await supabase.functions.invoke('analyze-questionnaire', {
-        body: { 
-          responses: answers,
-          userId: session!.user.id
-        }
-      });
-
-      if (aiResponse.error) throw aiResponse.error;
-
-      setAiRecommendations(aiResponse.data.recommendations);
+      const recommendations = await submitQuestionnaire(answers, session!.user.id);
+      setAiRecommendations(recommendations);
       setShowRecommendations(true);
-      
       localStorage.removeItem(STORAGE_KEY);
       
       toast({
