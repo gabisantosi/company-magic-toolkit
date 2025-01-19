@@ -22,32 +22,40 @@ export const PaymentForm = () => {
 
     try {
       console.log("Starting payment confirmation...");
-      const { error } = await stripe.confirmPayment({
+      const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/payment-success`,
         },
+        redirect: 'if_required',
       });
 
-      if (error) {
-        console.error("Payment error:", error);
+      if (confirmError) {
+        console.error("Payment confirmation error:", confirmError);
         toast({
           title: "Payment Failed",
-          description: error.message || "An error occurred during payment.",
+          description: confirmError.message || "An error occurred during payment.",
           variant: "destructive",
         });
-      } else {
-        console.log("Payment successful!");
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        console.log("Payment successful!", paymentIntent);
         toast({
           title: "Success",
           description: "Payment processed successfully!",
         });
+      } else {
+        console.log("Payment status:", paymentIntent?.status);
+        // Handle other payment intent statuses
+        toast({
+          title: "Payment Status",
+          description: "Please check your payment status and try again if needed.",
+        });
       }
-    } catch (error) {
-      console.error("Unexpected error:", error);
+    } catch (error: any) {
+      console.error("Unexpected payment error:", error);
       toast({
         title: "Error",
-        description: "An unexpected error occurred.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {

@@ -15,8 +15,11 @@ export const PaymentElement = () => {
         console.log("Initializing payment...");
         const secret = await getPaymentIntent();
         console.log("Payment intent created successfully");
+        if (!secret) {
+          throw new Error("Failed to get client secret");
+        }
         setClientSecret(secret);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Payment initialization error:", error);
         toast({
           title: "Error",
