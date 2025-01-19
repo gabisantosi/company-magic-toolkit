@@ -30,7 +30,12 @@ const PaymentElementContent = ({ onPaymentSuccess }: PaymentElementProps) => {
 
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-6">
-      <StripePaymentElement />
+      <StripePaymentElement options={{
+        layout: {
+          type: 'tabs',
+          defaultCollapsed: false,
+        },
+      }} />
       <Button
         type="submit"
         disabled={!stripe || !elements || isLoading}
@@ -63,7 +68,9 @@ export const PaymentElement = (props: PaymentElementProps) => {
   return (
     <Elements stripe={stripePromise} options={{ 
       appearance: stripeAppearance,
-      clientSecret
+      clientSecret,
+      locale: 'en',
+      loader: 'auto',
     }}>
       <PaymentElementContent {...props} />
     </Elements>

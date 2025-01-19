@@ -7,6 +7,11 @@ export const stripeAppearance: Appearance = {
   variables: {
     colorPrimary: '#0F172A',
   },
+  rules: {
+    '.Input': {
+      borderColor: '#E2E8F0',
+    },
+  },
 };
 
 export const getPaymentIntent = async () => {
